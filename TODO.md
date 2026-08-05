@@ -2,7 +2,7 @@
   - [x] Validate server URL (/System/Info/Public)
   - [ ] Generate persistent DeviceId and X-Emby-Authorization header
   - [ ] Authenticate user (/Users/AuthenticateByName) and store AccessToken
-  - [ ] Save session locally for auto-login on restart
+  - [x] Save session locally for auto-login on restart
   - [ ] Multi-server storage and switching UI
 
 

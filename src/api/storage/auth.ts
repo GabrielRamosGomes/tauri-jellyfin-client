@@ -20,7 +20,7 @@ export const authStorage = {
     await store.set(KEYS.SERVER_URL, session.serverUrl);
     await store.set(KEYS.ACCESS_TOKEN, session.accessToken);
     await store.set(KEYS.USER_ID, session.userId);
-    await store.save(); // Flushes changes to disk immediately
+    await store.save();
   },
 
   async loadSession() {
