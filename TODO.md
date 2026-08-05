@@ -1,0 +1,27 @@
+- [ ] 1. Server Management & Authentication
+  - [x] Validate server URL (/System/Info/Public)
+  - [ ] Generate persistent DeviceId and X-Emby-Authorization header
+  - [ ] Authenticate user (/Users/AuthenticateByName) and store AccessToken
+  - [ ] Save session locally for auto-login on restart
+  - [ ] Multi-server storage and switching UI
+
+
+- [ ] 2. Library & Media Discovery
+  - [ ] Fetch library categories (/Users/{UserId}/Views)
+  - [ ] Render media grids with pagination (/Users/{UserId}/Items)
+  - [ ] Load posters and backdrops (/Items/{itemId}/Images/{type})
+  - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
+  - [ ] Detailed media view (synopsis, year, runtime, stream specs)
+  
+- [ ] 3. Playback / DirectPlaye
+  - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
+  - [ ] Pass raw stream URL directly to libmpv
+  - [ ] Enable GPU hardware decoding (hwdec=auto)
+  - [ ] Core playback controls (Play, Pause, Seek, Volume, Fullscreen)
+  - [ ] Sync playback progress to server (/Sessions/Playing/Progress)
+
+- [ ] 4. Extra Media Features
+  - [ ] Parse MediaStreams for UI badges (Dolby Vision, HDR10+, Atmos, DTS)
+  - [ ] Intro Skip button (jumoog/Intro-Skipper timestamps integration)
+  - [ ] Media segment / chapter markers on progress bar
+  - [ ] Queue playback & auto-play next episode
