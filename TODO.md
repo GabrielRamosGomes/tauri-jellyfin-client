@@ -5,7 +5,6 @@
   - [x] Save session locally for auto-login on restart
   - [ ] Multi-server storage and switching UI
 
-
 - [ ] 2. Library & Media Discovery
   - [ ] Fetch library categories (/Users/{UserId}/Views)
   - [ ] Render media grids with pagination (/Users/{UserId}/Items)
