@@ -11,11 +11,11 @@
 
     <form v-else class="server-form" @submit.prevent="connect">
       <div class="row">
-        <input 
-          v-model="serverUrl" 
-          type="url" 
-          placeholder="Server URL (e.g. http://192.168.1.5:8096)" 
-          required 
+        <input
+          v-model="serverUrl"
+          type="url"
+          placeholder="Server URL (e.g. http://192.168.1.5:8096)"
+          required
           :disabled="loading"
         />
         <button type="submit" :disabled="loading">
@@ -29,74 +29,75 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue';
-  import { connectToServer, createClient } from './api/jellyfin/jellyfin';
-  import { authStorage } from './api/storage/auth';
-  import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
-  import type { Jellyfin } from '@jellyfin/sdk';
+import type { Jellyfin } from '@jellyfin/sdk';
 
-  const serverUrl = ref('');
-  const sdk = ref<Jellyfin>();
-  const loading = ref(false);
-  const errorMessage = ref('');
-  const serverInfo = ref<PublicSystemInfo | null>(null);
+import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
+import { ref, onMounted } from 'vue';
 
-  onMounted(async () => {
-    const savedSession = await authStorage.loadSession();
-    sdk.value = await createClient();
-    
-    if (savedSession?.serverUrl) {
-      loading.value = true;
-        try {
-          const server = await connectToServer(sdk.value, savedSession.serverUrl);
-          serverUrl.value = savedSession.serverUrl;
-          serverInfo.value = server.info;
-        } catch {
-          authStorage.clearSession();
-        } finally {
-          loading.value = false;
-        } 
-      }
-  });
+import { connectToServer, createClient } from './api/jellyfin/jellyfin';
+import { authStorage } from './api/storage/auth';
 
-  async function connect() {
+const serverUrl = ref('');
+const sdk = ref<Jellyfin>();
+const loading = ref(false);
+const errorMessage = ref('');
+const serverInfo = ref<PublicSystemInfo | null>(null);
+
+onMounted(async () => {
+  const savedSession = await authStorage.loadSession();
+  sdk.value = await createClient();
+
+  if (savedSession?.serverUrl) {
     loading.value = true;
-    errorMessage.value = '';
-
-    if (!sdk.value) {
-      sdk.value = await createClient();
-    }
-
     try {
-      const server = await connectToServer(sdk.value, serverUrl.value);
+      const server = await connectToServer(sdk.value, savedSession.serverUrl);
+      serverUrl.value = savedSession.serverUrl;
       serverInfo.value = server.info;
-      serverUrl.value = server.serverUrl;
-
-      authStorage.saveSession({
-        serverUrl: server.serverUrl,
-        accessToken: "",
-        userId: "",
-      })
-
-    } catch (error) {
-      const message = error instanceof Error ? error.message : "Failed to connect to Jellyfin server.";
-      
-      console.error('Error connecting to Jellyfin server:', message);
-      errorMessage.value = message;
+    } catch {
+      authStorage.clearSession();
     } finally {
       loading.value = false;
     }
+  }
+});
 
-    console.log('Connecting to Jellyfin server at:', serverUrl.value);
+async function connect() {
+  loading.value = true;
+  errorMessage.value = '';
+
+  if (!sdk.value) {
+    sdk.value = await createClient();
   }
 
-  function disconnect() {
-    authStorage.clearSession();
-    serverInfo.value = null;
-    serverUrl.value = "";
+  try {
+    const server = await connectToServer(sdk.value, serverUrl.value);
+    serverInfo.value = server.info;
+    serverUrl.value = server.serverUrl;
+
+    authStorage.saveSession({
+      serverUrl: server.serverUrl,
+      accessToken: '',
+      userId: '',
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : 'Failed to connect to Jellyfin server.';
+
+    console.error('Error connecting to Jellyfin server:', message);
+    errorMessage.value = message;
+  } finally {
+    loading.value = false;
   }
+
+  console.log('Connecting to Jellyfin server at:', serverUrl.value);
+}
+
+function disconnect() {
+  authStorage.clearSession();
+  serverInfo.value = null;
+  serverUrl.value = '';
+}
 </script>
-
 
 <style>
 :root {

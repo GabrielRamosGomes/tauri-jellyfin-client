@@ -1,5 +1,5 @@
-import type { Api } from "@jellyfin/sdk";
-import type { PublicSystemInfo } from "@jellyfin/sdk/lib/generated-client/models";
+import type { Api } from '@jellyfin/sdk';
+import type { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
 
 export interface ClientAppInfo {
   name: string;
