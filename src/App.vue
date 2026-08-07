@@ -31,11 +31,10 @@
 <script setup lang="ts">
 import type { Jellyfin } from '@jellyfin/sdk';
 
+import { connectToServer, createClient } from '@/api/jellyfin/jellyfin';
+import { authStorage } from '@/api/storage/auth';
 import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
 import { ref, onMounted } from 'vue';
-
-import { connectToServer, createClient } from './api/jellyfin/jellyfin';
-import { authStorage } from './api/storage/auth';
 
 const serverUrl = ref('');
 const sdk = ref<Jellyfin>();
@@ -88,8 +87,6 @@ async function connect() {
   } finally {
     loading.value = false;
   }
-
-  console.log('Connecting to Jellyfin server at:', serverUrl.value);
 }
 
 function disconnect() {

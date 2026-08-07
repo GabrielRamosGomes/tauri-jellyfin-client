@@ -1,8 +1,8 @@
+import { authStorage } from '@/api/storage/auth';
 import { Jellyfin } from '@jellyfin/sdk';
 import { getSystemApi } from '@jellyfin/sdk/lib/utils/api/system-api';
 
 import { version } from '../../../package.json';
-import { authStorage } from '../storage/auth';
 import { ClientAppInfo, ConnectedServer } from './types';
 
 const CLIENT_NAME = 'Jellyfin Tauri';
