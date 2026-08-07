@@ -11,7 +11,7 @@
   - [ ] Load posters and backdrops (/Items/{itemId}/Images/{type})
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
   - [ ] Detailed media view (synopsis, year, runtime, stream specs)
-  
+
 - [ ] 3. Playback / DirectPlaye
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
   - [ ] Pass raw stream URL directly to libmpv

@@ -28,9 +28,7 @@ export const authStorage = {
     const accessToken = await store.get<string>(KEYS.ACCESS_TOKEN);
     const userId = await store.get<string>(KEYS.USER_ID);
 
-    return serverUrl
-      ? { serverUrl, accessToken: accessToken ?? '', userId: userId ?? '' }
-      : null;
+    return serverUrl ? { serverUrl, accessToken: accessToken ?? '', userId: userId ?? '' } : null;
   },
 
   async clearSession() {
