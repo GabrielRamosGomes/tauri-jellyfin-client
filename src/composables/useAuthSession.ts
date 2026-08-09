@@ -32,7 +32,7 @@ export function useAuthSession() {
 
 	async function activate(serverUrl: string): Promise<AuthenticatedSession | null> {
 		const serverSession = await authStorage.getSession(serverUrl);
-		if (session) {
+		if (serverSession) {
 			await authStorage.setActiveServerUrl(serverUrl);
 			session.value = serverSession;
 		}

@@ -55,9 +55,9 @@ export const authStorage = {
 	},
 
 	async listSessions(): Promise<StoredSessionMeta[]> {
-		const sessions = getSessions();
+		const sessions = await getSessions();
 
-		return Object.values(sessions);
+		return Object.values(sessions ?? {});
 	},
 
 	async getActiveServerUrl(): Promise<string | null> {
