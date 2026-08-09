@@ -17,8 +17,19 @@
 		<form v-else-if="serverInfo" class="server-form" @submit.prevent="login">
 			<p class="server-meta">{{ serverInfo.ServerName }} ({{ serverInfo.Version }})</p>
 			<div class="row">
-				<input v-model="username" type="text" placeholder="Username" required :disabled="loading" />
-				<input v-model="password" type="password" placeholder="Password" :disabled="loading" />
+				<input
+					v-model="credentials.username"
+					type="text"
+					placeholder="Username"
+					required
+					:disabled="loading"
+				/>
+				<input
+					v-model="credentials.password"
+					type="password"
+					placeholder="Password"
+					:disabled="loading"
+				/>
 				<button type="submit" :disabled="loading">
 					{{ loading ? 'Signing in...' : 'Sign in' }}
 				</button>
@@ -49,111 +60,62 @@
 </template>
 
 <script setup lang="ts">
-	import type { Api, Jellyfin } from '@jellyfin/sdk';
-	import type { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
+	import { useAuthSession } from '@/composables/useAuthSession';
+	import { useServerConnection } from '@/composables/useServerConnection';
+	import { computed, onMounted } from 'vue';
 
-	import { authenticateUser, connectToServer, createClient } from '@/api/jellyfin/jellyfin';
-	import { AuthenticatedSession, JellyfinUser } from '@/api/jellyfin/types';
-	import { authStorage } from '@/api/storage/auth';
-	import { ref, onMounted } from 'vue';
+	const {
+		api,
+		serverUrl,
+		serverInfo,
+		loading: connectLoading,
+		errorMessage: connectError,
+		connect: connectToUrl,
+		reset,
+	} = useServerConnection();
 
-	const serverUrl = ref('');
-	const username = ref('');
-	const password = ref('');
+	const {
+		session,
+		credentials,
+		loading: authLoading,
+		errorMessage: authError,
+		login: authenticate,
+		logout: clearSession,
+		restoreSession,
+	} = useAuthSession();
 
-	const sdk = ref<Jellyfin>();
-	const api = ref<Api>();
-	const loading = ref(false);
-	const errorMessage = ref('');
-	const serverInfo = ref<PublicSystemInfo | null>(null);
-	const session = ref<AuthenticatedSession | null>(null);
+	const loading = computed(() => connectLoading.value || authLoading.value);
+	const errorMessage = computed(() => authError.value || connectError.value);
 
 	onMounted(async () => {
-		sdk.value = await createClient();
-
-		const saved = await authStorage.loadActiveSession();
+		const saved = await restoreSession();
 		if (!saved) return;
 
-		loading.value = true;
-		try {
-			const server = await connectToServer(sdk.value, saved.serverUrl);
-			server.api.accessToken = saved.accessToken;
-
-			serverUrl.value = server.serverUrl;
-			serverInfo.value = server.info;
-			api.value = server.api;
-			session.value = saved;
-		} catch {
-			await authStorage.clearSession(saved.serverUrl);
-		} finally {
-			loading.value = false;
+		const server = await connectToUrl(saved.serverUrl);
+		if (!server) {
+			await clearSession();
+			return;
 		}
+
+		server.api.accessToken = saved.accessToken;
 	});
 
 	async function connect() {
-		loading.value = true;
-		errorMessage.value = '';
-
-		if (!sdk.value) {
-			sdk.value = await createClient();
-		}
-
-		try {
-			const server = await connectToServer(sdk.value, serverUrl.value);
-			serverUrl.value = server.serverUrl;
-			serverInfo.value = server.info;
-			api.value = server.api;
-		} catch (error) {
-			errorMessage.value =
-				error instanceof Error ? error.message : 'Failed to connect to Jellyfin server.';
-			console.error('Error connecting to Jellyfin server:', errorMessage.value);
-		} finally {
-			loading.value = false;
-		}
+		await connectToUrl(serverUrl.value);
 	}
 
 	async function login() {
 		if (!api.value) return;
-
-		loading.value = true;
-		errorMessage.value = '';
-
-		try {
-			const user: JellyfinUser = {
-				username: username.value,
-				password: password.value,
-			};
-			const authed = await authenticateUser(api.value, user);
-			await authStorage.saveSession(authed);
-			session.value = authed;
-			password.value = '';
-		} catch (error) {
-			errorMessage.value = error instanceof Error ? error.message : 'Login failed.';
-			console.error('Error authenticating with Jellyfin server:', errorMessage.value);
-		} finally {
-			loading.value = false;
-		}
+		await authenticate(api.value);
 	}
 
 	async function logout() {
-		if (session.value) {
-			await authStorage.clearSession(session.value.serverUrl);
-		}
-		session.value = null;
-		username.value = '';
-		password.value = '';
+		await clearSession();
 	}
 
 	async function switchServer() {
-		if (session.value) {
-			await authStorage.clearSession(session.value.serverUrl);
-		}
-		session.value = null;
-		serverInfo.value = null;
-		api.value = undefined;
-		serverUrl.value = '';
-		username.value = '';
-		password.value = '';
+		await clearSession();
+		reset();
 	}
 </script>
 

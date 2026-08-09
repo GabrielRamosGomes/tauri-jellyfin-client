@@ -74,13 +74,13 @@ export async function connectToServer(sdk: Jellyfin, serverUrl: string): Promise
 
 export async function authenticateUser(
 	api: Api,
-	user: JellyfinUser,
+	credentials: JellyfinUser,
 ): Promise<AuthenticatedSession> {
 	const userApi = getUserApi(api);
 	const { data } = await userApi.authenticateUserByName({
 		authenticateUserByName: {
-			Username: user.username,
-			Pw: user.password,
+			Username: credentials.username,
+			Pw: credentials.password,
 		},
 	});
 
@@ -95,7 +95,7 @@ export async function authenticateUser(
 		serverUrl: api.basePath,
 		serverId: data.ServerId ?? '',
 		userId: data.User.Id,
-		username: data.User.Name ?? user.username,
+		username: data.User.Name ?? credentials.username,
 		accessToken: data.AccessToken,
 	};
 }
