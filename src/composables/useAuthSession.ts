@@ -30,6 +30,22 @@ export function useAuthSession() {
 		}
 	}
 
+	async function activate(serverUrl: string): Promise<AuthenticatedSession | null> {
+		const serverSession = await authStorage.getSession(serverUrl);
+		if (session) {
+			await authStorage.setActiveServerUrl(serverUrl);
+			session.value = serverSession;
+		}
+
+		return serverSession;
+	}
+
+	async function restoreActive(): Promise<AuthenticatedSession | null> {
+		const activeUrl = await authStorage.getActiveServerUrl();
+
+		return activeUrl ? activate(activeUrl) : null;
+	}
+
 	async function restoreSession(): Promise<AuthenticatedSession | null> {
 		const saved = await authStorage.loadActiveSession();
 		if (saved) session.value = saved;
@@ -38,10 +54,25 @@ export function useAuthSession() {
 	}
 
 	async function logout() {
-		if (session.value) await authStorage.clearSession(session.value.serverUrl);
+		await authStorage.clearActiveServerUrl();
+		clearData();
+	}
+
+	async function clearData() {
 		session.value = null;
 		credentials.value = { username: '', password: '' };
 	}
 
-	return { session, credentials, loading, errorMessage, login, logout, restoreSession };
+	return {
+		session,
+		credentials,
+		loading,
+		errorMessage,
+		activate,
+		clearData,
+		login,
+		logout,
+		restoreActive,
+		restoreSession,
+	};
 }

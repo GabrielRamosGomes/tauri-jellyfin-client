@@ -1,12 +1,9 @@
-import { AuthenticatedSession } from '@/api/jellyfin/types';
+import { AuthenticatedSession, Sessions, StoredSessionMeta } from '@/api/jellyfin/types';
 import { LazyStore } from '@tauri-apps/plugin-store';
 
 import { keychain } from './keychain';
 
 const store = new LazyStore('settings.json');
-
-type Sessions = Record<string, StoredSessionMeta>;
-type StoredSessionMeta = Omit<AuthenticatedSession, 'accessToken'>;
 
 const KEYS = {
 	SESSIONS: 'jf_sessions', // uses Sessions type from above
@@ -19,12 +16,6 @@ async function getSessions(): Promise<Sessions | null> {
 	if (!sessions) return null;
 
 	return sessions;
-}
-
-async function getActiveServer() {
-	const activeServer = await store.get<string>(KEYS.ACTIVE_SERVER);
-
-	return activeServer;
 }
 
 export const authStorage = {
@@ -40,15 +31,12 @@ export const authStorage = {
 		await keychain.set(session.serverUrl, accessToken);
 	},
 
-	async loadActiveSession(): Promise<AuthenticatedSession | null> {
-		const activeServer = await getActiveServer();
-		if (!activeServer) return null;
-
+	async getSession(serverUrl: string): Promise<AuthenticatedSession | null> {
 		const sessions = await getSessions();
-		const metadata = sessions?.[activeServer];
+		const metadata = sessions?.[serverUrl];
 		if (!metadata) return null;
 
-		const accessToken = await keychain.get(activeServer);
+		const accessToken = await keychain.get(serverUrl);
 		if (!accessToken) return null;
 
 		return { ...metadata, accessToken };
@@ -59,11 +47,38 @@ export const authStorage = {
 		delete sessions[serverUrl];
 		await store.set(KEYS.SESSIONS, sessions);
 
-		const activeServer = await getActiveServer();
+		const activeServer = await this.getActiveServerUrl();
 		if (activeServer === serverUrl) await store.delete(KEYS.ACTIVE_SERVER);
 		await store.save();
 
 		await keychain.delete(serverUrl);
+	},
+
+	async listSessions(): Promise<StoredSessionMeta[]> {
+		const sessions = getSessions();
+
+		return Object.values(sessions);
+	},
+
+	async getActiveServerUrl(): Promise<string | null> {
+		const activeServer = await store.get<string>(KEYS.ACTIVE_SERVER);
+
+		return activeServer ?? null;
+	},
+
+	async clearActiveServerUrl() {
+		await store.delete(KEYS.ACTIVE_SERVER);
+		await store.save();
+	},
+
+	async setActiveServerUrl(serverUrl: string) {
+		await store.set(KEYS.ACTIVE_SERVER, serverUrl);
+		await store.save();
+	},
+
+	async loadActiveSession(): Promise<AuthenticatedSession | null> {
+		const activeServer = await this.getActiveServerUrl();
+		return activeServer ? this.getSession(activeServer) : null;
 	},
 
 	async getDeviceId() {

@@ -53,5 +53,11 @@ export default defineConfig({
 				'typescript/no-explicit-any': 'off',
 			},
 		},
+		{
+			files: ['src/main.ts'],
+			rules: {
+				'import/no-unassigned-import': 'off',
+			},
+		},
 	],
 });

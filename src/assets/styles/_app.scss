@@ -1,0 +1,166 @@
+@use './variables' as v;
+
+:root {
+	color-scheme: light dark;
+	font-family: v.$font-family;
+	font-size: 16px;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: v.$color-text;
+	background-color: v.$color-bg;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+}
+
+.container {
+	max-width: 480px;
+	margin: 0 auto;
+	padding: 10vh 24px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+h1 {
+	font-size: 1.75em;
+	margin: 0 0 24px;
+}
+
+h2 {
+	margin: 4px 0;
+	font-size: 1.25em;
+}
+
+.row {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+input,
+button {
+	border-radius: 8px;
+	border: 1px solid v.$color-border;
+	padding: 0.6em 1em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	color: v.$color-text;
+	background-color: v.$color-surface;
+	transition:
+		border-color 0.2s,
+		background-color 0.2s;
+	outline: none;
+}
+
+input {
+	flex: 1;
+	min-width: 0;
+}
+
+input:focus {
+	border-color: v.$color-primary;
+}
+
+button {
+	cursor: pointer;
+	border-color: transparent;
+	background-color: v.$color-primary;
+	color: #ffffff;
+
+	&:hover {
+		background-color: v.$color-primary-hover;
+	}
+
+	&:active {
+		background-color: v.$color-primary-active;
+	}
+}
+
+button:disabled,
+input:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.link-btn {
+	background: none;
+	border: none;
+	color: v.$color-primary;
+	font-weight: 400;
+	text-decoration: underline;
+	padding: 4px;
+
+	&:hover {
+		background: none;
+		color: v.$color-primary-hover;
+	}
+}
+
+.server-meta {
+	margin: 0;
+	color: v.$color-muted;
+	font-size: 0.9em;
+}
+
+.error-msg {
+	margin: 0;
+	color: v.$color-error;
+	font-size: 0.9em;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		color: v.$color-text-dark;
+		background-color: v.$color-bg-dark;
+	}
+
+	input,
+	button {
+		color: v.$color-text-dark;
+		border-color: v.$color-border-dark;
+		background-color: v.$color-surface-dark;
+	}
+
+	button {
+		background-color: v.$color-primary-dark;
+
+		&:hover {
+			background-color: v.$color-primary-hover-dark;
+		}
+
+		&:active {
+			background-color: v.$color-primary-active-dark;
+		}
+	}
+
+	.link-btn {
+		color: v.$color-link-dark;
+
+		&:hover {
+			color: v.$color-link-hover-dark;
+		}
+	}
+
+	.server-meta {
+		color: v.$color-muted-dark;
+	}
+
+	.error-msg {
+		color: v.$color-error-dark;
+	}
+}

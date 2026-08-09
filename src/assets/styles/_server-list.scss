@@ -1,0 +1,43 @@
+// ServerList.vue
+@use './variables' as v;
+
+.server-list {
+	width: 100%;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border: 1px solid v.$color-border-subtle;
+		border-radius: 8px;
+		background-color: v.$color-surface;
+		font-size: 0.9em;
+
+		span {
+			flex: 1;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			text-align: left;
+		}
+	}
+
+	button {
+		padding: 4px 10px;
+		font-size: 0.85em;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	.server-list li {
+		background-color: v.$color-surface-dark;
+		border-color: v.$color-border-dark;
+	}
+}

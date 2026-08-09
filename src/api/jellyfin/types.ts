@@ -26,3 +26,7 @@ export interface JellyfinUser {
 	username: string;
 	password: string;
 }
+
+export type StoredSessionMeta = Omit<AuthenticatedSession, 'accessToken'>;
+
+export type Sessions = Record<string, StoredSessionMeta>;

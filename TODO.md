@@ -11,6 +11,7 @@
   - [ ] Load posters and backdrops (/Items/{itemId}/Images/{type})
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
   - [ ] Detailed media view (synopsis, year, runtime, stream specs)
+  - [ ] Work on UI framework to unify app styles
 
 - [ ] 3. Playback / DirectPlaye
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
@@ -24,3 +25,6 @@
   - [ ] Intro Skip button (jumoog/Intro-Skipper timestamps integration)
   - [ ] Media segment / chapter markers on progress bar
   - [ ] Queue playback & auto-play next episode
+
+- [ ] 5. Nice Haves
+  - [ ] Translations
