@@ -14,7 +14,7 @@ export default defineConfig({
 	endOfLine: 'lf',
 	quoteProps: 'as-needed',
 	singleAttributePerLine: false,
-	vueIndentScriptAndStyle: false,
+	vueIndentScriptAndStyle: true,
 	htmlWhitespaceSensitivity: 'css',
 	sortImports: {
 		groups: [
