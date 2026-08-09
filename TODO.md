@@ -26,5 +26,5 @@
   - [ ] Media segment / chapter markers on progress bar
   - [ ] Queue playback & auto-play next episode
 
-- [ ] 5. Nice Haves
+- [ ] 5. Nice to Haves
   - [ ] Translations
