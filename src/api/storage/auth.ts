@@ -1,40 +1,54 @@
+import { AuthenticatedSession } from '@/api/jellyfin/types';
 import { LazyStore } from '@tauri-apps/plugin-store';
 
 const store = new LazyStore('settings.json');
 
+type Sessions = Record<string, AuthenticatedSession>;
+
 const KEYS = {
-  SERVER_URL: 'jf_server_url',
-  ACCESS_TOKEN: 'jf_access_token',
-  USER_ID: 'jf_user_id',
+  SESSIONS: 'jf_sessions', // uses Sessions type from above
+  ACTIVE_SERVER: 'jf_active_server',
   DEVICE_ID: 'jf_device_id',
 } as const;
 
-export interface StoredSession {
-  serverUrl: string;
-  accessToken: string;
-  userId: string;
+async function getSessions(): Promise<Sessions | null> {
+  const sessions = await store.get<Sessions>(KEYS.SESSIONS);
+  if (!sessions) return null;
+
+  return sessions;
+}
+
+async function getActiveServer() {
+  const activeServer = await store.get<string>(KEYS.ACTIVE_SERVER);
+
+  return activeServer;
 }
 
 export const authStorage = {
-  async saveSession(session: StoredSession) {
-    await store.set(KEYS.SERVER_URL, session.serverUrl);
-    await store.set(KEYS.ACCESS_TOKEN, session.accessToken);
-    await store.set(KEYS.USER_ID, session.userId);
+  async saveSession(session: AuthenticatedSession) {
+    const sessions = (await getSessions()) ?? {};
+
+    sessions[session.serverUrl] = session;
+    await store.set(KEYS.SESSIONS, sessions);
+    await store.set(KEYS.ACTIVE_SERVER, session.serverUrl);
     await store.save();
   },
 
-  async loadSession() {
-    const serverUrl = await store.get<string>(KEYS.SERVER_URL);
-    const accessToken = await store.get<string>(KEYS.ACCESS_TOKEN);
-    const userId = await store.get<string>(KEYS.USER_ID);
+  async loadActiveSession(): Promise<AuthenticatedSession | null> {
+    const activeServer = await getActiveServer();
+    if (!activeServer) return null;
 
-    return serverUrl ? { serverUrl, accessToken: accessToken ?? '', userId: userId ?? '' } : null;
+    const sessions = await getSessions();
+    return sessions?.[activeServer] ?? null;
   },
 
-  async clearSession() {
-    await store.delete(KEYS.SERVER_URL);
-    await store.delete(KEYS.ACCESS_TOKEN);
-    await store.delete(KEYS.USER_ID);
+  async clearSession(serverUrl: string) {
+    const sessions = (await getSessions()) ?? {};
+    delete sessions[serverUrl];
+    await store.set(KEYS.SESSIONS, sessions);
+
+    const activeServer = await getActiveServer();
+    if (activeServer === serverUrl) await store.delete(KEYS.ACTIVE_SERVER);
     await store.save();
   },
 

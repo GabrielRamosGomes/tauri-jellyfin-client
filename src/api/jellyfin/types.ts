@@ -13,3 +13,16 @@ export interface ConnectedServer {
   info: PublicSystemInfo;
   api: Api;
 }
+
+export interface AuthenticatedSession {
+  serverUrl: string;
+  serverId: string;
+  userId: string;
+  username: string;
+  accessToken: string;
+}
+
+export interface JellyfinUser {
+  username: string;
+  password: string;
+}
