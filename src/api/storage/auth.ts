@@ -1,9 +1,12 @@
 import { AuthenticatedSession } from '@/api/jellyfin/types';
 import { LazyStore } from '@tauri-apps/plugin-store';
 
+import { keychain } from './keychain';
+
 const store = new LazyStore('settings.json');
 
-type Sessions = Record<string, AuthenticatedSession>;
+type Sessions = Record<string, StoredSessionMeta>;
+type StoredSessionMeta = Omit<AuthenticatedSession, 'accessToken'>;
 
 const KEYS = {
   SESSIONS: 'jf_sessions', // uses Sessions type from above
@@ -26,12 +29,15 @@ async function getActiveServer() {
 
 export const authStorage = {
   async saveSession(session: AuthenticatedSession) {
+    const { accessToken, ...metadata } = session;
     const sessions = (await getSessions()) ?? {};
 
-    sessions[session.serverUrl] = session;
+    sessions[session.serverUrl] = metadata;
     await store.set(KEYS.SESSIONS, sessions);
     await store.set(KEYS.ACTIVE_SERVER, session.serverUrl);
     await store.save();
+
+    await keychain.set(session.serverUrl, accessToken);
   },
 
   async loadActiveSession(): Promise<AuthenticatedSession | null> {
@@ -39,7 +45,13 @@ export const authStorage = {
     if (!activeServer) return null;
 
     const sessions = await getSessions();
-    return sessions?.[activeServer] ?? null;
+    const metadata = sessions?.[activeServer];
+    if (!metadata) return null;
+
+    const accessToken = await keychain.get(activeServer);
+    if (!accessToken) return null;
+
+    return { ...metadata, accessToken };
   },
 
   async clearSession(serverUrl: string) {
@@ -50,6 +62,8 @@ export const authStorage = {
     const activeServer = await getActiveServer();
     if (activeServer === serverUrl) await store.delete(KEYS.ACTIVE_SERVER);
     await store.save();
+
+    await keychain.delete(serverUrl);
   },
 
   async getDeviceId() {
