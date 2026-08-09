@@ -7,19 +7,26 @@
 }
 
 .library-card {
-	position: relative;
+	display: block;
 	width: 220px;
+	text-decoration: none;
+	color: inherit;
+}
+
+.library-card-media {
+	position: relative;
+	width: 100%;
 	aspect-ratio: 16 / 9;
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: v.$color-surface;
-	text-decoration: none;
 
 	img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
 		display: block;
+		color: transparent;
 	}
 }
 
@@ -35,11 +42,21 @@
 	font-size: 1.1em;
 	color: #ffffff;
 	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
-	background: linear-gradient(to top, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0));
+}
+
+.library-card-caption {
+	margin: 6px 0 0;
+	font-size: 0.85em;
+	font-weight: 500;
+	color: v.$color-text;
 }
 
 @media (prefers-color-scheme: dark) {
-	.library-card {
+	.library-card-media {
 		background-color: v.$color-surface-dark;
+	}
+
+	.library-card-caption {
+		color: v.$color-text-dark;
 	}
 }

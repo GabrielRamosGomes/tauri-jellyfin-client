@@ -18,6 +18,5 @@ export function getLibraryImageUrl(api: Api, library: BaseItemDto) {
 	const url = getImageApi(api).getItemImageUrl(library, ImageType.Primary);
 	if (!url) return undefined;
 
-	console.log(url);
 	return url;
 }

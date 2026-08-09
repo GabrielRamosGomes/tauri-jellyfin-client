@@ -1,13 +1,14 @@
 <template>
 	<router-link :to="{ name: 'library', params: { id: library.Id } }" class="library-card">
-		<img
-			v-if="imageUrl && !imageFailed"
-			:src="imageUrl"
-			:alt="library.Name ?? ''"
-			loading="lazy"
-			@error="imageFailed = true"
-		/>
-		<span class="library-card-title">{{ library.Name }}</span>
+		<div class="library-card-media">
+			<img
+				v-if="imageUrl && !imageFailed"
+				:src="imageUrl"
+				:alt="library.Name ?? ''"
+				@error="imageFailed = true"
+			/>
+		</div>
+		<p class="library-card-caption">{{ library.Name }}</p>
 	</router-link>
 </template>
 
