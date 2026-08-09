@@ -1,7 +1,7 @@
 - [ ] 1. Server Management & Authentication
   - [x] Validate server URL (/System/Info/Public)
   - [ ] Generate persistent DeviceId and X-Emby-Authorization header
-  - [ ] Authenticate user (/Users/AuthenticateByName) and store AccessToken
+  - [x] Authenticate user (/Users/AuthenticateByName) and store AccessToken
   - [x] Save session locally for auto-login on restart
   - [ ] Multi-server storage and switching UI
 

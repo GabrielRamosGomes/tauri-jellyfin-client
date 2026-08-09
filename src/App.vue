@@ -2,13 +2,33 @@
   <main class="container">
     <h1>Jellyfin Tauri</h1>
 
-    <div v-if="serverInfo" class="server-card">
+    <!-- Authenticated -->
+    <div v-if="session" class="server-card">
       <p class="status-badge">Connected</p>
-      <h2>{{ serverInfo.ServerName }}</h2>
-      <p class="server-meta">Version: {{ serverInfo.Version }}</p>
-      <button type="button" @click="disconnect">Disconnect</button>
+      <h2>{{ serverInfo?.ServerName }}</h2>
+      <p class="server-meta">Signed in as {{ session.username }}</p>
+      <div class="row">
+        <button type="button" @click="logout">Log out</button>
+        <button type="button" @click="switchServer">Switch server</button>
+      </div>
     </div>
 
+    <!-- Connected to server, needs login -->
+    <form v-else-if="serverInfo" class="server-form" @submit.prevent="login">
+      <p class="server-meta">{{ serverInfo.ServerName }} ({{ serverInfo.Version }})</p>
+      <div class="row">
+        <input v-model="username" type="text" placeholder="Username" required :disabled="loading" />
+        <input v-model="password" type="password" placeholder="Password" :disabled="loading" />
+        <button type="submit" :disabled="loading">
+          {{ loading ? 'Signing in...' : 'Sign in' }}
+        </button>
+      </div>
+
+      <p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+      <button type="button" class="link-btn" @click="switchServer">Use a different server</button>
+    </form>
+
+    <!-- No server connected -->
     <form v-else class="server-form" @submit.prevent="connect">
       <div class="row">
         <input
@@ -29,34 +49,44 @@
 </template>
 
 <script setup lang="ts">
-import type { Jellyfin } from '@jellyfin/sdk';
+import type { Api, Jellyfin } from '@jellyfin/sdk';
+import type { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
 
-import { connectToServer, createClient } from '@/api/jellyfin/jellyfin';
+import { authenticateUser, connectToServer, createClient } from '@/api/jellyfin/jellyfin';
+import { AuthenticatedSession, JellyfinUser } from '@/api/jellyfin/types';
 import { authStorage } from '@/api/storage/auth';
-import { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
 import { ref, onMounted } from 'vue';
 
 const serverUrl = ref('');
+const username = ref('');
+const password = ref('');
+
 const sdk = ref<Jellyfin>();
+const api = ref<Api>();
 const loading = ref(false);
 const errorMessage = ref('');
 const serverInfo = ref<PublicSystemInfo | null>(null);
+const session = ref<AuthenticatedSession | null>(null);
 
 onMounted(async () => {
-  const savedSession = await authStorage.loadSession();
   sdk.value = await createClient();
 
-  if (savedSession?.serverUrl) {
-    loading.value = true;
-    try {
-      const server = await connectToServer(sdk.value, savedSession.serverUrl);
-      serverUrl.value = savedSession.serverUrl;
-      serverInfo.value = server.info;
-    } catch {
-      authStorage.clearSession();
-    } finally {
-      loading.value = false;
-    }
+  const saved = await authStorage.loadActiveSession();
+  if (!saved) return;
+
+  loading.value = true;
+  try {
+    const server = await connectToServer(sdk.value, saved.serverUrl);
+    server.api.accessToken = saved.accessToken;
+
+    serverUrl.value = server.serverUrl;
+    serverInfo.value = server.info;
+    api.value = server.api;
+    session.value = saved;
+  } catch {
+    await authStorage.clearSession(saved.serverUrl);
+  } finally {
+    loading.value = false;
   }
 });
 
@@ -70,29 +100,60 @@ async function connect() {
 
   try {
     const server = await connectToServer(sdk.value, serverUrl.value);
-    serverInfo.value = server.info;
     serverUrl.value = server.serverUrl;
-
-    authStorage.saveSession({
-      serverUrl: server.serverUrl,
-      accessToken: '',
-      userId: '',
-    });
+    serverInfo.value = server.info;
+    api.value = server.api;
   } catch (error) {
-    const message =
+    errorMessage.value =
       error instanceof Error ? error.message : 'Failed to connect to Jellyfin server.';
-
-    console.error('Error connecting to Jellyfin server:', message);
-    errorMessage.value = message;
+    console.error('Error connecting to Jellyfin server:', errorMessage.value);
   } finally {
     loading.value = false;
   }
 }
 
-function disconnect() {
-  authStorage.clearSession();
+async function login() {
+  if (!api.value) return;
+
+  loading.value = true;
+  errorMessage.value = '';
+
+  try {
+    const user: JellyfinUser = {
+      username: username.value,
+      password: password.value,
+    };
+    const authed = await authenticateUser(api.value, user);
+    await authStorage.saveSession(authed);
+    session.value = authed;
+    password.value = '';
+  } catch (error) {
+    errorMessage.value = error instanceof Error ? error.message : 'Login failed.';
+    console.error('Error authenticating with Jellyfin server:', errorMessage.value);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function logout() {
+  if (session.value) {
+    await authStorage.clearSession(session.value.serverUrl);
+  }
+  session.value = null;
+  username.value = '';
+  password.value = '';
+}
+
+async function switchServer() {
+  if (session.value) {
+    await authStorage.clearSession(session.value.serverUrl);
+  }
+  session.value = null;
   serverInfo.value = null;
+  api.value = undefined;
   serverUrl.value = '';
+  username.value = '';
+  password.value = '';
 }
 </script>
 
@@ -164,6 +225,15 @@ button:disabled,
 input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.link-btn {
+  margin-top: 8px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-decoration: underline;
+  padding: 4px;
 }
 
 @media (prefers-color-scheme: dark) {
