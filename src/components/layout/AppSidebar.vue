@@ -11,6 +11,14 @@
 			<p class="nav-section-label">Media</p>
 			<!-- Populated once library views (TODO 2. Fetch library categories) are wired up -->
 			<p v-if="!libraries.length" class="nav-empty">No libraries yet</p>
+			<router-link
+				v-for="library in libraries"
+				:key="library.Id"
+				:to="{ name: 'library', params: { id: library.Id } }"
+				class="nav-item"
+			>
+				{{ library.Name }}
+			</router-link>
 
 			<p class="nav-section-label">Administration</p>
 			<router-link :to="{ name: 'dashboard' }" class="nav-item">Dashboard</router-link>
@@ -31,16 +39,16 @@
 
 <script setup lang="ts">
 	import { useAuthSession } from '@/composables/useAuthSession';
+	import { useLibraries } from '@/composables/useLibraries';
 	import { useServerConnection } from '@/composables/useServerConnection';
 	import { getCurrentWindow } from '@tauri-apps/api/window';
 	import { useRouter } from 'vue-router';
 
+	const { libraries } = useLibraries();
 	const router = useRouter();
 
 	const { session, logout } = useAuthSession();
 	const { serverInfo } = useServerConnection();
-
-	const libraries: never[] = [];
 
 	async function signOut() {
 		await logout();

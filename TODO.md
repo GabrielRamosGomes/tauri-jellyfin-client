@@ -6,14 +6,14 @@
   - [x] Multi-server storage and switching UI
 
 - [ ] 2. Library & Media Discovery
-  - [ ] Fetch library categories (/Users/{UserId}/Views)
-  - [ ] Render media grids with pagination (/Users/{UserId}/Items)
-  - [ ] Load posters and backdrops (/Items/{itemId}/Images/{type})
+  - [x] Fetch library categories
+  - [ ] Render media grids with pagination
+  - [ ] Load posters and backdrops
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
   - [ ] Detailed media view (synopsis, year, runtime, stream specs)
   - [ ] Work on UI framework to unify app styles
 
-- [ ] 3. Playback / DirectPlaye
+- [ ] 3. Playback / DirectPlayer
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
   - [ ] Pass raw stream URL directly to libmpv
   - [ ] Enable GPU hardware decoding (hwdec=auto)

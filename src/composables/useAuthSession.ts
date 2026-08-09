@@ -5,7 +5,6 @@ import { AuthenticatedSession, JellyfinUser } from '@/api/jellyfin/types';
 import { authStorage } from '@/api/storage/auth';
 import { ref } from 'vue';
 
-// Module-scoped state: singleton composable, same reasoning as useServerConnection.
 const loading = ref(false);
 const errorMessage = ref('');
 

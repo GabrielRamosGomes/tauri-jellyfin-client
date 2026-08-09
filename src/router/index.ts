@@ -41,6 +41,12 @@ const router = createRouter({
 					component: () => import('@/views/ComingSoonView.vue'),
 					props: { title: 'Settings' },
 				},
+				{
+					path: 'library/:id',
+					name: 'library',
+					component: () => import('@/views/ComingSoonView.vue'),
+					props: { title: 'Library' },
+				},
 			],
 		},
 	],
