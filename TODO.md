@@ -26,5 +26,10 @@
   - [ ] Media segment / chapter markers on progress bar
   - [ ] Queue playback & auto-play next episode
 
-- [ ] 5. Nice to Haves
+- [ ] 5. Server Administration (Admin Users Only)
+  - [ ] Detect admin users and gate the Administration nav section accordingly
+  - [ ] Dashboard (server activity / stats overview)
+  - [ ] Metadata Manager (edit item metadata from the client)
+
+- [ ] 6. Nice to Haves
   - [ ] Translations
