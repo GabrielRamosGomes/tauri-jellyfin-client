@@ -1,39 +1,87 @@
-// Light theme (default)
-$color-text: #0f0f0f;
-$color-bg: #f6f6f6;
-$color-surface: #ffffff;
-$color-border: #d5d5d5;
-$color-border-subtle: #e5e5e5;
-$color-muted: #6b6b6b;
+@mixin dark-tokens {
+	--color-text: #f6f6f6;
+	--color-bg: #1f1f1f;
+	--color-surface: #2a2a2a;
+	--color-border: #3a3a3a;
+	--color-border-subtle: #3a3a3a;
+	--color-muted: #a5a5a5;
 
-$color-primary: #396cd8;
-$color-primary-hover: #2f5bb8;
-$color-primary-active: #274c9c;
+	--color-primary: #4c7fe0;
+	--color-primary-hover: #5c8ce6;
+	--color-primary-active: #3c69c0;
+	--color-link: #7ea6ec;
+	--color-link-hover: #9bb9f0;
 
-$color-error: #d33636;
+	--color-error: #ff8080;
 
-$color-success-bg: #e3f6e8;
-$color-success-text: #1c7c3f;
-$color-success-dot: #2fae5f;
+	--color-success-bg: #163d22;
+	--color-success-text: #6fe39a;
+	--color-success-dot: #3fbf74;
+}
 
-// Dark theme
-$color-text-dark: #f6f6f6;
-$color-bg-dark: #1f1f1f;
-$color-surface-dark: #2a2a2a;
-$color-border-dark: #3a3a3a;
-$color-muted-dark: #a5a5a5;
+:root {
+	// Light theme (default)
+	--color-text: #0f0f0f;
+	--color-bg: #f6f6f6;
+	--color-surface: #ffffff;
+	--color-border: #d5d5d5;
+	--color-border-subtle: #e5e5e5;
+	--color-muted: #6b6b6b;
 
-$color-primary-dark: #4c7fe0;
-$color-primary-hover-dark: #5c8ce6;
-$color-primary-active-dark: #3c69c0;
-$color-link-dark: #7ea6ec;
-$color-link-hover-dark: #9bb9f0;
+	--color-primary: #396cd8;
+	--color-primary-hover: #2f5bb8;
+	--color-primary-active: #274c9c;
+	--color-link: #396cd8;
+	--color-link-hover: #2f5bb8;
 
-$color-error-dark: #ff8080;
+	--color-error: #d33636;
 
-$color-success-bg-dark: #163d22;
-$color-success-text-dark: #6fe39a;
-$color-success-dot-dark: #3fbf74;
+	--color-success-bg: #e3f6e8;
+	--color-success-text: #1c7c3f;
+	--color-success-dot: #2fae5f;
+}
+
+// Follows the OS setting by default...
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme='light']) {
+		@include dark-tokens;
+	}
+}
+
+// ...but an explicit user choice (data-theme on <html>) always wins, in either direction.
+:root[data-theme='dark'] {
+	@include dark-tokens;
+}
 
 $font-family:
 	-apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, Avenir, Helvetica, Arial, sans-serif;
+
+// Spacing scale
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+$space-2xl: 48px;
+
+// Radius scale
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+$radius-full: 999px;
+
+// Font sizes
+$font-size-xs: 0.75em;
+$font-size-sm: 0.85em;
+$font-size-md: 1em;
+$font-size-lg: 1.1em;
+$font-size-xl: 1.4em;
+$font-size-2xl: 1.8em;
+
+// Shadows (dark-mode-safe: black at fixed alpha reads fine on both themes)
+$shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.15);
+$shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+$shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.45);
+
+// Transitions
+$transition-fast: 0.15s ease;
