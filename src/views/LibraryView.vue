@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 	import MediaItemCard from '@/components/MediaItemCard.vue';
+	import { useChildItems } from '@/composables/useChildItems';
 	import { useLibraries } from '@/composables/useLibraries';
-	import { useLibraryItems } from '@/composables/useLibraryItems';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';
 
@@ -30,5 +30,5 @@
 		() => libraries.value.find((library) => library.Id === libraryId.value)?.Name ?? 'Library',
 	);
 
-	const { items, loading, errorMessage } = useLibraryItems(libraryId);
+	const { items, loading, errorMessage } = useChildItems(libraryId);
 </script>

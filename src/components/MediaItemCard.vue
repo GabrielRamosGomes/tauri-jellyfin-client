@@ -1,5 +1,5 @@
 <template>
-	<div class="media-item-card">
+	<router-link :to="{ name: 'item', params: { id: item.Id } }" class="media-item-card">
 		<div class="media-item-media">
 			<img
 				v-if="imageUrl && !imageFailed"
@@ -14,7 +14,7 @@
 		</div>
 		<p class="media-item-name">{{ item.Name }}</p>
 		<p v-if="item.ProductionYear" class="media-item-year">{{ item.ProductionYear }}</p>
-	</div>
+	</router-link>
 </template>
 
 <script setup lang="ts">

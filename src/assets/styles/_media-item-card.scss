@@ -82,6 +82,12 @@
 	justify-content: center;
 }
 
+.media-item-card {
+	display: block;
+	text-decoration: none;
+	color: inherit;
+}
+
 .media-item-badge-done {
 	background-color: v.$color-success-dot;
 }

@@ -4,6 +4,7 @@ import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 import { ImageType, ItemSortBy, SortOrder } from '@jellyfin/sdk/lib/generated-client/models';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
+import { getUserLibraryApi } from '@jellyfin/sdk/lib/utils/api/user-library-api';
 import { getUserViewsApi } from '@jellyfin/sdk/lib/utils/api/user-views-api';
 
 export async function getLibraryViews(api: Api, userId: string) {
@@ -22,15 +23,33 @@ export function getLibraryImageUrl(api: Api, library: BaseItemDto) {
 	return url;
 }
 
-export async function getItemsInLibrary(api: Api, userId: string, parentId: string) {
+export async function getChildItems(
+	api: Api,
+	userId: string,
+	parentId: string,
+	sortBy: ItemSortBy[] = [ItemSortBy.SortName],
+) {
 	const itemsApi = getItemsApi(api);
 	const { data } = await itemsApi.getItems({
 		userId,
 		parentId,
 		recursive: false,
-		sortBy: [ItemSortBy.SortName],
+		sortBy,
 		sortOrder: [SortOrder.Ascending],
 	});
 
 	return data.Items ?? [];
+}
+
+export async function getItemDetail(api: Api, userId: string, itemId: string) {
+	const useLibraryApi = getUserLibraryApi(api);
+	const { data } = await useLibraryApi.getItem({ itemId, userId });
+
+	return data;
+}
+
+// Items can have multiple backdrops; hero image just needs the first.
+export function getBackdropUrl(api: Api, item: BaseItemDto) {
+	const urls = getImageApi(api).getItemBackdropImageUrls(item);
+	return urls[0];
 }

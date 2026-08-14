@@ -8,9 +8,8 @@
 - [ ] 2. Library & Media Discovery
   - [x] Fetch library categories
   - [x] Render media grids with pagination
-  - [ ] Load posters and backdrops
+  - [ ] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
-  - [ ] Detailed media view (synopsis, year, runtime, stream specs)
   - [ ] Work on UI framework to unify app styles
 
 - [ ] 3. Playback / DirectPlayer
