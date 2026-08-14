@@ -8,7 +8,7 @@
 - [ ] 2. Library & Media Discovery
   - [x] Fetch library categories
   - [x] Render media grids with pagination
-  - [ ] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
+  - [x] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
   - [ ] Work on UI framework to unify app styles
 

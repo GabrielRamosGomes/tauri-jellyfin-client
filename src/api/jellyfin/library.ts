@@ -1,7 +1,12 @@
 import type { Api } from '@jellyfin/sdk';
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-import { ImageType, ItemSortBy, SortOrder } from '@jellyfin/sdk/lib/generated-client/models';
+import {
+	ImageType,
+	ItemFields,
+	ItemSortBy,
+	SortOrder,
+} from '@jellyfin/sdk/lib/generated-client/models';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
 import { getUserLibraryApi } from '@jellyfin/sdk/lib/utils/api/user-library-api';
@@ -36,6 +41,7 @@ export async function getChildItems(
 		recursive: false,
 		sortBy,
 		sortOrder: [SortOrder.Ascending],
+		fields: [ItemFields.Overview],
 	});
 
 	return data.Items ?? [];
