@@ -7,7 +7,7 @@
 
 - [ ] 2. Library & Media Discovery
   - [x] Fetch library categories
-  - [ ] Render media grids with pagination
+  - [x] Render media grids with pagination
   - [ ] Load posters and backdrops
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
   - [ ] Detailed media view (synopsis, year, runtime, stream specs)

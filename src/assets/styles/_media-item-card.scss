@@ -1,0 +1,105 @@
+@use './variables' as v;
+
+.item-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+	gap: 16px;
+	margin: 16px 0;
+}
+
+.library-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.library-count {
+	padding: 2px 10px;
+	border-radius: 999px;
+	background-color: v.$color-surface;
+	color: v.$color-muted;
+	font-size: 0.85em;
+	font-weight: 600;
+}
+
+.media-item-media {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 2 / 3;
+	border-radius: 8px;
+	overflow: hidden;
+	background-color: v.$color-surface;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		color: transparent;
+	}
+}
+
+.media-item-title {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	text-align: center;
+	font-weight: 700;
+	color: #ffffff;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.media-item-name {
+	margin: 6px 0 0;
+	font-size: 0.9em;
+	font-weight: 500;
+	color: v.$color-text;
+}
+
+.media-item-year {
+	margin: 2px 0 0;
+	font-size: 0.8em;
+	color: v.$color-muted;
+}
+
+.media-item-badge {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border-radius: 999px;
+	background-color: rgba(0, 0, 0, 0.65);
+	color: #ffffff;
+	font-size: 0.75em;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.media-item-badge-done {
+	background-color: v.$color-success-dot;
+}
+
+@media (prefers-color-scheme: dark) {
+	.media-item-media {
+		background-color: v.$color-surface-dark;
+	}
+
+	.library-count {
+		background-color: v.$color-surface-dark;
+	}
+
+	.media-item-name {
+		color: v.$color-text-dark;
+	}
+
+	.media-item-year {
+		color: v.$color-muted-dark;
+	}
+}

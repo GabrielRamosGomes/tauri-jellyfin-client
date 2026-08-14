@@ -44,7 +44,7 @@ const router = createRouter({
 				{
 					path: 'library/:id',
 					name: 'library',
-					component: () => import('@/views/ComingSoonView.vue'),
+					component: () => import('@/views/LibraryView.vue'),
 					props: { title: 'Library' },
 				},
 			],
