@@ -19,7 +19,7 @@
 	aspect-ratio: 16 / 9;
 	border-radius: 8px;
 	overflow: hidden;
-	background-color: v.$color-surface;
+	background-color: var(--color-surface);
 
 	img {
 		width: 100%;
@@ -48,15 +48,5 @@
 	margin: 6px 0 0;
 	font-size: 0.85em;
 	font-weight: 500;
-	color: v.$color-text;
-}
-
-@media (prefers-color-scheme: dark) {
-	.library-card-media {
-		background-color: v.$color-surface-dark;
-	}
-
-	.library-card-caption {
-		color: v.$color-text-dark;
-	}
+	color: var(--color-text);
 }

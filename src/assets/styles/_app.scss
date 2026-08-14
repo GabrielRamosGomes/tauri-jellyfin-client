@@ -7,8 +7,8 @@
 	line-height: 1.5;
 	font-weight: 400;
 
-	color: v.$color-text;
-	background-color: v.$color-bg;
+	color: var(--color-text);
+	background-color: var(--color-bg);
 
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
@@ -54,13 +54,13 @@ h2 {
 input,
 button {
 	border-radius: 8px;
-	border: 1px solid v.$color-border;
+	border: 1px solid var(--color-border);
 	padding: 0.6em 1em;
 	font-size: 1em;
 	font-weight: 500;
 	font-family: inherit;
-	color: v.$color-text;
-	background-color: v.$color-surface;
+	color: var(--color-text);
+	background-color: var(--color-surface);
 	transition:
 		border-color 0.2s,
 		background-color 0.2s;
@@ -73,21 +73,21 @@ input {
 }
 
 input:focus {
-	border-color: v.$color-primary;
+	border-color: var(--color-primary);
 }
 
 button {
 	cursor: pointer;
 	border-color: transparent;
-	background-color: v.$color-primary;
+	background-color: var(--color-primary);
 	color: #ffffff;
 
 	&:hover {
-		background-color: v.$color-primary-hover;
+		background-color: var(--color-primary-hover);
 	}
 
 	&:active {
-		background-color: v.$color-primary-active;
+		background-color: var(--color-primary-active);
 	}
 }
 
@@ -100,67 +100,25 @@ input:disabled {
 .link-btn {
 	background: none;
 	border: none;
-	color: v.$color-primary;
+	color: var(--color-link);
 	font-weight: 400;
 	text-decoration: underline;
 	padding: 4px;
 
 	&:hover {
 		background: none;
-		color: v.$color-primary-hover;
+		color: var(--color-link-hover);
 	}
 }
 
 .server-meta {
 	margin: 0;
-	color: v.$color-muted;
+	color: var(--color-muted);
 	font-size: 0.9em;
 }
 
 .error-msg {
 	margin: 0;
-	color: v.$color-error;
+	color: var(--color-error);
 	font-size: 0.9em;
-}
-
-@media (prefers-color-scheme: dark) {
-	:root {
-		color: v.$color-text-dark;
-		background-color: v.$color-bg-dark;
-	}
-
-	input,
-	button {
-		color: v.$color-text-dark;
-		border-color: v.$color-border-dark;
-		background-color: v.$color-surface-dark;
-	}
-
-	button {
-		background-color: v.$color-primary-dark;
-
-		&:hover {
-			background-color: v.$color-primary-hover-dark;
-		}
-
-		&:active {
-			background-color: v.$color-primary-active-dark;
-		}
-	}
-
-	.link-btn {
-		color: v.$color-link-dark;
-
-		&:hover {
-			color: v.$color-link-hover-dark;
-		}
-	}
-
-	.server-meta {
-		color: v.$color-muted-dark;
-	}
-
-	.error-msg {
-		color: v.$color-error-dark;
-	}
 }

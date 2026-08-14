@@ -16,8 +16,8 @@
 .library-count {
 	padding: 2px 10px;
 	border-radius: 999px;
-	background-color: v.$color-surface;
-	color: v.$color-muted;
+	background-color: var(--color-surface);
+	color: var(--color-muted);
 	font-size: 0.85em;
 	font-weight: 600;
 }
@@ -28,7 +28,7 @@
 	aspect-ratio: 2 / 3;
 	border-radius: 8px;
 	overflow: hidden;
-	background-color: v.$color-surface;
+	background-color: var(--color-surface);
 
 	img {
 		width: 100%;
@@ -56,13 +56,13 @@
 	margin: 6px 0 0;
 	font-size: 0.9em;
 	font-weight: 500;
-	color: v.$color-text;
+	color: var(--color-text);
 }
 
 .media-item-year {
 	margin: 2px 0 0;
 	font-size: 0.8em;
-	color: v.$color-muted;
+	color: var(--color-muted);
 }
 
 .media-item-badge {
@@ -89,23 +89,5 @@
 }
 
 .media-item-badge-done {
-	background-color: v.$color-success-dot;
-}
-
-@media (prefers-color-scheme: dark) {
-	.media-item-media {
-		background-color: v.$color-surface-dark;
-	}
-
-	.library-count {
-		background-color: v.$color-surface-dark;
-	}
-
-	.media-item-name {
-		color: v.$color-text-dark;
-	}
-
-	.media-item-year {
-		color: v.$color-muted-dark;
-	}
+	background-color: var(--color-success-dot);
 }

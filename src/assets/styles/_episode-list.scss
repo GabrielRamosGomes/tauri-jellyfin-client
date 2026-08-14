@@ -18,7 +18,7 @@
 	transition: background-color 0.15s ease;
 
 	&:hover {
-		background-color: v.$color-surface;
+		background-color: var(--color-surface);
 	}
 }
 
@@ -27,7 +27,7 @@
 	text-align: center;
 	font-size: 1em;
 	font-weight: 600;
-	color: v.$color-muted;
+	color: var(--color-muted);
 }
 
 .episode-thumb {
@@ -36,7 +36,7 @@
 	aspect-ratio: 16 / 9;
 	border-radius: 8px;
 	overflow: hidden;
-	background-color: v.$color-surface;
+	background-color: var(--color-surface);
 
 	img {
 		width: 100%;
@@ -82,7 +82,7 @@
 }
 
 .episode-badge-done {
-	background-color: v.$color-success-dot;
+	background-color: var(--color-success-dot);
 }
 
 .episode-info {
@@ -93,7 +93,7 @@
 .episode-name {
 	margin: 0;
 	font-weight: 600;
-	color: v.$color-text;
+	color: var(--color-text);
 }
 
 .episode-meta {
@@ -101,35 +101,16 @@
 	gap: 10px;
 	margin: 2px 0 6px;
 	font-size: 0.8em;
-	color: v.$color-muted;
+	color: var(--color-muted);
 }
 
 .episode-overview {
 	margin: 0;
 	font-size: 0.85em;
 	line-height: 1.4;
-	color: v.$color-muted;
+	color: var(--color-muted);
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
-}
-
-@media (prefers-color-scheme: dark) {
-	.episode-list-item:hover {
-		background-color: v.$color-surface-dark;
-	}
-
-	.episode-thumb {
-		background-color: v.$color-surface-dark;
-	}
-
-	.episode-name {
-		color: v.$color-text-dark;
-	}
-
-	.episode-meta,
-	.episode-overview {
-		color: v.$color-muted-dark;
-	}
 }

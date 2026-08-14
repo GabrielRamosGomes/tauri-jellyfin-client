@@ -4,7 +4,7 @@
 	position: relative;
 	border-radius: 12px;
 	overflow: hidden;
-	background-color: v.$color-surface;
+	background-color: var(--color-surface);
 	background-size: cover;
 	background-position: center;
 	margin: 0 0 24px;
@@ -24,7 +24,7 @@
 	aspect-ratio: 2 / 3;
 	border-radius: 8px;
 	overflow: hidden;
-	background-color: v.$color-surface;
+	background-color: var(--color-surface);
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
 
 	img {
@@ -72,20 +72,6 @@
 .item-detail-children {
 	h2 {
 		margin: 0 0 12px;
-		color: v.$color-text;
-	}
-}
-
-@media (prefers-color-scheme: dark) {
-	.item-detail-header {
-		background-color: v.$color-surface-dark;
-	}
-
-	.item-detail-poster {
-		background-color: v.$color-surface-dark;
-	}
-
-	.item-detail-children h2 {
-		color: v.$color-text-dark;
+		color: var(--color-text);
 	}
 }
