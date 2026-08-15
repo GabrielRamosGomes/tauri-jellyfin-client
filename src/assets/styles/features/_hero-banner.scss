@@ -1,11 +1,22 @@
 // HeroBanner.vue
 @use '../variables' as v;
 
+@keyframes hero-banner-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 .hero-banner {
 	position: relative;
-	aspect-ratio: 21 / 9;
-	min-height: 280px;
-	max-height: 520px;
+	width: 100%;
+	height: clamp(280px, 30vw, 520px);
 	display: flex;
 	align-items: flex-end;
 	border-radius: v.$radius-lg;
@@ -14,6 +25,9 @@
 	background-size: cover;
 	background-position: center top;
 	margin-bottom: v.$space-2xl;
+	// Eases in on mount rather than popping in instantly — matters most now
+	// that the underlying data usually resolves fast enough to feel abrupt.
+	animation: hero-banner-in 0.35s ease-out;
 }
 
 .hero-banner-overlay {

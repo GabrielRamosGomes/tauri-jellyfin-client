@@ -1,7 +1,7 @@
 <template>
 	<dropdown-menu-root v-if="session">
 		<dropdown-menu-trigger class="ui-avatar app-header-avatar" title="Account">
-			<img v-if="avatarUrl" :src="avatarUrl" alt="" />
+			<img v-if="avatarUrl && !avatarFailed" :src="avatarUrl" alt="" @error="avatarFailed = true" />
 			<span v-else>{{ accountInitial }}</span>
 		</dropdown-menu-trigger>
 
@@ -43,12 +43,14 @@
 		DropdownMenuSeparator,
 		DropdownMenuTrigger,
 	} from 'reka-ui';
-	import { computed } from 'vue';
+	import { computed, ref } from 'vue';
 	import { useRouter } from 'vue-router';
 
 	const router = useRouter();
 	const { session, logout } = useAuthSession();
 	const { avatarUrl } = useUserProfile();
+
+	const avatarFailed = ref(false);
 
 	const accountInitial = computed(() => session.value?.username.charAt(0).toUpperCase() ?? '?');
 

@@ -17,70 +17,99 @@ export interface LatestSection {
 	items: BaseItemDto[];
 }
 
-export function useHomeSections() {
-	const loading = ref(false);
-	const errorMessage = ref('');
+const loading = ref(false);
+const errorMessage = ref('');
 
-	const favorites = ref<BaseItemDto[]>([]);
-	const continueWatching = ref<BaseItemDto[]>([]);
-	const nextUp = ref<BaseItemDto[]>([]);
-	const latestByLibrary = ref<LatestSection[]>([]);
+const favorites = ref<BaseItemDto[]>([]);
+const continueWatching = ref<BaseItemDto[]>([]);
+const nextUp = ref<BaseItemDto[]>([]);
+const latestByLibrary = ref<LatestSection[]>([]);
 
-	async function refresh(libraries: BaseItemDto[]) {
-		const { api } = useServerConnection();
-		const { session } = useAuthSession();
+let pendingLoads = 0;
 
-		const currentApi = api.value;
-		if (!currentApi || !session.value) return;
+function beginLoad() {
+	pendingLoads += 1;
+	loading.value = true;
+}
 
-		loading.value = true;
-		errorMessage.value = '';
+function endLoad() {
+	pendingLoads -= 1;
+	if (pendingLoads <= 0) loading.value = false;
+}
 
-		try {
-			const userId = session.value.userId;
-			const libraryIds = libraries
-				.map((library) => ({ id: library.Id, name: library.Name ?? '' }))
-				.filter((library): library is { id: string; name: string } => Boolean(library.id));
+async function refreshUserSections() {
+	const { api } = useServerConnection();
+	const { session } = useAuthSession();
 
-			const [favoritesResult, continueWatchingResult, nextUpResult, latestResults] =
-				await Promise.all([
-					getFavorites(currentApi, userId),
-					getContinueWatching(currentApi, userId),
-					getNextUp(currentApi, userId),
-					Promise.all(
-						libraryIds.map(async (library) => ({
-							libraryId: library.id,
-							libraryName: library.name,
-							items: await getLatestMedia(currentApi, userId, library.id),
-						})),
-					),
-				]);
+	const currentApi = api.value;
+	if (!currentApi || !session.value) return;
 
-			favorites.value = favoritesResult;
-			continueWatching.value = continueWatchingResult;
-			nextUp.value = nextUpResult;
-			latestByLibrary.value = latestResults;
-		} catch (error) {
-			errorMessage.value = error instanceof Error ? error.message : 'Failed to load home page.';
-			console.error('Error fetching home sections:', errorMessage.value);
-		} finally {
-			loading.value = false;
-		}
+	const userId = session.value.userId;
+
+	beginLoad();
+	try {
+		await Promise.all([
+			getFavorites(currentApi, userId).then((result) => {
+				favorites.value = result;
+			}),
+			getContinueWatching(currentApi, userId).then((result) => {
+				continueWatching.value = result;
+			}),
+			getNextUp(currentApi, userId).then((result) => {
+				nextUp.value = result;
+			}),
+		]);
+	} catch (error) {
+		errorMessage.value = error instanceof Error ? error.message : 'Failed to load home page.';
+		console.error('Error fetching home sections:', errorMessage.value);
+	} finally {
+		endLoad();
+	}
+}
+
+async function refreshLibrarySections(libraries: BaseItemDto[]) {
+	const { api } = useServerConnection();
+	const { session } = useAuthSession();
+
+	const currentApi = api.value;
+	if (!currentApi || !session.value) return;
+
+	const userId = session.value.userId;
+	const libraryIds = libraries
+		.map((library) => ({ id: library.Id, name: library.Name ?? '' }))
+		.filter((library): library is { id: string; name: string } => Boolean(library.id));
+
+	beginLoad();
+	try {
+		await Promise.all(
+			libraryIds.map((library) =>
+				getLatestMedia(currentApi, userId, library.id).then((items) => {
+					const section = { libraryId: library.id, libraryName: library.name, items };
+					const others = latestByLibrary.value.filter((s) => s.libraryId !== library.id);
+					latestByLibrary.value = [...others, section];
+				}),
+			),
+		);
+	} catch (error) {
+		errorMessage.value = error instanceof Error ? error.message : 'Failed to load home page.';
+		console.error('Error fetching home sections:', errorMessage.value);
+	} finally {
+		endLoad();
+	}
+}
+
+const heroItem = computed<BaseItemDto | undefined>(() => {
+	if (continueWatching.value.length) return continueWatching.value[0];
+
+	for (const section of latestByLibrary.value) {
+		const unwatched = section.items.find((item) => !item.UserData?.Played);
+		if (unwatched) return unwatched;
 	}
 
-	// Prefer resuming what's already in progress; otherwise surface the most
-	// recent unwatched addition across libraries.
-	const heroItem = computed<BaseItemDto | undefined>(() => {
-		if (continueWatching.value.length) return continueWatching.value[0];
+	return undefined;
+});
 
-		for (const section of latestByLibrary.value) {
-			const unwatched = section.items.find((item) => !item.UserData?.Played);
-			if (unwatched) return unwatched;
-		}
-
-		return undefined;
-	});
-
+export function useHomeSections() {
 	return {
 		loading,
 		errorMessage,
@@ -89,6 +118,7 @@ export function useHomeSections() {
 		nextUp,
 		latestByLibrary,
 		heroItem,
-		refresh,
+		refreshUserSections,
+		refreshLibrarySections,
 	};
 }

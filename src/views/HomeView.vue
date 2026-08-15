@@ -5,7 +5,6 @@
 		<media-row title="My Collection" :items="libraries" variant="library" />
 		<p v-if="!libraries.length" class="server-meta">No libraries yet.</p>
 
-		<!-- <media-row title="Favourites" :items="favorites" /> -->
 		<media-row title="Up Next" :items="nextUp" variant="landscape" />
 		<media-row title="Continue Watching" :items="continueWatching" variant="landscape" />
 		<media-row
@@ -22,15 +21,26 @@
 	import MediaRow from '@/components/MediaRow.vue';
 	import { useHomeSections } from '@/composables/jellyfin/useHomeSections';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
-	import { watch } from 'vue';
+	import { onMounted, watch } from 'vue';
 
 	const { libraries } = useLibraries();
-	const { continueWatching, nextUp, latestByLibrary, heroItem, refresh } = useHomeSections();
+	const {
+		continueWatching,
+		nextUp,
+		latestByLibrary,
+		heroItem,
+		refreshUserSections,
+		refreshLibrarySections,
+	} = useHomeSections();
+
+	onMounted(() => {
+		refreshUserSections();
+	});
 
 	watch(
 		libraries,
 		(current) => {
-			if (current.length) refresh(current);
+			if (current.length) refreshLibrarySections(current);
 		},
 		{ immediate: true },
 	);

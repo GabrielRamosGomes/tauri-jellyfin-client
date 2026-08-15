@@ -20,7 +20,9 @@ export function useUserProfile() {
 	}
 
 	const avatarUrl = computed(() =>
-		api.value && profile.value ? getUserAvatarUrl(api.value, profile.value) : undefined,
+		api.value && profile.value?.PrimaryImageTag
+			? getUserAvatarUrl(api.value, profile.value)
+			: undefined,
 	);
 
 	return { profile, avatarUrl, refresh };
