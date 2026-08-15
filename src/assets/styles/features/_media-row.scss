@@ -13,13 +13,30 @@
 }
 
 .media-row-title {
+	position: relative;
 	margin: 0;
+	padding-left: v.$space-md;
 	font-size: v.$font-size-xl;
+
+	&::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.15em;
+		bottom: 0.15em;
+		width: 4px;
+		border-radius: v.$radius-full;
+		background-color: var(--color-primary);
+	}
 }
 
 .media-row-controls {
 	display: flex;
-	gap: v.$space-xs;
+	gap: 2px;
+	padding: 2px;
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border-subtle);
+	border-radius: v.$radius-full;
 }
 
 .media-row-track {

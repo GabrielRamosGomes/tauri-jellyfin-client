@@ -1,56 +1,53 @@
 @mixin dark-tokens {
-	--color-text: #f2eefa;
-	--color-bg: #140f24;
-	--color-surface: #1f1938;
-	--color-border: #3a3160;
-	--color-border-subtle: #2a2348;
-	--color-muted: #9f97c4;
+	--color-text: #f5f0e6;
+	--color-bg: #0c0c10;
+	--color-surface: #17161c;
+	--color-border: #3a3742;
+	--color-border-subtle: #24222b;
+	--color-muted: #8b8794;
 
-	--color-primary: #c97b52;
-	--color-primary-hover: #d99268;
-	--color-primary-active: #ad6440;
-	--color-primary-soft-bg: rgba(201, 123, 82, 0.18);
-	--color-link: #e0a374;
-	--color-link-hover: #ecb98f;
+	--color-primary: #ff2079;
+	--color-primary-hover: #ff4d95;
+	--color-primary-active: #d4145f;
+	--color-primary-soft-bg: rgba(255, 32, 121, 0.18);
+	--color-link: #00c2d1;
+	--color-link-hover: #33d6e3;
 
-	--color-error: #ff6b8b;
+	--color-error: #ff3b3b;
 
-	--color-success-bg: #123626;
-	--color-success-text: #6fe3b0;
-	--color-success-dot: #34c98a;
+	--color-success-bg: #0f2e22;
+	--color-success-text: #2fe6a0;
+	--color-success-dot: #14e8a0;
 
-	--color-hover-overlay: rgba(255, 255, 255, 0.06);
+	--color-hover-overlay: rgba(255, 255, 255, 0.07);
 }
 
 :root {
-	// Light theme (default) — pale lavender-white "scale" surfaces, deep
-	// indigo text, same copper accent darkened for contrast on light bg.
-	--color-text: #221b38;
-	--color-bg: #f6f2fb;
+	--color-text: #170f1a;
+	--color-bg: #f5eef2;
 	--color-surface: #ffffff;
-	--color-border: #ded5ef;
-	--color-border-subtle: #ece5f7;
-	--color-muted: #756e94;
+	--color-border: #e3d3dc;
+	--color-border-subtle: #efe4ea;
+	--color-muted: #8a7a87;
 
-	--color-primary: #b5623b;
-	--color-primary-hover: #9c4f2d;
-	--color-primary-active: #834023;
-	--color-primary-soft-bg: rgba(181, 98, 59, 0.12);
-	--color-link: #b5623b;
-	--color-link-hover: #9c4f2d;
+	--color-primary: #d4145f;
+	--color-primary-hover: #b30f4d;
+	--color-primary-active: #930c40;
+	--color-primary-soft-bg: rgba(212, 20, 95, 0.1);
+	--color-link: #0e8a96;
+	--color-link-hover: #0b6e78;
 
-	--color-error: #d6335f;
+	--color-error: #c81e3a;
 
-	--color-success-bg: #e3f6ec;
-	--color-success-text: #157f4c;
-	--color-success-dot: #22b573;
+	--color-success-bg: #e2f7ef;
+	--color-success-text: #0f7a52;
+	--color-success-dot: #1fae74;
 
 	--color-hover-overlay: rgba(0, 0, 0, 0.05);
 }
 
-// Follows the OS setting by default...
 @media (prefers-color-scheme: dark) {
-	:root:not([data-theme='light']) {
+	:root:not([data-theme]) {
 		@include dark-tokens;
 	}
 }
@@ -58,6 +55,30 @@
 // ...but an explicit user choice (data-theme on <html>) always wins, in either direction.
 :root[data-theme='dark'] {
 	@include dark-tokens;
+}
+
+:root[data-theme='voltaic'] {
+	--color-text: #eaf6fa;
+	--color-bg: #0b1420;
+	--color-surface: #131f2f;
+	--color-border: #24405a;
+	--color-border-subtle: #1a2c40;
+	--color-muted: #6f8ea3;
+
+	--color-primary: #17aab8;
+	--color-primary-hover: #2ec7d4;
+	--color-primary-active: #128f9c;
+	--color-primary-soft-bg: rgba(23, 170, 184, 0.18);
+	--color-link: #33d6e3;
+	--color-link-hover: #5ee3ee;
+
+	--color-error: #ff4d6d;
+
+	--color-success-bg: #0f2e22;
+	--color-success-text: #4be38a;
+	--color-success-dot: #2fe6a0;
+
+	--color-hover-overlay: rgba(255, 255, 255, 0.06);
 }
 
 $font-family:

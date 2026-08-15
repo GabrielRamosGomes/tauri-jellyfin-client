@@ -1,6 +1,6 @@
 import { LazyStore } from '@tauri-apps/plugin-store';
 
-export type ThemePreference = 'system' | 'light' | 'dark';
+export type ThemePreference = 'system' | 'light' | 'dark' | 'voltaic';
 
 const store = new LazyStore('settings.json');
 const KEY = 'jf_theme_preference';
