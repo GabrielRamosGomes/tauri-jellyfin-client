@@ -11,6 +11,10 @@
 
 			<span v-if="item.UserData?.Played" class="media-item-badge media-item-badge-done">✓</span>
 			<span v-else-if="unwatchedCount" class="media-item-badge">{{ unwatchedCount }}</span>
+
+			<div class="media-item-play">
+				<play :size="20" fill="currentColor" />
+			</div>
 		</div>
 		<p class="media-item-name">{{ item.Name }}</p>
 		<p v-if="item.ProductionYear" class="media-item-year">{{ item.ProductionYear }}</p>
@@ -22,6 +26,7 @@
 
 	import { getLibraryImageUrl } from '@/api/jellyfin/library';
 	import { useServerConnection } from '@/composables/useServerConnection';
+	import { Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();

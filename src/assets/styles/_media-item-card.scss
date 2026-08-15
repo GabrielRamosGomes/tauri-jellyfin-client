@@ -29,6 +29,7 @@
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: var(--color-surface);
+	transition: box-shadow v.$transition-fast;
 
 	img {
 		width: 100%;
@@ -36,6 +37,32 @@
 		object-fit: cover;
 		display: block;
 		color: transparent;
+		transition: filter v.$transition-fast;
+	}
+}
+
+.media-item-play {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	opacity: 0;
+	transition: opacity v.$transition-fast;
+
+	svg {
+		width: 48px;
+		height: 48px;
+		padding: 12px;
+		border-radius: v.$radius-full;
+		background-color: var(--color-primary);
+		color: #ffffff;
+		box-shadow: v.$shadow-md;
+		transition: background-color v.$transition-fast;
+
+		&:hover {
+			background-color: var(--color-primary-active);
+		}
 	}
 }
 
@@ -80,12 +107,36 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	transition: opacity v.$transition-fast;
 }
 
 .media-item-card {
 	display: block;
+	position: relative;
 	text-decoration: none;
 	color: inherit;
+	transition: transform v.$transition-fast;
+
+	&:hover {
+		transform: scale(1.05);
+		z-index: 2;
+
+		.media-item-media {
+			box-shadow: v.$shadow-lg;
+		}
+
+		.media-item-media img {
+			filter: blur(1.5px) brightness(0.7);
+		}
+
+		.media-item-play {
+			opacity: 1;
+		}
+
+		.media-item-badge {
+			opacity: 0;
+		}
+	}
 }
 
 .media-item-badge-done {

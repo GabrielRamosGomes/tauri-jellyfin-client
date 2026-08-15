@@ -1,0 +1,149 @@
+@use './variables' as v;
+
+.media-row {
+	margin-bottom: v.$space-2xl;
+}
+
+.media-row-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: v.$space-md;
+}
+
+.media-row-title {
+	margin: 0;
+	font-size: v.$font-size-xl;
+}
+
+.media-row-controls {
+	display: flex;
+	gap: v.$space-xs;
+}
+
+.media-row-track {
+	display: flex;
+	align-items: flex-start;
+	gap: v.$space-lg;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	scroll-snap-type: x proximity;
+	padding-bottom: v.$space-xs;
+	scrollbar-width: none;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+.media-row-card {
+	flex: 0 0 clamp(120px, 13vw, 230px);
+	min-width: 0;
+	scroll-snap-align: start;
+}
+
+.media-row-card--landscape {
+	flex-basis: clamp(220px, 24vw, 340px);
+}
+
+.media-row-card--library {
+	flex-basis: clamp(220px, 26vw, 380px);
+}
+
+.media-episode-card {
+	display: block;
+	position: relative;
+	text-decoration: none;
+	color: inherit;
+	transition: transform v.$transition-fast;
+
+	&:hover {
+		transform: scale(1.05);
+		z-index: 2;
+
+		.media-episode-media {
+			box-shadow: v.$shadow-lg;
+		}
+
+		.media-episode-media img {
+			filter: blur(1.5px) brightness(0.7);
+		}
+
+		.media-item-play {
+			opacity: 1;
+		}
+
+		.media-item-badge {
+			opacity: 0;
+		}
+	}
+}
+
+.media-episode-media {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 16 / 9;
+	border-radius: 8px;
+	overflow: hidden;
+	background-color: var(--color-surface);
+	transition: box-shadow v.$transition-fast;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		color: transparent;
+		transition: filter v.$transition-fast;
+	}
+}
+
+.media-episode-fallback {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: v.$space-sm;
+	text-align: center;
+	font-weight: 700;
+	color: #ffffff;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.media-episode-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 4px;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.media-episode-progress-bar {
+	height: 100%;
+	background-color: var(--color-primary);
+}
+
+.media-episode-title {
+	margin: v.$space-sm 0 0;
+	font-size: v.$font-size-md;
+	font-weight: 600;
+	line-height: 1.3;
+	height: 1.3em;
+	color: var(--color-text);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.media-episode-subtitle {
+	margin: 2px 0 0;
+	font-size: v.$font-size-sm;
+	line-height: 1.3;
+	height: 1.3em;
+	color: var(--color-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

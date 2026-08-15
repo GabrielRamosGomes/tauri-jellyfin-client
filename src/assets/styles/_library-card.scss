@@ -1,16 +1,20 @@
 @use './variables' as v;
 
-.library-row {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
-}
-
 .library-card {
 	display: block;
-	width: 220px;
+	position: relative;
 	text-decoration: none;
 	color: inherit;
+	transition: transform v.$transition-fast;
+
+	&:hover {
+		transform: scale(1.03);
+		z-index: 2;
+
+		.library-card-media {
+			box-shadow: v.$shadow-lg;
+		}
+	}
 }
 
 .library-card-media {
@@ -20,6 +24,7 @@
 	border-radius: 8px;
 	overflow: hidden;
 	background-color: var(--color-surface);
+	transition: box-shadow v.$transition-fast;
 
 	img {
 		width: 100%;

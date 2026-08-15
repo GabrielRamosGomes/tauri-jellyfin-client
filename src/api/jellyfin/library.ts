@@ -4,13 +4,17 @@ import type { BaseItemDto, UserDto } from '@jellyfin/sdk/lib/generated-client/mo
 import {
 	ImageType,
 	ItemFields,
+	ItemFilter,
 	ItemSortBy,
 	SortOrder,
 } from '@jellyfin/sdk/lib/generated-client/models';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
+import { getTvShowsApi } from '@jellyfin/sdk/lib/utils/api/tv-shows-api';
 import { getUserLibraryApi } from '@jellyfin/sdk/lib/utils/api/user-library-api';
 import { getUserViewsApi } from '@jellyfin/sdk/lib/utils/api/user-views-api';
+
+const HOME_ROW_LIMIT = 15;
 
 export async function getLibraryViews(api: Api, userId: string) {
 	const userViewsApi = getUserViewsApi(api);
@@ -60,6 +64,60 @@ export function getBackdropUrl(api: Api, item: BaseItemDto) {
 	return urls[0];
 }
 
+export function getLandscapeImageUrl(api: Api, item: BaseItemDto) {
+	const imageApi = getImageApi(api);
+
+	if (item.Type === 'Episode') return imageApi.getItemImageUrl(item, ImageType.Primary);
+	if (item.ImageTags?.Thumb) return imageApi.getItemImageUrl(item, ImageType.Thumb);
+
+	return (
+		imageApi.getItemBackdropImageUrls(item)[0] ?? imageApi.getItemImageUrl(item, ImageType.Primary)
+	);
+}
+
 export function getUserAvatarUrl(api: Api, user: UserDto) {
 	return getImageApi(api).getUserImageUrl(user);
+}
+
+export async function getFavorites(api: Api, userId: string) {
+	const itemsApi = getItemsApi(api);
+	const { data } = await itemsApi.getItems({
+		userId,
+		filters: [ItemFilter.IsFavorite],
+		recursive: true,
+		limit: HOME_ROW_LIMIT,
+		sortBy: [ItemSortBy.SortName],
+	});
+
+	return data.Items ?? [];
+}
+
+export async function getContinueWatching(api: Api, userId: string) {
+	const itemsApi = getItemsApi(api);
+	const { data } = await itemsApi.getResumeItems({ userId, limit: HOME_ROW_LIMIT });
+
+	return data.Items ?? [];
+}
+
+export async function getNextUp(api: Api, userId: string) {
+	const tvShowsApi = getTvShowsApi(api);
+	const { data } = await tvShowsApi.getNextUp({
+		userId,
+		limit: HOME_ROW_LIMIT,
+		// In-progress episodes belong in Continue Watching, not here.
+		enableResumable: false,
+	});
+
+	return data.Items ?? [];
+}
+
+export async function getLatestMedia(api: Api, userId: string, parentId: string) {
+	const userLibraryApi = getUserLibraryApi(api);
+	const { data } = await userLibraryApi.getLatestMedia({
+		userId,
+		parentId,
+		limit: HOME_ROW_LIMIT,
+	});
+
+	return data;
 }
