@@ -8,7 +8,7 @@ A Tauri + Vue 3 (Composition API, `<script setup>`) Jellyfin client. State is ma
 src/components/
   ui/          → small, reusable primitives (buttons, inputs, badges, cards, menus...)
   layout/      → app chrome (header, sidebar, nav, user menu)
-  *.vue        → feature components (cards, lists, forms, headers)
+  features/    → feature components (cards, lists, forms, headers) — one per screen/section, not generic
 ```
 
 `ui/` is this project's shadcn-style primitives folder. Today it holds:

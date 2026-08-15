@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-	import EpisodeListItem from '@/components/EpisodeListItem.vue';
-	import ItemDetailHeader from '@/components/ItemDetailHeader.vue';
-	import MediaItemCard from '@/components/MediaItemCard.vue';
+	import EpisodeListItem from '@/components/features/EpisodeListItem.vue';
+	import ItemDetailHeader from '@/components/features/ItemDetailHeader.vue';
+	import MediaItemCard from '@/components/features/MediaItemCard.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
