@@ -55,7 +55,9 @@
 	left: 0;
 	z-index: 50;
 	width: 280px;
-	background-color: var(--color-surface);
+	background:
+		radial-gradient(circle at 15% -10%, var(--color-primary-soft-bg), transparent 55%),
+		var(--color-surface);
 	border-right: 1px solid var(--color-border-subtle);
 	border-radius: 0 v.$radius-md v.$radius-md 0;
 	padding: v.$space-sm 0;
@@ -162,7 +164,7 @@
 	}
 
 	&.router-link-active {
-		background-color: var(--color-primary-soft-bg);
+		background: linear-gradient(90deg, var(--color-primary-soft-bg), transparent);
 		border-left-color: var(--color-primary);
 		color: var(--color-primary);
 	}
