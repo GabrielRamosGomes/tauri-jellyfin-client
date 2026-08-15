@@ -26,9 +26,14 @@
 			{{ loading ? 'Signing in...' : 'Login' }}
 		</ui-button>
 
-		<button type="button" class="link-btn login-change-server" @click="emit('useDifferentServer')">
+		<ui-button
+			variant="ghost"
+			size="sm"
+			class="login-change-server"
+			@click="emit('useDifferentServer')"
+		>
 			Change Server
-		</button>
+		</ui-button>
 	</form>
 </template>
 

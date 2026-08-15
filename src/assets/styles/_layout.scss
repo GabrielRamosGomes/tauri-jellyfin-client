@@ -74,26 +74,18 @@
 	transform: translateX(0);
 }
 
-.nav-drawer-close {
-	display: flex;
-	align-items: center;
+.ui-btn.nav-drawer-close {
+	justify-content: flex-start;
 	gap: v.$space-sm;
 	padding: v.$space-sm;
 	margin: 0 v.$space-xs v.$space-sm;
 	border: none;
-	// Matches .nav-item's transparent border-left so both start at the same x
-	// position — .nav-item's border (even transparent) still occupies space.
 	border-left: 3px solid transparent;
 	border-radius: v.$radius-sm;
-	background: none;
 	color: var(--color-muted);
-	font-family: inherit;
 	font-size: v.$font-size-sm;
-	font-weight: 600;
-	cursor: pointer;
 
 	&:hover {
-		background-color: var(--color-hover-overlay);
 		color: var(--color-text);
 	}
 }

@@ -6,10 +6,10 @@
 	/>
 
 	<aside class="nav-drawer" :class="{ 'nav-drawer--open': isOpen }">
-		<button type="button" class="nav-drawer-close" @click="close">
+		<ui-button variant="ghost" size="sm" class="nav-drawer-close" @click="close">
 			<panel-left-close :size="20" />
 			<span>Close</span>
-		</button>
+		</ui-button>
 
 		<nav class="sidebar-nav">
 			<nav-group :items="homeItems" />
@@ -33,6 +33,7 @@
 	import type { NavItem } from './NavGroup.vue';
 	import type { CollectionType } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import UiButton from '@/components/ui/UiButton.vue';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { useNavDrawer } from '@/composables/ui/useNavDrawer';
 	import {
