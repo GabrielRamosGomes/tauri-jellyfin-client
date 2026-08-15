@@ -1,28 +1,33 @@
 <template>
-	<form class="server-form" @submit.prevent="emit('submit')">
-		<p class="server-meta">{{ serverInfo.ServerName }} ({{ serverInfo.Version }})</p>
-		<div class="row">
-			<input
-				v-model="credentials.username"
-				type="text"
-				placeholder="Username"
-				required
-				:disabled="loading"
-			/>
-			<input
-				v-model="credentials.password"
-				type="password"
-				placeholder="Password"
-				:disabled="loading"
-			/>
-			<button type="submit" :disabled="loading">
-				{{ loading ? 'Signing in...' : 'Sign in' }}
-			</button>
-		</div>
+	<form class="server-form login-form" @submit.prevent="emit('submit')">
+		<h1 class="login-title">Login</h1>
+		<p class="server-meta login-subtitle">{{ serverInfo.ServerName }} ({{ serverInfo.Version }})</p>
+
+		<ui-input
+			v-model="credentials.username"
+			:icon="User"
+			label="Username"
+			placeholder="Username"
+			required
+			:disabled="loading"
+		/>
+		<ui-input
+			v-model="credentials.password"
+			:icon="KeyRound"
+			type="password"
+			label="Password"
+			placeholder="Password"
+			:disabled="loading"
+		/>
 
 		<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
-		<button type="button" class="link-btn" @click="emit('useDifferentServer')">
-			Use a different server
+
+		<ui-button type="submit" :disabled="loading">
+			{{ loading ? 'Signing in...' : 'Login' }}
+		</ui-button>
+
+		<button type="button" class="link-btn login-change-server" @click="emit('useDifferentServer')">
+			Change Server
 		</button>
 	</form>
 </template>
@@ -30,6 +35,10 @@
 <script setup lang="ts">
 	import type { JellyfinUser } from '@/api/jellyfin/types';
 	import type { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
+
+	import UiButton from '@/components/ui/UiButton.vue';
+	import UiInput from '@/components/ui/UiInput.vue';
+	import { KeyRound, User } from 'lucide-vue-next';
 
 	defineProps<{
 		serverInfo: PublicSystemInfo;

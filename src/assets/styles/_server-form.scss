@@ -12,3 +12,18 @@
 	flex-direction: column;
 	gap: 12px;
 }
+
+.login-title {
+	margin: 0;
+	text-align: center;
+	font-size: v.$font-size-2xl;
+}
+
+.login-subtitle {
+	margin: -8px 0 8px;
+	text-align: center;
+}
+
+.login-change-server {
+	align-self: center;
+}

@@ -1,8 +1,9 @@
 <template>
 	<main class="container">
-		<h1>Jellyfin Tauri</h1>
+		<h1 v-if="!isSignOutMode">Jellyfin Tauri</h1>
 
 		<server-list
+			v-if="!isSignOutMode"
 			:servers="servers"
 			:active-server-url="session?.serverUrl"
 			:loading="loading"
@@ -38,8 +39,9 @@
 	import { useServerConnection } from '@/composables/useServerConnection';
 	import { useServers } from '@/composables/useServers';
 	import { computed, onMounted } from 'vue';
-	import { useRouter } from 'vue-router';
+	import { useRoute, useRouter } from 'vue-router';
 
+	const route = useRoute();
 	const router = useRouter();
 
 	const {
@@ -68,11 +70,15 @@
 	const loading = computed(() => connectLoading.value || authLoading.value);
 	const errorMessage = computed(() => authError.value || connectError.value);
 
+	// Signing out lands here with ?mode=signout: keep the existing server
+	// connection so the username/password form shows immediately. Arriving any
+	// other way (e.g. "Change Server") always resets to "pick a server" mode.
+	const isSignOutMode = computed(() => route.query.mode === 'signout');
+
 	onMounted(async () => {
-		// Always land here in "pick a server" mode, even when arriving already
-		// authenticated (e.g. via the sidebar's "Select Server" link).
 		await clearData();
-		reset();
+		if (!isSignOutMode.value) reset();
+
 		await refreshServers();
 	});
 

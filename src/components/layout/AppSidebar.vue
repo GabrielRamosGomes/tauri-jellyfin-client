@@ -1,61 +1,92 @@
 <template>
-	<aside class="sidebar">
-		<div v-if="session" class="sidebar-account">
-			<p class="sidebar-account-name">{{ session.username }}</p>
-			<p class="sidebar-account-server">{{ serverInfo?.ServerName ?? session.serverUrl }}</p>
-		</div>
+	<div
+		class="nav-drawer-backdrop"
+		:class="{ 'nav-drawer-backdrop--visible': isOpen }"
+		@click="close"
+	/>
+
+	<aside class="nav-drawer" :class="{ 'nav-drawer--open': isOpen }">
+		<button type="button" class="nav-drawer-close" @click="close">
+			<panel-left-close :size="20" />
+			<span>Close</span>
+		</button>
 
 		<nav class="sidebar-nav">
-			<router-link :to="{ name: 'home' }" class="nav-item">Home</router-link>
+			<nav-group :items="homeItems" />
 
-			<p class="nav-section-label">Media</p>
-			<!-- Populated once library views (TODO 2. Fetch library categories) are wired up -->
-			<p v-if="!libraries.length" class="nav-empty">No libraries yet</p>
-			<router-link
-				v-for="library in libraries"
-				:key="library.Id"
-				:to="{ name: 'library', params: { id: library.Id } }"
-				class="nav-item"
-			>
-				{{ library.Name }}
-			</router-link>
+			<hr class="nav-divider" />
 
-			<p class="nav-section-label">Administration</p>
-			<router-link :to="{ name: 'dashboard' }" class="nav-item">Dashboard</router-link>
-			<router-link :to="{ name: 'metadata-manager' }" class="nav-item">
-				Metadata Manager
-			</router-link>
+			<nav-group :items="libraryItems" empty-text="No libraries yet" />
 
-			<p class="nav-section-label">User</p>
-			<router-link :to="{ name: 'login' }" class="nav-item">Select Server</router-link>
-			<router-link :to="{ name: 'settings' }" class="nav-item">Settings</router-link>
-			<button type="button" class="nav-item nav-button" @click="signOut">Sign Out</button>
-			<button type="button" class="nav-item nav-button" @click="exitApplication">
-				Exit Application
-			</button>
+			<hr class="nav-divider" />
+
+			<nav-group label="Administration" :items="adminItems" />
 		</nav>
+
+		<footer class="nav-drawer-footer">
+			<span>tauri-jellyfin-client v{{ appVersion }}</span>
+		</footer>
 	</aside>
 </template>
 
 <script setup lang="ts">
-	import { useAuthSession } from '@/composables/useAuthSession';
+	import type { NavItem } from './NavGroup.vue';
+	import type { CollectionType } from '@jellyfin/sdk/lib/generated-client/models';
+
 	import { useLibraries } from '@/composables/useLibraries';
-	import { useServerConnection } from '@/composables/useServerConnection';
-	import { getCurrentWindow } from '@tauri-apps/api/window';
-	import { useRouter } from 'vue-router';
+	import { useNavDrawer } from '@/composables/useNavDrawer';
+	import {
+		BookOpen,
+		FilePenLine,
+		Film,
+		Folder,
+		Home,
+		LayoutDashboard,
+		Music,
+		PanelLeftClose,
+		Tv,
+	} from 'lucide-vue-next';
+	import { computed, watch } from 'vue';
+	import { useRoute } from 'vue-router';
+
+	import { version as appVersion } from '../../../package.json';
+	import NavGroup from './NavGroup.vue';
 
 	const { libraries } = useLibraries();
-	const router = useRouter();
+	const route = useRoute();
 
-	const { session, logout } = useAuthSession();
-	const { serverInfo } = useServerConnection();
+	const { isOpen, close } = useNavDrawer();
 
-	async function signOut() {
-		await logout();
-		router.push({ name: 'login' });
+	watch(
+		() => route.fullPath,
+		() => close(),
+	);
+
+	const LIBRARY_ICONS: Partial<Record<CollectionType, unknown>> = {
+		movies: Film,
+		tvshows: Tv,
+		music: Music,
+		books: BookOpen,
+	};
+
+	function libraryIcon(collectionType?: CollectionType) {
+		return (collectionType && LIBRARY_ICONS[collectionType]) || Folder;
 	}
 
-	async function exitApplication() {
-		await getCurrentWindow().close();
-	}
+	const homeItems = computed<NavItem[]>(() => [
+		{ to: { name: 'home' }, label: 'Home', icon: Home, exact: true },
+	]);
+
+	const libraryItems = computed<NavItem[]>(() =>
+		libraries.value.map((library) => ({
+			to: { name: 'library', params: { id: library.Id } },
+			label: library.Name ?? '',
+			icon: libraryIcon(library.CollectionType) as NavItem['icon'],
+		})),
+	);
+
+	const adminItems: NavItem[] = [
+		{ to: { name: 'dashboard' }, label: 'Dashboard', icon: LayoutDashboard },
+		{ to: { name: 'metadata-manager' }, label: 'Metadata Manager', icon: FilePenLine },
+	];
 </script>

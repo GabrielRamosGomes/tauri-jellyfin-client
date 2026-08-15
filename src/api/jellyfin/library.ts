@@ -1,5 +1,5 @@
 import type { Api } from '@jellyfin/sdk';
-import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
+import type { BaseItemDto, UserDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 import {
 	ImageType,
@@ -58,4 +58,8 @@ export async function getItemDetail(api: Api, userId: string, itemId: string) {
 export function getBackdropUrl(api: Api, item: BaseItemDto) {
 	const urls = getImageApi(api).getItemBackdropImageUrls(item);
 	return urls[0];
+}
+
+export function getUserAvatarUrl(api: Api, user: UserDto) {
+	return getImageApi(api).getUserImageUrl(user);
 }

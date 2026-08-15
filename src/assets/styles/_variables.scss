@@ -1,44 +1,54 @@
+// Warm coral/sunset accent on cool violet-tinted neutrals — deliberately its
+// own thing rather than Jellyfin's cyan-blue or Blink's pink/magenta. The
+// warm accent against cool-tinted (not flat-gray) backgrounds is what gives
+// it life instead of a "dead" neutral desaturated look.
 @mixin dark-tokens {
-	--color-text: #f6f6f6;
-	--color-bg: #1f1f1f;
-	--color-surface: #2a2a2a;
-	--color-border: #3a3a3a;
-	--color-border-subtle: #3a3a3a;
-	--color-muted: #a5a5a5;
+	--color-text: #f4f2f8;
+	--color-bg: #15121e;
+	--color-surface: #211d2e;
+	--color-border: #3a3350;
+	--color-border-subtle: #302a41;
+	--color-muted: #a79fc0;
 
-	--color-primary: #4c7fe0;
-	--color-primary-hover: #5c8ce6;
-	--color-primary-active: #3c69c0;
-	--color-link: #7ea6ec;
-	--color-link-hover: #9bb9f0;
+	--color-primary: #e2734e;
+	--color-primary-hover: #ec8a68;
+	--color-primary-active: #c85e3c;
+	--color-primary-soft-bg: rgba(226, 115, 78, 0.18);
+	--color-link: #f0916c;
+	--color-link-hover: #f5a888;
 
-	--color-error: #ff8080;
+	--color-error: #ff6b8b;
 
-	--color-success-bg: #163d22;
-	--color-success-text: #6fe39a;
-	--color-success-dot: #3fbf74;
+	--color-success-bg: #123626;
+	--color-success-text: #6fe3b0;
+	--color-success-dot: #34c98a;
+
+	--color-hover-overlay: rgba(255, 255, 255, 0.06);
 }
 
 :root {
 	// Light theme (default)
-	--color-text: #0f0f0f;
-	--color-bg: #f6f6f6;
+	--color-text: #1a1723;
+	--color-bg: #f5f3f8;
 	--color-surface: #ffffff;
-	--color-border: #d5d5d5;
-	--color-border-subtle: #e5e5e5;
-	--color-muted: #6b6b6b;
+	--color-border: #ddd7e8;
+	--color-border-subtle: #ece7f3;
+	--color-muted: #726c82;
 
-	--color-primary: #396cd8;
-	--color-primary-hover: #2f5bb8;
-	--color-primary-active: #274c9c;
-	--color-link: #396cd8;
-	--color-link-hover: #2f5bb8;
+	--color-primary: #cf5a3d;
+	--color-primary-hover: #b84a30;
+	--color-primary-active: #9c3d27;
+	--color-primary-soft-bg: rgba(207, 90, 61, 0.12);
+	--color-link: #cf5a3d;
+	--color-link-hover: #b84a30;
 
-	--color-error: #d33636;
+	--color-error: #d6335f;
 
-	--color-success-bg: #e3f6e8;
-	--color-success-text: #1c7c3f;
-	--color-success-dot: #2fae5f;
+	--color-success-bg: #e3f6ec;
+	--color-success-text: #157f4c;
+	--color-success-dot: #22b573;
+
+	--color-hover-overlay: rgba(0, 0, 0, 0.05);
 }
 
 // Follows the OS setting by default...
@@ -59,7 +69,7 @@ $font-family:
 // Spacing scale
 $space-xs: 4px;
 $space-sm: 8px;
-$space-md: 16px;
+$space-md: 12px;
 $space-lg: 24px;
 $space-xl: 32px;
 $space-2xl: 48px;

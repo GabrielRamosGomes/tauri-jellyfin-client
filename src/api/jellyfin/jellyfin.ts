@@ -72,6 +72,13 @@ export async function connectToServer(sdk: Jellyfin, serverUrl: string): Promise
 	};
 }
 
+export async function getCurrentUser(api: Api) {
+	const userApi = getUserApi(api);
+	const { data } = await userApi.getCurrentUser();
+
+	return data;
+}
+
 export async function authenticateUser(
 	api: Api,
 	credentials: JellyfinUser,
