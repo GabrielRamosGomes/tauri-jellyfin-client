@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 	import MediaRow from '@/components/MediaRow.vue';
-	import { useHomeSections } from '@/composables/useHomeSections';
-	import { useLibraries } from '@/composables/useLibraries';
+	import { useHomeSections } from '@/composables/jellyfin/useHomeSections';
+	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { watch } from 'vue';
 
 	const { libraries } = useLibraries();

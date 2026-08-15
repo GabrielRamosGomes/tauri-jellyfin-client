@@ -1,5 +1,5 @@
-import { useAuthSession } from '@/composables/useAuthSession';
-import { useServerConnection } from '@/composables/useServerConnection';
+import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
+import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 import { createRouter, createWebHistory } from 'vue-router';
 
 declare module 'vue-router' {

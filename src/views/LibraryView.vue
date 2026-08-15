@@ -17,8 +17,8 @@
 
 <script setup lang="ts">
 	import MediaItemCard from '@/components/MediaItemCard.vue';
-	import { useChildItems } from '@/composables/useChildItems';
-	import { useLibraries } from '@/composables/useLibraries';
+	import { useChildItems } from '@/composables/jellyfin/useChildItems';
+	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';
 

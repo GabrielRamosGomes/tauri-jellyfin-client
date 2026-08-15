@@ -11,8 +11,8 @@
 <script setup lang="ts">
 	import AppHeader from '@/components/layout/AppHeader.vue';
 	import AppSidebar from '@/components/layout/AppSidebar.vue';
-	import { useLibraries } from '@/composables/useLibraries';
-	import { useUserProfile } from '@/composables/useUserProfile';
+	import { useLibraries } from '@/composables/jellyfin/useLibraries';
+	import { useUserProfile } from '@/composables/jellyfin/useUserProfile';
 	import { onMounted } from 'vue';
 
 	const { refresh: refreshLibraries } = useLibraries();

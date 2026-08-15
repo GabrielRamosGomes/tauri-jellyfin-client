@@ -28,7 +28,7 @@
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 	import { getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/useServerConnection';
+	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();

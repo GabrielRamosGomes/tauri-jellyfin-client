@@ -35,9 +35,9 @@
 	import LoginForm from '@/components/LoginForm.vue';
 	import ServerConnectForm from '@/components/ServerConnectForm.vue';
 	import ServerList from '@/components/ServerList.vue';
-	import { useAuthSession } from '@/composables/useAuthSession';
-	import { useServerConnection } from '@/composables/useServerConnection';
-	import { useServers } from '@/composables/useServers';
+	import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
+	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
+	import { useServers } from '@/composables/jellyfin/useServers';
 	import { computed, onMounted } from 'vue';
 	import { useRoute, useRouter } from 'vue-router';
 

@@ -25,7 +25,7 @@
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 	import { getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/useServerConnection';
+	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 	import { Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 

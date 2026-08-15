@@ -33,8 +33,8 @@
 	import type { NavItem } from './NavGroup.vue';
 	import type { CollectionType } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { useLibraries } from '@/composables/useLibraries';
-	import { useNavDrawer } from '@/composables/useNavDrawer';
+	import { useLibraries } from '@/composables/jellyfin/useLibraries';
+	import { useNavDrawer } from '@/composables/ui/useNavDrawer';
 	import {
 		BookOpen,
 		FilePenLine,

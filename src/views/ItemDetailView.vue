@@ -25,8 +25,8 @@
 	import EpisodeListItem from '@/components/EpisodeListItem.vue';
 	import ItemDetailHeader from '@/components/ItemDetailHeader.vue';
 	import MediaItemCard from '@/components/MediaItemCard.vue';
-	import { useChildItems } from '@/composables/useChildItems';
-	import { useItemDetail } from '@/composables/useItemDetail';
+	import { useChildItems } from '@/composables/jellyfin/useChildItems';
+	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';

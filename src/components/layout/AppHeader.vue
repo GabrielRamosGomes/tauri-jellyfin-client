@@ -50,9 +50,9 @@
 
 <script setup lang="ts">
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
-	import { useAuthSession } from '@/composables/useAuthSession';
-	import { useNavDrawer } from '@/composables/useNavDrawer';
-	import { useUserProfile } from '@/composables/useUserProfile';
+	import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
+	import { useUserProfile } from '@/composables/jellyfin/useUserProfile';
+	import { useNavDrawer } from '@/composables/ui/useNavDrawer';
 	import { ArrowLeft, Heart, Home, LogOut, Menu, Search, Server, Settings } from 'lucide-vue-next';
 	import {
 		DropdownMenuContent,
