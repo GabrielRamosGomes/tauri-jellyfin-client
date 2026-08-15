@@ -27,8 +27,7 @@
 	gap: v.$space-lg;
 	overflow-x: auto;
 	scroll-behavior: smooth;
-	scroll-snap-type: x proximity;
-	padding-bottom: v.$space-xs;
+	padding: v.$space-md;
 	scrollbar-width: none;
 
 	&::-webkit-scrollbar {
@@ -39,7 +38,6 @@
 .media-row-card {
 	flex: 0 0 clamp(120px, 13vw, 230px);
 	min-width: 0;
-	scroll-snap-align: start;
 }
 
 .media-row-card--landscape {

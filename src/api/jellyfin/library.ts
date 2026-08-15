@@ -104,7 +104,6 @@ export async function getNextUp(api: Api, userId: string) {
 	const { data } = await tvShowsApi.getNextUp({
 		userId,
 		limit: HOME_ROW_LIMIT,
-		// In-progress episodes belong in Continue Watching, not here.
 		enableResumable: false,
 	});
 
@@ -117,7 +116,8 @@ export async function getLatestMedia(api: Api, userId: string, parentId: string)
 		userId,
 		parentId,
 		limit: HOME_ROW_LIMIT,
+		groupItems: true,
 	});
 
-	return data;
+	return data.filter((item) => item.Type !== 'Episode');
 }
