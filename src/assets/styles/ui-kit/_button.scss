@@ -1,0 +1,74 @@
+// UiButton.vue
+@use '../variables' as v;
+
+.ui-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: v.$space-xs;
+	border-radius: v.$radius-md;
+	border: 1px solid transparent;
+	font-family: inherit;
+	font-weight: 600;
+	cursor: pointer;
+	transition:
+		background-color v.$transition-fast,
+		border-color v.$transition-fast,
+		opacity v.$transition-fast;
+}
+
+.ui-btn--sm {
+	padding: 4px 10px;
+	font-size: v.$font-size-sm;
+}
+
+.ui-btn--md {
+	padding: 0.6em 1em;
+	font-size: v.$font-size-md;
+}
+
+.ui-btn--primary {
+	background-color: var(--color-primary);
+	color: #ffffff;
+
+	&:hover {
+		background-color: var(--color-primary-hover);
+	}
+
+	&:active {
+		background-color: var(--color-primary-active);
+	}
+}
+
+.ui-btn--secondary {
+	background-color: var(--color-surface);
+	border-color: var(--color-border);
+	color: var(--color-text);
+
+	&:hover {
+		background-color: var(--color-hover-overlay);
+	}
+}
+
+.ui-btn--ghost {
+	background: none;
+	color: var(--color-text);
+
+	&:hover {
+		background-color: var(--color-hover-overlay);
+	}
+}
+
+.ui-btn--danger {
+	background-color: var(--color-error);
+	color: #ffffff;
+
+	&:hover {
+		opacity: 0.85;
+	}
+}
+
+.ui-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

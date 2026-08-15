@@ -1,0 +1,33 @@
+// UiIconButton.vue
+@use '../variables' as v;
+
+.ui-icon-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	border: none;
+	border-radius: v.$radius-full;
+	background: none;
+	color: var(--color-muted);
+	cursor: pointer;
+	transition:
+		background-color v.$transition-fast,
+		color v.$transition-fast;
+
+	&:hover {
+		background-color: var(--color-hover-overlay);
+		color: var(--color-text);
+	}
+}
+
+.ui-icon-btn--active {
+	color: var(--color-primary);
+}
+
+.ui-icon-btn:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}

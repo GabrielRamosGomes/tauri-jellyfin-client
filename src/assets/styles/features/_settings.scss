@@ -1,0 +1,28 @@
+// SettingsView.vue
+@use '../variables' as v;
+
+.settings-view {
+	display: flex;
+	flex-direction: column;
+	max-width: 560px;
+}
+
+.settings-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: v.$space-lg;
+	padding: v.$space-md 0;
+	border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.settings-row-label {
+	margin: 0;
+	font-weight: 600;
+}
+
+.settings-row-desc {
+	margin: 2px 0 0;
+	color: var(--color-muted);
+	font-size: v.$font-size-sm;
+}

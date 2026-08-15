@@ -1,4 +1,5 @@
-@use './variables' as v;
+// MediaRow.vue / MediaEpisodeCard.vue
+@use '../variables' as v;
 
 .media-row {
 	margin-bottom: v.$space-2xl;

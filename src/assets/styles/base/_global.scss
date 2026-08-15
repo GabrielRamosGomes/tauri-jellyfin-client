@@ -1,4 +1,6 @@
-@use './variables' as v;
+// Base reset + generic element styles (unstyled server-form/login inputs
+// still fall back to these until they're migrated to UiInput/UiButton).
+@use '../variables' as v;
 
 :root {
 	color-scheme: light dark;

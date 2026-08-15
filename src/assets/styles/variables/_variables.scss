@@ -1,21 +1,17 @@
-// Warm coral/sunset accent on cool violet-tinted neutrals — deliberately its
-// own thing rather than Jellyfin's cyan-blue or Blink's pink/magenta. The
-// warm accent against cool-tinted (not flat-gray) backgrounds is what gives
-// it life instead of a "dead" neutral desaturated look.
 @mixin dark-tokens {
-	--color-text: #f4f2f8;
-	--color-bg: #15121e;
-	--color-surface: #211d2e;
-	--color-border: #3a3350;
-	--color-border-subtle: #302a41;
-	--color-muted: #a79fc0;
+	--color-text: #f2eefa;
+	--color-bg: #140f24;
+	--color-surface: #1f1938;
+	--color-border: #3a3160;
+	--color-border-subtle: #2a2348;
+	--color-muted: #9f97c4;
 
-	--color-primary: #e2734e;
-	--color-primary-hover: #ec8a68;
-	--color-primary-active: #c85e3c;
-	--color-primary-soft-bg: rgba(226, 115, 78, 0.18);
-	--color-link: #f0916c;
-	--color-link-hover: #f5a888;
+	--color-primary: #c97b52;
+	--color-primary-hover: #d99268;
+	--color-primary-active: #ad6440;
+	--color-primary-soft-bg: rgba(201, 123, 82, 0.18);
+	--color-link: #e0a374;
+	--color-link-hover: #ecb98f;
 
 	--color-error: #ff6b8b;
 
@@ -27,20 +23,21 @@
 }
 
 :root {
-	// Light theme (default)
-	--color-text: #1a1723;
-	--color-bg: #f5f3f8;
+	// Light theme (default) — pale lavender-white "scale" surfaces, deep
+	// indigo text, same copper accent darkened for contrast on light bg.
+	--color-text: #221b38;
+	--color-bg: #f6f2fb;
 	--color-surface: #ffffff;
-	--color-border: #ddd7e8;
-	--color-border-subtle: #ece7f3;
-	--color-muted: #726c82;
+	--color-border: #ded5ef;
+	--color-border-subtle: #ece5f7;
+	--color-muted: #756e94;
 
-	--color-primary: #cf5a3d;
-	--color-primary-hover: #b84a30;
-	--color-primary-active: #9c3d27;
-	--color-primary-soft-bg: rgba(207, 90, 61, 0.12);
-	--color-link: #cf5a3d;
-	--color-link-hover: #b84a30;
+	--color-primary: #b5623b;
+	--color-primary-hover: #9c4f2d;
+	--color-primary-active: #834023;
+	--color-primary-soft-bg: rgba(181, 98, 59, 0.12);
+	--color-link: #b5623b;
+	--color-link-hover: #9c4f2d;
 
 	--color-error: #d6335f;
 
