@@ -8,8 +8,11 @@
 			</router-link>
 		</div>
 
+		<div class="app-header-search">
+			<search-bar />
+		</div>
+
 		<div class="app-header-group">
-			<ui-icon-button :icon="Search" label="Search" />
 			<ui-icon-button :icon="Heart" label="Favorites" />
 			<user-menu />
 		</div>
@@ -19,9 +22,10 @@
 <script setup lang="ts">
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useNavDrawer } from '@/composables/ui/useNavDrawer';
-	import { ArrowLeft, Heart, Home, Menu, Search } from 'lucide-vue-next';
+	import { ArrowLeft, Heart, Home, Menu } from 'lucide-vue-next';
 	import { useRouter } from 'vue-router';
 
+	import SearchBar from './SearchBar.vue';
 	import UserMenu from './UserMenu.vue';
 
 	const router = useRouter();

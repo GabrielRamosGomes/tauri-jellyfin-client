@@ -14,10 +14,10 @@
 .app-header {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	gap: v.$space-md;
 	height: 56px;
 	flex-shrink: 0;
-	padding: 0 v.$space-md;
+	padding: 0 v.$space-xl;
 	background: transparent;
 }
 
@@ -25,6 +25,25 @@
 	display: flex;
 	align-items: center;
 	gap: v.$space-xs;
+	flex-shrink: 0;
+}
+
+.app-header-search {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+
+	.search-bar {
+		width: 100%;
+		max-width: 480px;
+
+		.ui-input {
+			height: 38px;
+			padding-top: 0;
+			padding-bottom: 0;
+			border-radius: v.$radius-lg;
+		}
+	}
 }
 
 .app-header-home {
