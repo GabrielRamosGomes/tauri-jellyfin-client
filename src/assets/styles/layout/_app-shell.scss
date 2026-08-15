@@ -5,8 +5,8 @@
 	flex-direction: column;
 	min-height: 100vh;
 	background:
-		radial-gradient(ellipse 1100px 650px at 12% -12%, var(--color-primary-soft-bg), transparent 60%),
-		radial-gradient(ellipse 900px 550px at 105% 0%, var(--color-primary-soft-bg), transparent 55%),
+		radial-gradient(ellipse 1100px 650px at 12% -12%, var(--color-primary-glow), transparent 55%),
+		radial-gradient(ellipse 900px 550px at 105% 0%, var(--color-primary-glow), transparent 50%),
 		var(--color-bg);
 }
 
@@ -59,7 +59,7 @@
 	z-index: 50;
 	width: 280px;
 	background:
-		radial-gradient(circle at 15% -10%, var(--color-primary-soft-bg), transparent 55%),
+		radial-gradient(circle 320px at 15% -10%, var(--color-primary-glow), transparent 80%),
 		var(--color-surface);
 	border-right: 1px solid var(--color-border-subtle);
 	border-radius: 0 v.$radius-md v.$radius-md 0;
