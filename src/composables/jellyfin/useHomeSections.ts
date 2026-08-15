@@ -6,7 +6,7 @@ import {
 	getLatestMedia,
 	getNextUp,
 } from '@/api/jellyfin/library';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { useAuthSession } from './useAuthSession';
 import { useServerConnection } from './useServerConnection';
@@ -68,5 +68,27 @@ export function useHomeSections() {
 		}
 	}
 
-	return { loading, errorMessage, favorites, continueWatching, nextUp, latestByLibrary, refresh };
+	// Prefer resuming what's already in progress; otherwise surface the most
+	// recent unwatched addition across libraries.
+	const heroItem = computed<BaseItemDto | undefined>(() => {
+		if (continueWatching.value.length) return continueWatching.value[0];
+
+		for (const section of latestByLibrary.value) {
+			const unwatched = section.items.find((item) => !item.UserData?.Played);
+			if (unwatched) return unwatched;
+		}
+
+		return undefined;
+	});
+
+	return {
+		loading,
+		errorMessage,
+		favorites,
+		continueWatching,
+		nextUp,
+		latestByLibrary,
+		heroItem,
+		refresh,
+	};
 }

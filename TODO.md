@@ -32,3 +32,5 @@
 
 - [ ] 6. Nice to Haves
   - [ ] Translations
+  - [ ] Cmd/Ctrl+K command palette for jump-to-title/library/settings
+  - [ ] System tray mini-player

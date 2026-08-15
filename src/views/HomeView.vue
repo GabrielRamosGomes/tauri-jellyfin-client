@@ -1,5 +1,7 @@
 <template>
 	<div>
+		<hero-banner v-if="heroItem" :item="heroItem" />
+
 		<media-row title="My Collection" :items="libraries" variant="library" />
 		<p v-if="!libraries.length" class="server-meta">No libraries yet.</p>
 
@@ -16,13 +18,14 @@
 </template>
 
 <script setup lang="ts">
+	import HeroBanner from '@/components/HeroBanner.vue';
 	import MediaRow from '@/components/MediaRow.vue';
 	import { useHomeSections } from '@/composables/jellyfin/useHomeSections';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { watch } from 'vue';
 
 	const { libraries } = useLibraries();
-	const { continueWatching, nextUp, latestByLibrary, refresh } = useHomeSections();
+	const { continueWatching, nextUp, latestByLibrary, heroItem, refresh } = useHomeSections();
 
 	watch(
 		libraries,

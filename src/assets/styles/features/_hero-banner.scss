@@ -1,0 +1,77 @@
+// HeroBanner.vue
+@use '../variables' as v;
+
+.hero-banner {
+	position: relative;
+	aspect-ratio: 21 / 9;
+	min-height: 280px;
+	max-height: 520px;
+	display: flex;
+	align-items: flex-end;
+	border-radius: v.$radius-lg;
+	overflow: hidden;
+	background-color: var(--color-surface);
+	background-size: cover;
+	background-position: center top;
+	margin-bottom: v.$space-2xl;
+}
+
+.hero-banner-overlay {
+	width: 100%;
+	padding: v.$space-xl;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.85) 90%);
+}
+
+.hero-banner-content {
+	max-width: 640px;
+}
+
+.hero-banner-eyebrow {
+	margin: 0 0 4px;
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.85);
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.hero-banner-title {
+	margin: 0 0 v.$space-sm;
+	font-size: v.$font-size-2xl;
+	color: #ffffff;
+	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.hero-banner-meta {
+	display: flex;
+	gap: v.$space-md;
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.85);
+	margin: 0 0 v.$space-sm;
+}
+
+.hero-banner-overview {
+	margin: 0 0 v.$space-lg;
+	max-width: 560px;
+	color: rgba(255, 255, 255, 0.9);
+	line-height: 1.5;
+	font-size: v.$font-size-md;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.hero-banner-progress {
+	margin-top: v.$space-md;
+	max-width: 240px;
+	height: 4px;
+	border-radius: v.$radius-full;
+	background-color: rgba(255, 255, 255, 0.25);
+	overflow: hidden;
+}
+
+.hero-banner-progress-bar {
+	height: 100%;
+	background-color: var(--color-primary);
+}
