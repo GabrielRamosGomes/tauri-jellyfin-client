@@ -111,12 +111,33 @@
 	transition: opacity v.$transition-fast;
 }
 
+@keyframes media-item-card-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
 .media-item-card {
 	display: block;
 	position: relative;
 	text-decoration: none;
 	color: inherit;
 	transition: transform v.$transition-fast;
+	animation: media-item-card-in 0.3s ease-out backwards;
+
+	// Staggers the first couple rows into a cascade rather than popping in as
+	// one block; caps out so long grids don't keep animating for ages.
+	@for $i from 1 through 16 {
+		&:nth-child(#{$i}) {
+			animation-delay: #{$i * 0.03}s;
+		}
+	}
 
 	&:hover {
 		transform: scale(1.05);

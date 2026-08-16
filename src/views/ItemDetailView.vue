@@ -1,5 +1,5 @@
 <template>
-	<div v-if="item" class="item-detail-page">
+	<div v-if="item" class="item-detail-page" :style="pageTintStyle">
 		<div class="item-detail-backdrop" :style="backdropStyle" />
 		<div class="item-detail-scrim" />
 
@@ -36,8 +36,9 @@
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { useDominantColor } from '@/composables/ui/useDominantColor';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
-	import { computed } from 'vue';
+	import { computed, onBeforeUnmount, watch } from 'vue';
 	import { useRoute } from 'vue-router';
 
 	const route = useRoute();
@@ -45,6 +46,7 @@
 
 	const { item, loading, errorMessage } = useItemDetail(itemId);
 	const { backdropUrl } = useMediaImages();
+	const { color: tintColor, setFromImage, clear } = useDominantColor();
 
 	// Spans the whole page (header + seasons/cast), not just a short hero box,
 	// so it reads as an ambient page background rather than a boxed banner.
@@ -54,6 +56,21 @@
 		const url = backdropUrl(item.value);
 		return url ? { backgroundImage: `url(${url})` } : {};
 	});
+
+	// The scrim fades to this instead of the theme's flat --color-bg, so the
+	// page settles into a dark tint of the backdrop's own color rather than
+	// snapping back to a neutral that may clash with it.
+	const pageTintStyle = computed(() =>
+		tintColor.value ? { '--item-detail-tint': tintColor.value } : {},
+	);
+
+	watch(
+		item,
+		(value) => setFromImage(value ? backdropUrl(value) : undefined),
+		{ immediate: true },
+	);
+
+	onBeforeUnmount(() => clear());
 
 	const showChildren = computed(
 		() => item.value?.Type === 'Series' || item.value?.Type === 'Season',
