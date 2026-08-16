@@ -142,7 +142,7 @@ export async function getNextUp(api: Api, userId: string, seriesId?: string) {
 		userId,
 		seriesId,
 		limit: seriesId ? 1 : HOME_ROW_LIMIT,
-		enableResumable: false,
+		enableResumable: true,
 		fields: [ItemFields.Overview],
 	});
 
