@@ -56,6 +56,10 @@
 .media-row-card {
 	flex: 0 0 clamp(120px, 13vw, 230px);
 	min-width: 0;
+
+	.item-detail-content & {
+		flex-basis: clamp(120px, 13vw, 200px);
+	}
 }
 
 .media-row-card--landscape {
