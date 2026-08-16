@@ -26,10 +26,7 @@ export async function getLibraryViews(api: Api, userId: string) {
 }
 
 export function getLibraryImageUrl(api: Api, library: BaseItemDto) {
-	const url = getImageApi(api).getItemImageUrl(library, ImageType.Primary, {
-		fillWidth: 400,
-		quality: 96,
-	});
+	const url = getImageApi(api).getItemImageUrl(library, ImageType.Primary);
 	if (!url) return undefined;
 
 	return url;
