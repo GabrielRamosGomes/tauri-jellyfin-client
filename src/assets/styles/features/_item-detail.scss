@@ -148,6 +148,10 @@
 	gap: v.$space-sm;
 }
 
+.item-detail-play-btn {
+	border-radius: v.$radius-full;
+}
+
 .item-detail-actions .item-detail-action {
 	background-color: rgba(255, 255, 255, 0.12);
 	color: #ffffff;
@@ -193,13 +197,25 @@
 	}
 }
 
-.next-up-section {
+.series-content-row {
+	display: flex;
+	gap: v.$space-3xl;
 	margin-bottom: v.$space-2xl;
 }
 
+.next-up-section {
+	flex: 0 0 clamp(240px, 22vw, 320px);
+	min-width: 0;
+}
+
 .next-up-card {
-	max-width: clamp(260px, 28vw, 380px);
 	margin-top: v.$space-md;
+}
+
+.series-seasons {
+	flex: 1 1 0;
+	min-width: 0;
+	margin-bottom: 0;
 }
 
 .item-detail-children {

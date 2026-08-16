@@ -1,12 +1,18 @@
 <template>
-	<div v-if="nextUpItem" class="next-up-section">
-		<h2 class="scrollable-row-title">Next Up</h2>
-		<media-episode-card :item="nextUpItem" class="next-up-card" />
+	<div v-if="nextUpItem" class="series-content-row">
+		<div class="next-up-section">
+			<h2 class="scrollable-row-title">Next Up</h2>
+			<media-episode-card :item="nextUpItem" class="next-up-card" />
+		</div>
+
+		<media-row v-if="children.length" title="Seasons" :items="children" class="series-seasons" />
 	</div>
 
-	<media-row v-if="children.length" title="Seasons" :items="children" />
-	<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
-	<p v-else class="server-meta">Nothing here yet.</p>
+	<template v-else>
+		<media-row v-if="children.length" title="Seasons" :items="children" />
+		<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
+		<p v-else class="server-meta">Nothing here yet.</p>
+	</template>
 </template>
 
 <script setup lang="ts">

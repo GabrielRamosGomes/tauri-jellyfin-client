@@ -27,6 +27,11 @@
 				<p v-if="item.Overview" class="item-detail-overview">{{ item.Overview }}</p>
 
 				<div class="item-detail-actions">
+					<ui-button size="sm" class="item-detail-play-btn" @click="$emit('play')">
+						<play :size="18" fill="currentColor" />
+						Play
+					</ui-button>
+
 					<ui-icon-button
 						:icon="Heart"
 						:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
@@ -66,14 +71,16 @@
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 	import UiBadge from '@/components/ui/UiBadge.vue';
+	import UiButton from '@/components/ui/UiButton.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { openUrl } from '@tauri-apps/plugin-opener';
-	import { Check, ExternalLink, Heart, Star } from 'lucide-vue-next';
+	import { Check, ExternalLink, Heart, Play, Star } from 'lucide-vue-next';
 	import { computed, toRef } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
+	defineEmits<{ play: [] }>();
 	const { libraryImageUrl, logoUrl: getLogoUrl } = useMediaImages();
 
 	const itemRef = toRef(props, 'item');
