@@ -15,16 +15,9 @@
 
 .item-detail-page {
 	position: relative;
-	// No min-height here on purpose: a linear-gradient's last color stop
-	// already fills all remaining space regardless of box height, so short
-	// pages (a movie with no seasons row, few cast members) already end in
-	// solid tint without a seam — forcing this to fill the viewport instead
-	// left a large empty void below short content.
+	min-height: calc(100vh - #{v.$header-height});
+	background-color: var(--item-detail-tint, var(--color-bg));
 	width: calc(100% + #{v.$space-xl * 2});
-	// Negative on all four sides (not just top/left/right) so the backdrop
-	// covers .app-content's bottom padding too — .item-detail-content re-adds
-	// padding: v.$space-xl on every side, so the visible spacing is unchanged,
-	// it's just backed by the tint/image now instead of the flat page bg.
 	margin: calc(v.$space-xl * -1);
 	overflow: hidden;
 	animation: item-detail-fade-in 0.4s ease-out;
@@ -41,14 +34,22 @@
 .item-detail-scrim {
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(
-		180deg,
-		rgba(0, 0, 0, 0.05) 0%,
-		rgba(0, 0, 0, 0.2) 220px,
-		rgba(0, 0, 0, 0.45) 420px,
-		rgba(0, 0, 0, 0.75) 620px,
-		var(--item-detail-tint, var(--color-bg)) 100%
-	);
+	background:
+		linear-gradient(
+			180deg,
+			transparent 42%,
+			color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 30%, transparent) 60%,
+			color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 65%, transparent) 75%,
+			color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 90%, transparent) 85%,
+			var(--item-detail-tint, var(--color-bg)) 92%
+		),
+		linear-gradient(
+			180deg,
+			rgba(0, 0, 0, 0.05) 0px,
+			rgba(0, 0, 0, 0.2) 220px,
+			rgba(0, 0, 0, 0.4) 420px,
+			rgba(0, 0, 0, 0.55) 620px
+		);
 }
 
 .item-detail-content {

@@ -18,7 +18,7 @@
 	display: flex;
 	align-items: center;
 	gap: v.$space-md;
-	height: 56px;
+	height: v.$header-height;
 	flex-shrink: 0;
 	padding: 0 v.$space-xl;
 	background-color: color-mix(in srgb, var(--color-bg) 85%, transparent);
