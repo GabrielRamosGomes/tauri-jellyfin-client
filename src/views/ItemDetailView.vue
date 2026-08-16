@@ -12,11 +12,11 @@
 </template>
 
 <script setup lang="ts">
-	import CastRow from '@/components/features/CastRow.vue';
-	import ItemDetailHeader from '@/components/features/ItemDetailHeader.vue';
-	import ItemDetailLayout from '@/components/features/ItemDetailLayout.vue';
-	import SeasonContent from '@/components/features/SeasonContent.vue';
-	import SeriesContent from '@/components/features/SeriesContent.vue';
+	import CastRow from '@/components/features/media/CastRow.vue';
+	import ItemDetailHeader from '@/components/features/item-detail/ItemDetailHeader.vue';
+	import ItemDetailLayout from '@/components/features/item-detail/ItemDetailLayout.vue';
+	import SeasonContent from '@/components/features/item-detail/SeasonContent.vue';
+	import SeriesContent from '@/components/features/item-detail/SeriesContent.vue';
 	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';

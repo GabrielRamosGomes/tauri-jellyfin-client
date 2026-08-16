@@ -7,7 +7,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import MediaRow from '@/components/features/MediaRow.vue';
+	import MediaRow from '@/components/features/media/MediaRow.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
 	import { computed } from 'vue';

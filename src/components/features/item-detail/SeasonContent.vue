@@ -13,7 +13,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import EpisodeListItem from '@/components/features/EpisodeListItem.vue';
+	import EpisodeListItem from '@/components/features/item-detail/EpisodeListItem.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
 	import { computed } from 'vue';

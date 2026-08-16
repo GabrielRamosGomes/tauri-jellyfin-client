@@ -32,9 +32,9 @@
 </template>
 
 <script setup lang="ts">
-	import LoginForm from '@/components/features/LoginForm.vue';
-	import ServerConnectForm from '@/components/features/ServerConnectForm.vue';
-	import ServerList from '@/components/features/ServerList.vue';
+	import LoginForm from '@/components/features/auth/LoginForm.vue';
+	import ServerConnectForm from '@/components/features/auth/ServerConnectForm.vue';
+	import ServerList from '@/components/features/auth/ServerList.vue';
 	import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
 	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 	import { useServers } from '@/composables/jellyfin/useServers';

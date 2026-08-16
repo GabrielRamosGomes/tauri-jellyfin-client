@@ -17,8 +17,8 @@
 </template>
 
 <script setup lang="ts">
-	import HeroBanner from '@/components/features/HeroBanner.vue';
-	import MediaRow from '@/components/features/MediaRow.vue';
+	import HeroBanner from '@/components/features/item-detail/HeroBanner.vue';
+	import MediaRow from '@/components/features/media/MediaRow.vue';
 	import { useHomeSections } from '@/composables/jellyfin/useHomeSections';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { onMounted, watch } from 'vue';

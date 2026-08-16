@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-	import MediaItemCard from '@/components/features/MediaItemCard.vue';
+	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { computed } from 'vue';
