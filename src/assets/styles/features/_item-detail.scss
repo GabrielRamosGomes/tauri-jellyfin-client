@@ -193,6 +193,15 @@
 	}
 }
 
+.next-up-section {
+	margin-bottom: v.$space-2xl;
+}
+
+.next-up-card {
+	max-width: clamp(260px, 28vw, 380px);
+	margin-top: v.$space-md;
+}
+
 .item-detail-children {
 	h2 {
 		margin: 0 0 12px;

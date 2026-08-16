@@ -136,12 +136,14 @@ export async function getContinueWatching(api: Api, userId: string) {
 	return data.Items ?? [];
 }
 
-export async function getNextUp(api: Api, userId: string) {
+export async function getNextUp(api: Api, userId: string, seriesId?: string) {
 	const tvShowsApi = getTvShowsApi(api);
 	const { data } = await tvShowsApi.getNextUp({
 		userId,
-		limit: HOME_ROW_LIMIT,
+		seriesId,
+		limit: seriesId ? 1 : HOME_ROW_LIMIT,
 		enableResumable: false,
+		fields: [ItemFields.Overview],
 	});
 
 	return data.Items ?? [];
