@@ -1,5 +1,5 @@
 <template>
-	<div class="item-detail-header" :style="backdropStyle">
+	<div class="item-detail-header">
 		<div class="item-detail-header-overlay">
 			<div class="item-detail-poster">
 				<img v-if="posterUrl" :src="posterUrl" :alt="item.Name ?? ''" />
@@ -74,7 +74,7 @@
 	import { computed, toRef } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { backdropUrl: getBackdropUrl, libraryImageUrl, logoUrl: getLogoUrl } = useMediaImages();
+	const { libraryImageUrl, logoUrl: getLogoUrl } = useMediaImages();
 
 	const itemRef = toRef(props, 'item');
 	const { pending, toggleFavorite, toggleWatched } = useItemActions(itemRef);
@@ -82,13 +82,8 @@
 	const isFavorite = computed(() => props.item.UserData?.IsFavorite ?? false);
 	const isWatched = computed(() => props.item.UserData?.Played ?? false);
 
-	const backdropUrl = computed(() => getBackdropUrl(props.item));
 	const posterUrl = computed(() => libraryImageUrl(props.item));
 	const logoUrl = computed(() => getLogoUrl(props.item));
-
-	const backdropStyle = computed(() =>
-		backdropUrl.value ? { backgroundImage: `url(${backdropUrl.value})` } : {},
-	);
 
 	const runtimeMinutes = computed(() =>
 		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,

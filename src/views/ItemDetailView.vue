@@ -1,23 +1,28 @@
 <template>
-	<div v-if="item">
-		<item-detail-header :item="item" />
+	<div v-if="item" class="item-detail-page">
+		<div class="item-detail-backdrop" :style="backdropStyle" />
+		<div class="item-detail-scrim" />
 
-		<div v-if="showChildren" class="item-detail-children">
-			<h2>{{ childrenLabel }}</h2>
+		<div class="item-detail-content">
+			<item-detail-header :item="item" />
 
-			<template v-if="children.length">
-				<div v-if="item.Type === 'Series'" class="item-grid">
-					<media-item-card v-for="child in children" :key="child.Id" :item="child" />
-				</div>
-				<div v-else class="episode-list">
-					<episode-list-item v-for="child in episodes" :key="child.Id" :item="child" />
-				</div>
-			</template>
-			<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
-			<p v-else class="server-meta">Nothing here yet.</p>
+			<div v-if="showChildren" class="item-detail-children">
+				<h2>{{ childrenLabel }}</h2>
+
+				<template v-if="children.length">
+					<div v-if="item.Type === 'Series'" class="item-grid">
+						<media-item-card v-for="child in children" :key="child.Id" :item="child" />
+					</div>
+					<div v-else class="episode-list">
+						<episode-list-item v-for="child in episodes" :key="child.Id" :item="child" />
+					</div>
+				</template>
+				<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
+				<p v-else class="server-meta">Nothing here yet.</p>
+			</div>
+
+			<cast-row v-if="item.People?.length" :people="item.People" />
 		</div>
-
-		<cast-row v-if="item.People?.length" :people="item.People" />
 	</div>
 	<p v-else-if="loading" class="server-meta">Loading...</p>
 	<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
@@ -30,6 +35,7 @@
 	import MediaItemCard from '@/components/features/MediaItemCard.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';
@@ -38,6 +44,16 @@
 	const itemId = computed(() => route.params.id as string);
 
 	const { item, loading, errorMessage } = useItemDetail(itemId);
+	const { backdropUrl } = useMediaImages();
+
+	// Spans the whole page (header + seasons/cast), not just a short hero box,
+	// so it reads as an ambient page background rather than a boxed banner.
+	const backdropStyle = computed(() => {
+		if (!item.value) return {};
+
+		const url = backdropUrl(item.value);
+		return url ? { backgroundImage: `url(${url})` } : {};
+	});
 
 	const showChildren = computed(
 		() => item.value?.Type === 'Series' || item.value?.Type === 'Season',

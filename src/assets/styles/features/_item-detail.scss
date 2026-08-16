@@ -1,24 +1,62 @@
 // ItemDetailHeader.vue
 @use '../variables' as v;
 
-.item-detail-header {
+// Breaks out of .app-content's padding so the backdrop bleeds edge-to-edge
+// as a whole-page background (behind the header AND the seasons/cast rows
+// below it) instead of a boxed, margined hero banner. Plain block layout on
+// purpose — an absolutely-positioned backdrop stretched via `inset: 0` needs
+// a definite-height positioned ancestor, which an auto-height page doesn't
+// have; sizing this from normal content avoids that trap entirely.
+.item-detail-page {
 	position: relative;
-	min-height: clamp(320px, 34vw, 480px);
-	border-radius: v.$radius-lg;
+	width: calc(100% + #{v.$space-xl * 2});
+	margin: calc(v.$space-xl * -1) calc(v.$space-xl * -1) 0;
 	overflow: hidden;
-	background-color: var(--color-surface);
+}
+
+// inset: 0 on the two layers below resolves against .item-detail-page's own
+// box, which must stay padding-free so they reach the true page edges — the
+// equivalent horizontal/vertical inset for readable content is reapplied on
+// .item-detail-content instead, below the image layers.
+.item-detail-backdrop {
+	position: absolute;
+	inset: 0;
 	background-size: cover;
-	background-position: center;
-	margin: 0 0 v.$space-2xl;
+	background-position: top center;
+	background-repeat: no-repeat;
+}
+
+.item-detail-scrim {
+	position: absolute;
+	inset: 0;
+	// Fades to the page's own background color partway down so the image
+	// dissolves into the rest of the page instead of ending at a hard edge —
+	// by the time seasons/cast scroll into view it's effectively solid.
+	background: linear-gradient(
+		180deg,
+		rgba(0, 0, 0, 0.05) 0%,
+		rgba(0, 0, 0, 0.55) 320px,
+		var(--color-bg) 640px
+	);
+}
+
+.item-detail-content {
+	position: relative;
+	padding: v.$space-xl;
+}
+
+.item-detail-header {
+	min-height: clamp(360px, 55vh, 600px);
+	display: flex;
+	align-items: flex-end;
 }
 
 .item-detail-header-overlay {
 	display: flex;
 	gap: v.$space-xl;
 	align-items: flex-end;
-	min-height: 100%;
-	padding: v.$space-xl;
-	background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 90%);
+	width: 100%;
+	padding-bottom: v.$space-lg;
 }
 
 .item-detail-poster {
