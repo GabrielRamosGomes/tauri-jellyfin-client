@@ -10,7 +10,13 @@
 				@error="imageFailed = true"
 			/>
 			<span class="episode-play">▶</span>
-			<span v-if="item.UserData?.Played" class="episode-badge episode-badge-done">✓</span>
+			<span
+				v-if="item.UserData?.Played"
+				class="episode-badge episode-badge-done"
+				aria-label="Watched"
+			>
+				<check :size="12" stroke-width="3" aria-hidden="true" />
+			</span>
 		</div>
 
 		<div class="episode-info">
@@ -27,18 +33,16 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { Check } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { libraryImageUrl } = useMediaImages();
 
 	const imageFailed = ref(false);
 
-	const imageUrl = computed(() =>
-		api.value ? getLibraryImageUrl(api.value, props.item) : undefined,
-	);
+	const imageUrl = computed(() => libraryImageUrl(props.item));
 
 	const runtimeMinutes = computed(() =>
 		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,

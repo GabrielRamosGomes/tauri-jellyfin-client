@@ -31,18 +31,15 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getBackdropUrl } from '@/api/jellyfin/library';
 	import UiButton from '@/components/ui/UiButton.vue';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { Play } from 'lucide-vue-next';
 	import { computed } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { backdropUrl: getBackdropUrl } = useMediaImages();
 
-	const backdropUrl = computed(() =>
-		api.value ? getBackdropUrl(api.value, props.item) : undefined,
-	);
+	const backdropUrl = computed(() => getBackdropUrl(props.item));
 	const backdropStyle = computed(() =>
 		backdropUrl.value ? { backgroundImage: `url(${backdropUrl.value})` } : {},
 	);

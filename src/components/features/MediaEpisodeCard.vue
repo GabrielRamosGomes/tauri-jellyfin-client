@@ -13,7 +13,13 @@
 				<div class="media-episode-progress-bar" :style="{ width: `${progress}%` }" />
 			</div>
 
-			<span v-if="item.UserData?.Played" class="media-item-badge media-item-badge-done">✓</span>
+			<span
+				v-if="item.UserData?.Played"
+				class="media-item-badge media-item-badge-done"
+				aria-label="Watched"
+			>
+				<check :size="14" stroke-width="3" aria-hidden="true" />
+			</span>
 
 			<div class="media-item-play">
 				<play :size="20" fill="currentColor" />
@@ -28,19 +34,16 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getLandscapeImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
-	import { Play } from 'lucide-vue-next';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { Check, Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { landscapeImageUrl } = useMediaImages();
 
 	const imageFailed = ref(false);
 
-	const imageUrl = computed(() =>
-		api.value ? getLandscapeImageUrl(api.value, props.item) : undefined,
-	);
+	const imageUrl = computed(() => landscapeImageUrl(props.item));
 
 	const isEpisode = computed(() => props.item.Type === 'Episode');
 

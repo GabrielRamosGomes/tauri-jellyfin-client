@@ -5,11 +5,21 @@
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
 				:alt="item.Name ?? ''"
+				width="400"
+				height="600"
+				loading="lazy"
+				decoding="async"
 				@error="imageFailed = true"
 			/>
 			<span v-else class="media-item-title">{{ item.Name }}</span>
 
-			<span v-if="item.UserData?.Played" class="media-item-badge media-item-badge-done">✓</span>
+			<span
+				v-if="item.UserData?.Played"
+				class="media-item-badge media-item-badge-done"
+				aria-label="Watched"
+			>
+				<check :size="14" stroke-width="3" aria-hidden="true" />
+			</span>
 			<span v-else-if="unwatchedCount" class="media-item-badge">{{ unwatchedCount }}</span>
 
 			<div class="media-item-play">
@@ -24,19 +34,16 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
-	import { Play } from 'lucide-vue-next';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { Check, Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { libraryImageUrl } = useMediaImages();
 
 	const imageFailed = ref(false);
 
-	const imageUrl = computed(() =>
-		api.value ? getLibraryImageUrl(api.value, props.item) : undefined,
-	);
+	const imageUrl = computed(() => libraryImageUrl(props.item));
 
 	const unwatchedCount = computed(() => props.item.UserData?.UnplayedItemCount);
 </script>

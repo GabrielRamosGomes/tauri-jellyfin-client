@@ -15,16 +15,13 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ library: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { libraryImageUrl } = useMediaImages();
 
 	const imageFailed = ref(false);
 
-	const imageUrl = computed(() =>
-		api.value ? getLibraryImageUrl(api.value, props.library) : undefined,
-	);
+	const imageUrl = computed(() => libraryImageUrl(props.library));
 </script>

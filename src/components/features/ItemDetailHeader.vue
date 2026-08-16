@@ -24,19 +24,14 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-	import { getBackdropUrl, getLibraryImageUrl } from '@/api/jellyfin/library';
-	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
+	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { computed } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { api } = useServerConnection();
+	const { backdropUrl: getBackdropUrl, libraryImageUrl } = useMediaImages();
 
-	const backdropUrl = computed(() =>
-		api.value ? getBackdropUrl(api.value, props.item) : undefined,
-	);
-	const posterUrl = computed(() =>
-		api.value ? getLibraryImageUrl(api.value, props.item) : undefined,
-	);
+	const backdropUrl = computed(() => getBackdropUrl(props.item));
+	const posterUrl = computed(() => libraryImageUrl(props.item));
 
 	const backdropStyle = computed(() =>
 		backdropUrl.value ? { backgroundImage: `url(${backdropUrl.value})` } : {},
