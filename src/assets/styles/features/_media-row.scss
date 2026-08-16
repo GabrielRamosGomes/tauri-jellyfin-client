@@ -1,58 +1,6 @@
 // MediaRow.vue / MediaEpisodeCard.vue
 @use '../variables' as v;
 
-.media-row {
-	margin-bottom: v.$space-2xl;
-}
-
-.media-row-header {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	margin-bottom: v.$space-md;
-}
-
-.media-row-title {
-	position: relative;
-	margin: 0;
-	padding-left: v.$space-md;
-	font-size: v.$font-size-xl;
-
-	&::before {
-		content: '';
-		position: absolute;
-		left: 0;
-		top: 0.15em;
-		bottom: 0.15em;
-		width: 4px;
-		border-radius: v.$radius-full;
-		background-color: var(--color-primary);
-	}
-}
-
-.media-row-controls {
-	display: flex;
-	gap: 2px;
-	padding: 2px;
-	background-color: var(--color-surface);
-	border: 1px solid var(--color-border-subtle);
-	border-radius: v.$radius-full;
-}
-
-.media-row-track {
-	display: flex;
-	align-items: flex-start;
-	gap: v.$space-lg;
-	overflow-x: auto;
-	scroll-behavior: smooth;
-	padding: v.$space-md;
-	scrollbar-width: none;
-
-	&::-webkit-scrollbar {
-		display: none;
-	}
-}
-
 .media-row-card {
 	flex: 0 0 clamp(120px, 13vw, 230px);
 	min-width: 0;
