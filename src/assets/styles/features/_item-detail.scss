@@ -3,30 +3,32 @@
 
 .item-detail-header {
 	position: relative;
-	border-radius: 12px;
+	min-height: clamp(320px, 34vw, 480px);
+	border-radius: v.$radius-lg;
 	overflow: hidden;
 	background-color: var(--color-surface);
 	background-size: cover;
 	background-position: center;
-	margin: 0 0 24px;
+	margin: 0 0 v.$space-2xl;
 }
 
 .item-detail-header-overlay {
 	display: flex;
-	gap: 24px;
+	gap: v.$space-xl;
 	align-items: flex-end;
-	padding: 32px 24px;
-	background: linear-gradient(180deg, rgba(0, 0, 0, 0.15) 0%, rgba(0, 0, 0, 0.75) 100%);
+	min-height: 100%;
+	padding: v.$space-xl;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.8) 90%);
 }
 
 .item-detail-poster {
 	flex: 0 0 auto;
-	width: 160px;
+	width: 180px;
 	aspect-ratio: 2 / 3;
-	border-radius: 8px;
+	border-radius: v.$radius-md;
 	overflow: hidden;
 	background-color: var(--color-surface);
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+	box-shadow: v.$shadow-lg;
 
 	img {
 		width: 100%;
@@ -43,31 +45,105 @@
 }
 
 .item-detail-title {
-	margin: 0 0 8px;
-	font-size: 1.8em;
+	margin: 0 0 v.$space-sm;
+	font-size: v.$font-size-2xl;
 	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+}
+
+.item-detail-logo {
+	max-width: min(420px, 100%);
+	max-height: 120px;
+	margin: 0 0 v.$space-sm;
+	filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
 }
 
 .item-detail-meta {
 	display: flex;
-	gap: 12px;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: v.$space-md;
 	font-size: 0.9em;
 	font-weight: 600;
 	opacity: 0.9;
-	margin: 0 0 8px;
+	margin: 0 0 v.$space-sm;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.item-detail-rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: #ffd166;
 }
 
 .item-detail-genres {
-	margin: 0 0 12px;
-	font-size: 0.85em;
-	opacity: 0.85;
+	display: flex;
+	flex-wrap: wrap;
+	gap: v.$space-xs;
+	margin: 0 0 v.$space-md;
 }
 
 .item-detail-overview {
-	margin: 0;
+	margin: 0 0 v.$space-lg;
 	max-width: 640px;
 	line-height: 1.5;
 	font-size: 0.95em;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.item-detail-actions {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: v.$space-sm;
+}
+
+// Compound selectors here (rather than a bare `.item-detail-action` class)
+// deliberately out-specificity `.ui-icon-btn` in ui-kit/_icon-button.scss,
+// which is @used after features/ in main.scss and would otherwise win the cascade.
+.item-detail-actions .item-detail-action {
+	background-color: rgba(255, 255, 255, 0.12);
+	color: #ffffff;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.22);
+	}
+}
+
+.item-detail-actions .item-detail-action--favorite {
+	background-color: var(--color-error);
+	color: #ffffff;
+}
+
+.item-detail-actions .item-detail-action--watched {
+	background-color: var(--color-success-dot);
+	color: #ffffff;
+}
+
+.item-detail-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: v.$space-sm;
+	margin-left: v.$space-sm;
+}
+
+.item-detail-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	border-radius: v.$radius-full;
+	background: none;
+	color: #ffffff;
+	font-size: v.$font-size-xs;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color v.$transition-fast;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.12);
+	}
 }
 
 .item-detail-children {

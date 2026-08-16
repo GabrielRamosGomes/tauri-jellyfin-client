@@ -1,5 +1,9 @@
 import type { Api } from '@jellyfin/sdk';
-import type { BaseItemDto, UserDto } from '@jellyfin/sdk/lib/generated-client/models';
+import type {
+	BaseItemDto,
+	BaseItemPerson,
+	UserDto,
+} from '@jellyfin/sdk/lib/generated-client/models';
 
 import {
 	ImageType,
@@ -10,6 +14,7 @@ import {
 } from '@jellyfin/sdk/lib/generated-client/models';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
+import { getPlaystateApi } from '@jellyfin/sdk/lib/utils/api/playstate-api';
 import { getTvShowsApi } from '@jellyfin/sdk/lib/utils/api/tv-shows-api';
 import { getUserLibraryApi } from '@jellyfin/sdk/lib/utils/api/user-library-api';
 import { getUserViewsApi } from '@jellyfin/sdk/lib/utils/api/user-views-api';
@@ -77,6 +82,38 @@ export function getLandscapeImageUrl(api: Api, item: BaseItemDto) {
 
 export function getUserAvatarUrl(api: Api, user: UserDto) {
 	return getImageApi(api).getUserImageUrl(user);
+}
+
+export function getLogoUrl(api: Api, item: BaseItemDto) {
+	if (!item.ImageTags?.Logo) return undefined;
+
+	return getImageApi(api).getItemImageUrl(item, ImageType.Logo);
+}
+
+export function getPersonImageUrl(api: Api, person: BaseItemPerson) {
+	if (!person.Id || !person.PrimaryImageTag) return undefined;
+
+	return getImageApi(api).getItemImageUrlById(person.Id, ImageType.Primary, {
+		tag: person.PrimaryImageTag,
+	});
+}
+
+export async function setFavorite(api: Api, userId: string, itemId: string, isFavorite: boolean) {
+	const userLibraryApi = getUserLibraryApi(api);
+	const { data } = isFavorite
+		? await userLibraryApi.markFavoriteItem({ itemId, userId })
+		: await userLibraryApi.unmarkFavoriteItem({ itemId, userId });
+
+	return data;
+}
+
+export async function setWatched(api: Api, userId: string, itemId: string, isWatched: boolean) {
+	const playstateApi = getPlaystateApi(api);
+	const { data } = isWatched
+		? await playstateApi.markPlayedItem({ itemId, userId })
+		: await playstateApi.markUnplayedItem({ itemId, userId });
+
+	return data;
 }
 
 export async function getFavorites(api: Api, userId: string) {

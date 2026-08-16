@@ -46,8 +46,9 @@
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
+	import { useScrollTrack } from '@/composables/ui/useScrollTrack';
 	import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
-	import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+	import { computed } from 'vue';
 
 	import LibraryCard from './LibraryCard.vue';
 	import MediaEpisodeCard from './MediaEpisodeCard.vue';
@@ -62,45 +63,6 @@
 		{ variant: 'poster' },
 	);
 
-	const trackRef = ref<HTMLDivElement | null>(null);
-	const canScrollLeft = ref(false);
-	const canScrollRight = ref(false);
-
-	function updateScrollState() {
-		const track = trackRef.value;
-		if (!track) return;
-
-		canScrollLeft.value = track.scrollLeft > 1;
-		canScrollRight.value = track.scrollLeft + track.clientWidth < track.scrollWidth - 1;
-	}
-
-	function scroll(direction: 1 | -1) {
-		const track = trackRef.value;
-		if (!track) return;
-
-		track.scrollBy({ left: direction * track.clientWidth * 0.9, behavior: 'smooth' });
-	}
-
-	let resizeObserver: ResizeObserver | undefined;
-
-	onMounted(() => {
-		const track = trackRef.value;
-		if (!track) return;
-
-		updateScrollState();
-		track.addEventListener('scroll', updateScrollState, { passive: true });
-
-		resizeObserver = new ResizeObserver(updateScrollState);
-		resizeObserver.observe(track);
-	});
-
-	onBeforeUnmount(() => {
-		trackRef.value?.removeEventListener('scroll', updateScrollState);
-		resizeObserver?.disconnect();
-	});
-
-	watch(
-		() => props.items,
-		() => nextTick(updateScrollState),
-	);
+	const items = computed(() => props.items);
+	const { trackRef, canScrollLeft, canScrollRight, scroll } = useScrollTrack(items);
 </script>

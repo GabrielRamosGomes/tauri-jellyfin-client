@@ -1,0 +1,62 @@
+// CastRow.vue
+@use '../variables' as v;
+
+.cast-row {
+	margin-bottom: v.$space-2xl;
+}
+
+.cast-row-track {
+	padding: 12px 0;
+}
+
+.cast-card {
+	flex: 0 0 104px;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.cast-avatar {
+	width: 100px;
+	height: 100px;
+	border-radius: v.$radius-full;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border-subtle);
+	color: var(--color-muted);
+	font-weight: 700;
+	font-size: v.$font-size-lg;
+	margin-bottom: v.$space-sm;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+}
+
+.cast-name {
+	margin: 0;
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+	color: var(--color-text);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}
+
+.cast-role {
+	margin: 2px 0 0;
+	font-size: v.$font-size-xs;
+	color: var(--color-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 100%;
+}

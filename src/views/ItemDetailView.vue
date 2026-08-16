@@ -16,12 +16,15 @@
 			<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
 			<p v-else class="server-meta">Nothing here yet.</p>
 		</div>
+
+		<cast-row v-if="item.People?.length" :people="item.People" />
 	</div>
 	<p v-else-if="loading" class="server-meta">Loading...</p>
 	<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
 </template>
 
 <script setup lang="ts">
+	import CastRow from '@/components/features/CastRow.vue';
 	import EpisodeListItem from '@/components/features/EpisodeListItem.vue';
 	import ItemDetailHeader from '@/components/features/ItemDetailHeader.vue';
 	import MediaItemCard from '@/components/features/MediaItemCard.vue';
@@ -47,10 +50,6 @@
 		ItemSortBy.IndexNumber,
 	]);
 
-	// Some seasons contain extras (recaps, shorts) filed alongside regular
-	// episodes that reuse an adjacent episode's IndexNumber instead of having
-	// their own — drop those from the list rather than showing duplicate
-	// episode numbers.
 	const episodes = computed(() => {
 		const seen = new Set<number>();
 
