@@ -13,7 +13,7 @@
 					v-if="imageUrl(person)"
 					:src="imageUrl(person)"
 					:alt="person.Name ?? ''" />
-				<span v-else>{{ initials(person.Name) }}</span>
+				<span v-else>{{ getInitials(person.Name) }}</span>
 			</div>
 			<p class="cast-name">{{ person.Name }}</p>
 			<p
@@ -30,6 +30,7 @@
 
 	import UiScrollableRow from '@/components/ui/UiScrollableRow.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { getInitials } from '@/utils/format';
 	import { PersonKind } from '@jellyfin/sdk/lib/generated-client/models';
 	import { computed } from 'vue';
 
@@ -44,16 +45,5 @@
 
 	function imageUrl(person: BaseItemPerson) {
 		return personImageUrl(person);
-	}
-
-	function initials(name: string | null | undefined) {
-		if (!name) return '?';
-
-		return name
-			.split(' ')
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((part) => part[0]?.toUpperCase())
-			.join('');
 	}
 </script>

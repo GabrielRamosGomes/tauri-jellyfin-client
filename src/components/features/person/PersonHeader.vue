@@ -55,7 +55,7 @@
 					variant="secondary"
 					size="sm"
 					class="person-link"
-					@click="openLink(link.Url)">
+					@click="openExternal(link.Url)">
 					{{ link.Name }}
 					<external-link
 						:size="12"
@@ -75,7 +75,8 @@
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useClampToggle } from '@/composables/ui/useClampToggle';
-	import { openUrl } from '@tauri-apps/plugin-opener';
+	import { getInitials } from '@/utils/format';
+	import { openExternal } from '@/utils/openExternal';
 	import { ExternalLink, Heart } from 'lucide-vue-next';
 	import { computed, toRef } from 'vue';
 
@@ -95,14 +96,7 @@
 	const isFavorite = computed(() => props.person.UserData?.IsFavorite ?? false);
 	const photoUrl = computed(() => libraryImageUrl(props.person));
 
-	const initials = computed(() =>
-		(props.person.Name ?? '?')
-			.split(' ')
-			.filter(Boolean)
-			.slice(0, 2)
-			.map((part) => part[0]?.toUpperCase())
-			.join(''),
-	);
+	const initials = computed(() => getInitials(props.person.Name));
 
 	const birthDate = computed(() => {
 		if (!props.person.PremiereDate) return undefined;
@@ -116,8 +110,4 @@
 	const birthLine = computed(() =>
 		[birthDate.value && `Born ${birthDate.value}`, birthPlace.value].filter(Boolean).join(' · '),
 	);
-
-	function openLink(url: string | null | undefined) {
-		if (url) openUrl(url);
-	}
 </script>

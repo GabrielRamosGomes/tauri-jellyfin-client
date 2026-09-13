@@ -52,6 +52,7 @@
 
 	import UiButton from '@/components/ui/UiButton.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { ticksToMinutes } from '@/utils/format';
 	import { Play } from 'lucide-vue-next';
 	import { computed } from 'vue';
 
@@ -77,9 +78,7 @@
 		return [label, props.item.Name].filter(Boolean).join(' · ');
 	});
 
-	const runtimeMinutes = computed(() =>
-		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,
-	);
+	const runtimeMinutes = computed(() => ticksToMinutes(props.item.RunTimeTicks));
 
 	const progress = computed(() => props.item.UserData?.PlayedPercentage);
 </script>

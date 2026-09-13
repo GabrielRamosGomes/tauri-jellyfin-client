@@ -48,7 +48,7 @@
 						:key="link.Name ?? index"
 						type="button"
 						class="item-detail-link"
-						@click="openLink(link.Url)">
+						@click="openExternal(link.Url)">
 						{{ link.Name }}
 						<external-link
 							:size="12"
@@ -109,7 +109,8 @@
 	import UiDropdown from '@/components/ui/UiDropdown.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useMediaStreams } from '@/composables/jellyfin/useMediaStreams';
-	import { openUrl } from '@tauri-apps/plugin-opener';
+	import { formatDuration, formatEndsAt, formatRating } from '@/utils/format';
+	import { openExternal } from '@/utils/openExternal';
 	import { Captions, ExternalLink, Play, Star, Volume2 } from 'lucide-vue-next';
 	import { computed, toRef } from 'vue';
 
@@ -121,27 +122,8 @@
 		useMediaStreams(toRef(props, 'item'));
 
 	const logoUrl = computed(() => getLogoUrl(props.item));
-	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
+	const communityRating = computed(() => formatRating(props.item.CommunityRating));
 	const tagline = computed(() => props.item.Taglines?.[0]);
-
-	const runtime = computed(() => {
-		if (!props.item.RunTimeTicks) return undefined;
-
-		const minutes = Math.round(props.item.RunTimeTicks / 600_000_000);
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return hours ? `${hours}h ${mins}m` : `${mins}m`;
-	});
-
-	const endsAt = computed(() => {
-		if (!props.item.RunTimeTicks) return undefined;
-
-		const minutes = props.item.RunTimeTicks / 600_000_000;
-		const finishTime = new Date(Date.now() + minutes * 60_000);
-		return finishTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-	});
-
-	function openLink(url: string | null | undefined) {
-		if (url) openUrl(url);
-	}
+	const runtime = computed(() => formatDuration(props.item.RunTimeTicks));
+	const endsAt = computed(() => formatEndsAt(props.item.RunTimeTicks));
 </script>

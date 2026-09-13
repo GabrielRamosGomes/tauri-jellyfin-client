@@ -92,7 +92,7 @@
 							:key="link.Name ?? index"
 							type="button"
 							class="item-detail-link"
-							@click="openLink(link.Url)">
+							@click="openExternal(link.Url)">
 							{{ link.Name }}
 							<external-link
 								:size="12"
@@ -114,7 +114,9 @@
 	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useSeasons } from '@/composables/jellyfin/useSeasons';
-	import { openUrl } from '@tauri-apps/plugin-opener';
+	import { useSiblingNav } from '@/composables/ui/useSiblingNav';
+	import { formatDuration, formatRating } from '@/utils/format';
+	import { openExternal } from '@/utils/openExternal';
 	import { ChevronLeft, ChevronRight, ExternalLink, Play, Star } from 'lucide-vue-next';
 	import { computed } from 'vue';
 	import { useRouter } from 'vue-router';
@@ -124,21 +126,19 @@
 	const { libraryImageUrl } = useMediaImages();
 
 	const posterUrl = computed(() => libraryImageUrl(props.item));
-	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
+	const communityRating = computed(() => formatRating(props.item.CommunityRating));
 
 	// --- Season switcher ---
 	const seriesId = computed(() => props.item.SeriesId ?? '');
 	const { seasons } = useSeasons(seriesId);
 
-	const hasMultipleSeasons = computed(() => seasons.value.length > 1);
-	const currentIndex = computed(() => seasons.value.findIndex((s) => s.Id === props.item.Id));
-	const prevSeason = computed(() =>
-		currentIndex.value > 0 ? seasons.value[currentIndex.value - 1] : undefined,
-	);
-	const nextSeason = computed(() =>
-		currentIndex.value >= 0 && currentIndex.value < seasons.value.length - 1
-			? seasons.value[currentIndex.value + 1]
-			: undefined,
+	const {
+		prev: prevSeason,
+		next: nextSeason,
+		hasSiblings: hasMultipleSeasons,
+	} = useSiblingNav(
+		seasons,
+		computed(() => props.item.Id ?? undefined),
 	);
 
 	// --- Aggregate meta from the episode list ---
@@ -148,15 +148,9 @@
 		episodeCount.value ? Math.round((watchedCount.value / episodeCount.value) * 100) : 0,
 	);
 
-	const totalRuntime = computed(() => {
-		const ticks = props.episodes.reduce((sum, e) => sum + (e.RunTimeTicks ?? 0), 0);
-		if (!ticks) return undefined;
-
-		const minutes = Math.round(ticks / 600_000_000);
-		const hours = Math.floor(minutes / 60);
-		const mins = minutes % 60;
-		return hours ? `${hours}h ${mins}m` : `${mins}m`;
-	});
+	const totalRuntime = computed(() =>
+		formatDuration(props.episodes.reduce((sum, e) => sum + (e.RunTimeTicks ?? 0), 0)),
+	);
 
 	// --- Resume / play ---
 	// Prefer a partially-watched episode, else the first unwatched, else the start.
@@ -178,9 +172,5 @@
 	function playResume() {
 		const target = resumeEpisode.value;
 		if (target?.Id) router.push({ name: 'item', params: { id: target.Id } });
-	}
-
-	function openLink(url: string | null | undefined) {
-		if (url) openUrl(url);
 	}
 </script>

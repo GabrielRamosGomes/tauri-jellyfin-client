@@ -64,6 +64,7 @@
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { formatEndsAt, formatRating, ticksToMinutes } from '@/utils/format';
 	import { Play, Star } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
@@ -78,18 +79,9 @@
 
 	const progress = computed(() => props.item.UserData?.PlayedPercentage);
 
-	const runtimeMinutes = computed(() =>
-		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,
-	);
-
-	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
-
-	const endsAt = computed(() => {
-		if (!runtimeMinutes.value) return undefined;
-
-		const finishTime = new Date(Date.now() + runtimeMinutes.value * 60_000);
-		return finishTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-	});
+	const runtimeMinutes = computed(() => ticksToMinutes(props.item.RunTimeTicks));
+	const communityRating = computed(() => formatRating(props.item.CommunityRating));
+	const endsAt = computed(() => formatEndsAt(props.item.RunTimeTicks));
 
 	const premiereDate = computed(() =>
 		props.item.PremiereDate

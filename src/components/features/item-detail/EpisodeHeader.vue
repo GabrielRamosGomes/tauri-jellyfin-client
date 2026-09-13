@@ -81,7 +81,7 @@
 								:key="link.Name ?? index"
 								type="button"
 								class="item-detail-link"
-								@click="openLink(link.Url)">
+								@click="openExternal(link.Url)">
 								{{ link.Name }}
 								<external-link
 									:size="12"
@@ -149,7 +149,9 @@
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useMediaStreams } from '@/composables/jellyfin/useMediaStreams';
 	import { useSeasonEpisodes } from '@/composables/jellyfin/useSeasonEpisodes';
-	import { openUrl } from '@tauri-apps/plugin-opener';
+	import { useSiblingNav } from '@/composables/ui/useSiblingNav';
+	import { formatEndsAt, formatRating, ticksToMinutes } from '@/utils/format';
+	import { openExternal } from '@/utils/openExternal';
 	import {
 		Captions,
 		ChevronLeft,
@@ -179,7 +181,9 @@
 	} = useMediaStreams(toRef(props, 'item'));
 
 	const thumbUrl = computed(() => landscapeImageUrl(props.item));
-	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
+	const communityRating = computed(() => formatRating(props.item.CommunityRating));
+	const runtimeMinutes = computed(() => ticksToMinutes(props.item.RunTimeTicks));
+	const endsAt = computed(() => formatEndsAt(props.item.RunTimeTicks));
 
 	const episodeLabel = computed(() => {
 		const season = props.item.ParentIndexNumber;
@@ -192,29 +196,12 @@
 	const seasonNumber = computed(() => props.item.ParentIndexNumber ?? undefined);
 	const { episodes } = useSeasonEpisodes(seasonId, seasonNumber);
 
-	const hasSiblings = computed(() => episodes.value.length > 1);
-	const currentIndex = computed(() => episodes.value.findIndex((e) => e.Id === props.item.Id));
-	const prevEpisode = computed(() =>
-		currentIndex.value > 0 ? episodes.value[currentIndex.value - 1] : undefined,
+	const {
+		prev: prevEpisode,
+		next: nextEpisode,
+		hasSiblings,
+	} = useSiblingNav(
+		episodes,
+		computed(() => props.item.Id ?? undefined),
 	);
-	const nextEpisode = computed(() =>
-		currentIndex.value >= 0 && currentIndex.value < episodes.value.length - 1
-			? episodes.value[currentIndex.value + 1]
-			: undefined,
-	);
-
-	const runtimeMinutes = computed(() =>
-		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,
-	);
-
-	const endsAt = computed(() => {
-		if (!runtimeMinutes.value) return undefined;
-
-		const finishTime = new Date(Date.now() + runtimeMinutes.value * 60_000);
-		return finishTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
-	});
-
-	function openLink(url: string | null | undefined) {
-		if (url) openUrl(url);
-	}
 </script>
