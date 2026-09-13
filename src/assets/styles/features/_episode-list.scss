@@ -174,10 +174,19 @@
 
 .episode-meta {
 	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
 	gap: 10px;
 	margin: 4px 0 6px;
 	font-size: v.$font-size-sm;
 	color: var(--color-muted);
+}
+
+.episode-rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: #ffd166;
 }
 
 .episode-overview {

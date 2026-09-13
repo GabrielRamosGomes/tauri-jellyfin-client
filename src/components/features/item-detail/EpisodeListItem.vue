@@ -37,7 +37,16 @@
 			</p>
 			<div class="episode-meta">
 				<span v-if="premiereDate">{{ premiereDate }}</span>
+				<span
+					v-if="communityRating"
+					class="episode-rating">
+					<star
+						:size="12"
+						fill="currentColor" />
+					{{ communityRating }}
+				</span>
 				<span v-if="runtimeMinutes">{{ runtimeMinutes }}m</span>
+				<span v-if="endsAt">Ends at {{ endsAt }}</span>
 			</div>
 			<p
 				v-if="item.Overview"
@@ -55,7 +64,7 @@
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
-	import { Play } from 'lucide-vue-next';
+	import { Play, Star } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
@@ -72,6 +81,15 @@
 	const runtimeMinutes = computed(() =>
 		props.item.RunTimeTicks ? Math.round(props.item.RunTimeTicks / 600_000_000) : undefined,
 	);
+
+	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
+
+	const endsAt = computed(() => {
+		if (!runtimeMinutes.value) return undefined;
+
+		const finishTime = new Date(Date.now() + runtimeMinutes.value * 60_000);
+		return finishTime.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+	});
 
 	const premiereDate = computed(() =>
 		props.item.PremiereDate
