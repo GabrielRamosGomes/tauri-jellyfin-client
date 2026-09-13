@@ -62,17 +62,45 @@
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { ExternalLink, Heart } from 'lucide-vue-next';
-	import { computed, ref, toRef } from 'vue';
+	import { computed, nextTick, onBeforeUnmount, ref, toRef, watch } from 'vue';
 
-	const MAX_CHARS_BEFORE_COLLAPSE = 300;
 	const props = defineProps<{ person: BaseItemDto }>();
 	const { libraryImageUrl } = useMediaImages();
 
 	const personRef = toRef(props, 'person');
 	const { pending, toggleFavorite } = useItemActions(personRef);
 
+	const bioEl = ref<HTMLParagraphElement>();
 	const expanded = ref(false);
-	const isLong = computed(() => (props.person.Overview?.length ?? 0) > MAX_CHARS_BEFORE_COLLAPSE);
+	const canToggle = ref(false);
+
+	function measure() {
+		const el = bioEl.value;
+		if (!el || expanded.value) return; // only meaningful while clamped
+		canToggle.value = el.scrollHeight > el.clientHeight + 1;
+	}
+
+	const resizeObserver = new ResizeObserver(() => measure());
+
+	watch(
+		bioEl,
+		(el, _prev, onCleanup) => {
+			if (!el) return;
+			resizeObserver.observe(el);
+			onCleanup(() => resizeObserver.unobserve(el));
+		},
+		{ immediate: true },
+	);
+
+	watch(
+		() => props.person.Overview,
+		() => {
+			expanded.value = false;
+			nextTick(measure);
+		},
+	);
+
+	onBeforeUnmount(() => resizeObserver.disconnect());
 
 	const isFavorite = computed(() => props.person.UserData?.IsFavorite ?? false);
 	const photoUrl = computed(() => libraryImageUrl(props.person));
