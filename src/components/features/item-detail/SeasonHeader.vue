@@ -19,6 +19,7 @@
 				<div class="season-title-row">
 					<component
 						:is="prevSeason ? 'router-link' : 'span'"
+						v-if="hasMultipleSeasons"
 						class="season-nav"
 						:class="{ 'season-nav--disabled': !prevSeason }"
 						:to="prevSeason ? { name: 'item', params: { id: prevSeason.Id } } : undefined"
@@ -31,6 +32,7 @@
 
 					<component
 						:is="nextSeason ? 'router-link' : 'span'"
+						v-if="hasMultipleSeasons"
 						class="season-nav"
 						:class="{ 'season-nav--disabled': !nextSeason }"
 						:to="nextSeason ? { name: 'item', params: { id: nextSeason.Id } } : undefined"
@@ -108,6 +110,7 @@
 	const seriesId = computed(() => props.item.SeriesId ?? '');
 	const { seasons } = useSeasons(seriesId);
 
+	const hasMultipleSeasons = computed(() => seasons.value.length > 1);
 	const currentIndex = computed(() => seasons.value.findIndex((s) => s.Id === props.item.Id));
 	const prevSeason = computed(() =>
 		currentIndex.value > 0 ? seasons.value[currentIndex.value - 1] : undefined,
