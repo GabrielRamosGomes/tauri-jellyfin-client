@@ -63,6 +63,20 @@ export async function getItemDetail(api: Api, userId: string, itemId: string) {
 	return data;
 }
 
+export async function getItemsByPerson(api: Api, userId: string, personId: string) {
+	const itemsApi = getItemsApi(api);
+	const { data } = await itemsApi.getItems({
+		userId,
+		personIds: [personId],
+		recursive: true,
+		sortBy: [ItemSortBy.PremiereDate, ItemSortBy.ProductionYear, ItemSortBy.SortName],
+		sortOrder: [SortOrder.Descending],
+		fields: [ItemFields.Overview],
+	});
+
+	return data.Items ?? [];
+}
+
 // Items can have multiple backdrops; hero image just needs the first.
 export function getBackdropUrl(api: Api, item: BaseItemDto) {
 	const urls = getImageApi(api).getItemBackdropImageUrls(item);
