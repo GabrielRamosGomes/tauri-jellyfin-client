@@ -287,8 +287,9 @@
 }
 
 // --- Cinematic movie/series header ---
+// Anchor content to the top so short content doesn't leave a big empty band above.
 .movie-header {
-	min-height: clamp(440px, 66vh, 780px);
+	align-items: flex-start;
 }
 
 .movie-header-content {
