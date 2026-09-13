@@ -29,12 +29,15 @@
 		</tabs-content>
 	</tabs-root>
 
-	<p v-else-if="loading" class="server-meta">Loading...</p>
+	<div v-else-if="loading" class="person-grid">
+		<media-item-card-skeleton v-for="n in 10" :key="n" class="person-grid-card" />
+	</div>
 </template>
 
 <script setup lang="ts">
 	import MediaEpisodeCard from '@/components/features/media/MediaEpisodeCard.vue';
 	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
+	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
 	import { usePersonFilmography } from '@/composables/jellyfin/usePersonFilmography';
 	import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui';
 	import { ref, toRef, watch } from 'vue';

@@ -245,7 +245,7 @@
 	border-radius: v.$radius-full;
 }
 
-.item-detail-actions .item-detail-action {
+.item-detail-actions .item-action {
 	background-color: rgba(255, 255, 255, 0.12);
 	color: #ffffff;
 
@@ -299,6 +299,17 @@
 	flex: 1 1 0;
 	min-width: 0;
 	margin-bottom: 0;
+}
+
+.series-seasons-skeleton {
+	display: flex;
+	gap: v.$space-md;
+	margin-top: v.$space-md;
+	overflow: hidden;
+
+	> * {
+		flex: 0 0 clamp(120px, 13vw, 200px);
+	}
 }
 
 .item-detail-children {

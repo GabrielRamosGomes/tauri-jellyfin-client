@@ -63,22 +63,7 @@
 						{{ playLabel }}
 					</ui-button>
 
-					<ui-icon-button
-						:icon="Heart"
-						:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-						:disabled="pending"
-						class="item-detail-action"
-						:class="{ 'ui-icon-btn--favorite': isFavorite }"
-						@click="toggleFavorite"
-					/>
-					<ui-icon-button
-						:icon="Check"
-						:label="isWatched ? 'Mark as unwatched' : 'Mark as watched'"
-						:disabled="pending"
-						class="item-detail-action"
-						:class="{ 'ui-icon-btn--watched': isWatched }"
-						@click="toggleWatched"
-					/>
+					<item-actions :item="item" />
 
 					<div v-if="item.ExternalUrls?.length" class="item-detail-links">
 						<button
@@ -101,34 +86,21 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import ItemActions from '@/components/features/media/ItemActions.vue';
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
-	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import UiProgress from '@/components/ui/UiProgress.vue';
-	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useSeasons } from '@/composables/jellyfin/useSeasons';
 	import { openUrl } from '@tauri-apps/plugin-opener';
-	import {
-		Check,
-		ChevronLeft,
-		ChevronRight,
-		ExternalLink,
-		Heart,
-		Play,
-		Star,
-	} from 'lucide-vue-next';
-	import { computed, toRef } from 'vue';
+	import { ChevronLeft, ChevronRight, ExternalLink, Play, Star } from 'lucide-vue-next';
+	import { computed } from 'vue';
 	import { useRouter } from 'vue-router';
 
 	const props = defineProps<{ item: BaseItemDto; episodes: BaseItemDto[] }>();
 	const router = useRouter();
 	const { libraryImageUrl } = useMediaImages();
 
-	const { pending, toggleFavorite, toggleWatched } = useItemActions(toRef(props, 'item'));
-
-	const isFavorite = computed(() => props.item.UserData?.IsFavorite ?? false);
-	const isWatched = computed(() => props.item.UserData?.Played ?? false);
 	const posterUrl = computed(() => libraryImageUrl(props.item));
 	const communityRating = computed(() => props.item.CommunityRating?.toFixed(1));
 

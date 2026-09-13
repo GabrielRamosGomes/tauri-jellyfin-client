@@ -34,22 +34,7 @@
 						Play
 					</ui-button>
 
-					<ui-icon-button
-						:icon="Heart"
-						:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-						:disabled="pending"
-						class="item-detail-action"
-						:class="{ 'ui-icon-btn--favorite': isFavorite }"
-						@click="toggleFavorite"
-					/>
-					<ui-icon-button
-						:icon="Check"
-						:label="isWatched ? 'Mark as unwatched' : 'Mark as watched'"
-						:disabled="pending"
-						class="item-detail-action"
-						:class="{ 'ui-icon-btn--watched': isWatched }"
-						@click="toggleWatched"
-					/>
+					<item-actions :item="item" />
 
 					<div v-if="item.ExternalUrls?.length" class="item-detail-links">
 						<button
@@ -72,25 +57,18 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import ItemActions from '@/components/features/media/ItemActions.vue';
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiBadge from '@/components/ui/UiBadge.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
-	import UiIconButton from '@/components/ui/UiIconButton.vue';
-	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { openUrl } from '@tauri-apps/plugin-opener';
-	import { Check, ExternalLink, Heart, Play, Star } from 'lucide-vue-next';
-	import { computed, toRef } from 'vue';
+	import { ExternalLink, Play, Star } from 'lucide-vue-next';
+	import { computed } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
 	defineEmits<{ play: [] }>();
 	const { libraryImageUrl, logoUrl: getLogoUrl } = useMediaImages();
-
-	const itemRef = toRef(props, 'item');
-	const { pending, toggleFavorite, toggleWatched } = useItemActions(itemRef);
-
-	const isFavorite = computed(() => props.item.UserData?.IsFavorite ?? false);
-	const isWatched = computed(() => props.item.UserData?.Played ?? false);
 
 	const posterUrl = computed(() => libraryImageUrl(props.item));
 	const logoUrl = computed(() => getLogoUrl(props.item));

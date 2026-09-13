@@ -20,24 +20,7 @@
 			<ui-progress v-if="progress" :value="progress" class="episode-progress" />
 
 			<div class="episode-actions">
-				<ui-icon-button
-					:icon="Heart"
-					:size="16"
-					:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
-					:disabled="pending"
-					class="episode-action"
-					:class="{ 'ui-icon-btn--favorite': isFavorite }"
-					@click.stop.prevent="toggleFavorite"
-				/>
-				<ui-icon-button
-					:icon="Check"
-					:size="16"
-					:label="isWatched ? 'Mark as unwatched' : 'Mark as watched'"
-					:disabled="pending"
-					class="episode-action"
-					:class="{ 'ui-icon-btn--watched': isWatched }"
-					@click.stop.prevent="toggleWatched"
-				/>
+				<item-actions :item="item" :size="16" />
 			</div>
 		</ui-aspect-ratio>
 
@@ -57,20 +40,16 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import ItemActions from '@/components/features/media/ItemActions.vue';
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
-	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import UiProgress from '@/components/ui/UiProgress.vue';
-	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
-	import { Check, Heart, Play } from 'lucide-vue-next';
-	import { computed, ref, toRef } from 'vue';
+	import { Play } from 'lucide-vue-next';
+	import { computed, ref } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
 	const { landscapeImageUrl } = useMediaImages();
 
-	const { pending, toggleFavorite, toggleWatched } = useItemActions(toRef(props, 'item'));
-
-	const isFavorite = computed(() => props.item.UserData?.IsFavorite ?? false);
 	const isWatched = computed(() => props.item.UserData?.Played ?? false);
 
 	const imageFailed = ref(false);
