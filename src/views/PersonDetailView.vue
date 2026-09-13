@@ -1,10 +1,20 @@
 <template>
-	<person-detail-layout v-if="person" :person="person">
+	<person-detail-layout
+		v-if="person"
+		:person="person">
 		<person-header :person="person" />
 		<person-filmography :person-id="personId" />
 	</person-detail-layout>
-	<p v-else-if="loading" class="server-meta">Loading...</p>
-	<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+	<p
+		v-else-if="loading"
+		class="server-meta">
+		Loading...
+	</p>
+	<p
+		v-if="errorMessage"
+		class="error-msg">
+		{{ errorMessage }}
+	</p>
 </template>
 
 <script setup lang="ts">

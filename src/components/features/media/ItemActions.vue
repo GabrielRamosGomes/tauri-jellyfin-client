@@ -5,16 +5,14 @@
 		:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
 		class="item-action"
 		:class="{ 'ui-icon-btn--favorite': isFavorite }"
-		@click.stop.prevent="toggleFavorite"
-	/>
+		@click.stop.prevent="toggleFavorite" />
 	<ui-icon-button
 		:icon="Check"
 		:size="size"
 		:label="isWatched ? 'Mark as unwatched' : 'Mark as watched'"
 		class="item-action"
 		:class="{ 'ui-icon-btn--watched': isWatched }"
-		@click.stop.prevent="toggleWatched"
-	/>
+		@click.stop.prevent="toggleWatched" />
 </template>
 
 <script setup lang="ts">

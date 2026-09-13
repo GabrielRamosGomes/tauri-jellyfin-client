@@ -1,10 +1,18 @@
 <template>
-	<div class="media-item-skeleton" aria-hidden="true">
+	<div
+		class="media-item-skeleton"
+		aria-hidden="true">
 		<ui-aspect-ratio :ratio="2 / 3">
-			<ui-skeleton height="100%" radius="8px" />
+			<ui-skeleton
+				height="100%"
+				radius="8px" />
 		</ui-aspect-ratio>
-		<ui-skeleton width="80%" height="12px" />
-		<ui-skeleton width="40%" height="10px" />
+		<ui-skeleton
+			width="80%"
+			height="12px" />
+		<ui-skeleton
+			width="40%"
+			height="10px" />
 	</div>
 </template>
 

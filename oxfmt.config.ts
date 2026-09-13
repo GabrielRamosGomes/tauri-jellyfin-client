@@ -9,11 +9,11 @@ export default defineConfig({
 	jsxSingleQuote: false,
 	trailingComma: 'all',
 	bracketSpacing: true,
-	bracketSameLine: false,
+	bracketSameLine: true,
 	arrowParens: 'always',
 	endOfLine: 'lf',
 	quoteProps: 'as-needed',
-	singleAttributePerLine: false,
+	singleAttributePerLine: true,
 	vueIndentScriptAndStyle: true,
 	htmlWhitespaceSensitivity: 'css',
 	sortImports: {

@@ -1,26 +1,48 @@
 <template>
 	<div>
-		<hero-banner v-if="heroItem" :item="heroItem" />
+		<hero-banner
+			v-if="heroItem"
+			:item="heroItem" />
 
 		<template v-if="showSkeleton">
-			<media-row-skeleton title="My Collection" variant="landscape" />
-			<media-row-skeleton title="Up Next" variant="landscape" />
-			<media-row-skeleton title="Continue Watching" variant="landscape" />
-			<media-row-skeleton title="Latest" variant="poster" />
+			<media-row-skeleton
+				title="My Collection"
+				variant="landscape" />
+			<media-row-skeleton
+				title="Up Next"
+				variant="landscape" />
+			<media-row-skeleton
+				title="Continue Watching"
+				variant="landscape" />
+			<media-row-skeleton
+				title="Latest"
+				variant="poster" />
 		</template>
 
 		<template v-else>
-			<media-row title="My Collection" :items="libraries" variant="library" />
-			<p v-if="!libraries.length" class="server-meta">No libraries yet.</p>
+			<media-row
+				title="My Collection"
+				:items="libraries"
+				variant="library" />
+			<p
+				v-if="!libraries.length"
+				class="server-meta">
+				No libraries yet.
+			</p>
 
-			<media-row title="Up Next" :items="nextUp" variant="landscape" />
-			<media-row title="Continue Watching" :items="continueWatching" variant="landscape" />
+			<media-row
+				title="Up Next"
+				:items="nextUp"
+				variant="landscape" />
+			<media-row
+				title="Continue Watching"
+				:items="continueWatching"
+				variant="landscape" />
 			<media-row
 				v-for="section in latestByLibrary"
 				:key="section.libraryId"
 				:title="`Latest ${section.libraryName}`"
-				:items="section.items"
-			/>
+				:items="section.items" />
 		</template>
 	</div>
 </template>

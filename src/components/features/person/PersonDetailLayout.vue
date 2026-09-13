@@ -1,6 +1,10 @@
 <template>
-	<div class="person-detail-page" :style="pageTintStyle">
-		<div class="person-detail-backdrop" :style="backdropStyle" />
+	<div
+		class="person-detail-page"
+		:style="pageTintStyle">
+		<div
+			class="person-detail-backdrop"
+			:style="backdropStyle" />
 		<div class="person-detail-scrim" />
 
 		<div class="person-detail-content">

@@ -1,7 +1,12 @@
 <template>
 	<div class="person-header">
-		<ui-aspect-ratio :ratio="3 / 4" class="person-photo">
-			<img v-if="photoUrl" :src="photoUrl" :alt="person.Name ?? ''" />
+		<ui-aspect-ratio
+			:ratio="3 / 4"
+			class="person-photo">
+			<img
+				v-if="photoUrl"
+				:src="photoUrl"
+				:alt="person.Name ?? ''" />
 			<span v-else>{{ initials }}</span>
 		</ui-aspect-ratio>
 
@@ -15,14 +20,20 @@
 					:disabled="pending"
 					class="person-fav"
 					:class="{ 'person-fav--active': isFavorite }"
-					@click="toggleFavorite"
-				/>
+					@click="toggleFavorite" />
 			</div>
 
-			<p v-if="birthLine" class="person-subtitle">{{ birthLine }}</p>
+			<p
+				v-if="birthLine"
+				class="person-subtitle">
+				{{ birthLine }}
+			</p>
 
 			<template v-if="person.Overview">
-				<p ref="bioEl" class="person-bio" :class="{ 'person-bio--clamped': !expanded }">
+				<p
+					ref="bioEl"
+					class="person-bio"
+					:class="{ 'person-bio--clamped': !expanded }">
 					{{ person.Overview }}
 				</p>
 				<ui-button
@@ -30,23 +41,25 @@
 					variant="ghost"
 					size="sm"
 					class="person-bio-toggle"
-					@click="toggleBio"
-				>
+					@click="toggleBio">
 					{{ expanded ? 'Read less' : 'Read more' }}
 				</ui-button>
 			</template>
 
-			<div v-if="person.ExternalUrls?.length" class="person-links">
+			<div
+				v-if="person.ExternalUrls?.length"
+				class="person-links">
 				<ui-button
 					v-for="(link, index) in person.ExternalUrls"
 					:key="link.Name ?? index"
 					variant="secondary"
 					size="sm"
 					class="person-link"
-					@click="openLink(link.Url)"
-				>
+					@click="openLink(link.Url)">
 					{{ link.Name }}
-					<external-link :size="12" aria-hidden="true" />
+					<external-link
+						:size="12"
+						aria-hidden="true" />
 				</ui-button>
 			</div>
 		</div>

@@ -1,5 +1,7 @@
 <template>
-	<aspect-ratio :ratio="ratio" class="ui-aspect-ratio">
+	<aspect-ratio
+		:ratio="ratio"
+		class="ui-aspect-ratio">
 		<slot />
 	</aspect-ratio>
 </template>

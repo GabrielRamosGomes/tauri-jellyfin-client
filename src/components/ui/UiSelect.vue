@@ -2,8 +2,7 @@
 	<select-root
 		:model-value="modelValue"
 		:disabled="disabled"
-		@update:model-value="(value) => $emit('update:modelValue', value as string)"
-	>
+		@update:model-value="(value) => $emit('update:modelValue', value as string)">
 		<select-trigger class="ui-select-trigger">
 			<select-value />
 			<select-icon class="ui-select-icon">
@@ -12,14 +11,16 @@
 		</select-trigger>
 
 		<select-portal>
-			<select-content class="ui-select-content" position="popper" :side-offset="4">
+			<select-content
+				class="ui-select-content"
+				position="popper"
+				:side-offset="4">
 				<select-viewport>
 					<select-item
 						v-for="option in options"
 						:key="option.value"
 						:value="option.value"
-						class="ui-select-item"
-					>
+						class="ui-select-item">
 						<select-item-text>{{ option.label }}</select-item-text>
 						<select-item-indicator class="ui-select-item-indicator">
 							<check :size="14" />

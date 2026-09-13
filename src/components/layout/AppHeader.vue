@@ -1,9 +1,17 @@
 <template>
 	<header class="app-header">
 		<div class="app-header-group">
-			<ui-icon-button :icon="Menu" label="Menu" @click="toggle" />
-			<ui-icon-button :icon="ArrowLeft" label="Back" @click="router.back()" />
-			<router-link :to="{ name: 'home' }" class="ui-icon-btn app-header-home">
+			<ui-icon-button
+				:icon="Menu"
+				label="Menu"
+				@click="toggle" />
+			<ui-icon-button
+				:icon="ArrowLeft"
+				label="Back"
+				@click="router.back()" />
+			<router-link
+				:to="{ name: 'home' }"
+				class="ui-icon-btn app-header-home">
 				<home :size="18" />
 			</router-link>
 		</div>
@@ -13,7 +21,9 @@
 		</div>
 
 		<div class="app-header-group">
-			<ui-icon-button :icon="Heart" label="Favorites" />
+			<ui-icon-button
+				:icon="Heart"
+				label="Favorites" />
 			<user-menu />
 		</div>
 	</header>

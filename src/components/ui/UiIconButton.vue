@@ -1,6 +1,13 @@
 <template>
-	<button type="button" class="ui-icon-btn" :aria-label="label" :title="label" :disabled="disabled">
-		<component :is="icon" :size="size" />
+	<button
+		type="button"
+		class="ui-icon-btn"
+		:aria-label="label"
+		:title="label"
+		:disabled="disabled">
+		<component
+			:is="icon"
+			:size="size" />
 	</button>
 </template>
 

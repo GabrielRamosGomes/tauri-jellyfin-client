@@ -1,12 +1,15 @@
 <template>
-	<router-link :to="{ name: 'library', params: { id: library.Id } }" class="library-card">
-		<ui-aspect-ratio :ratio="16 / 9" class="library-card-media">
+	<router-link
+		:to="{ name: 'library', params: { id: library.Id } }"
+		class="library-card">
+		<ui-aspect-ratio
+			:ratio="16 / 9"
+			class="library-card-media">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
 				:alt="library.Name ?? ''"
-				@error="imageFailed = true"
-			/>
+				@error="imageFailed = true" />
 		</ui-aspect-ratio>
 		<p class="library-card-caption">{{ library.Name }}</p>
 	</router-link>

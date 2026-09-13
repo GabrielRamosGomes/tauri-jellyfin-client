@@ -36,8 +36,15 @@ src/components/
 	<dropdown-menu-root>
 		<dropdown-menu-trigger class="ui-avatar app-header-avatar">...</dropdown-menu-trigger>
 		<dropdown-menu-portal>
-			<dropdown-menu-content class="dropdown-menu-content" :side-offset="8" align="end">
-				<dropdown-menu-item class="dropdown-menu-item" @select="signOut">...</dropdown-menu-item>
+			<dropdown-menu-content
+				class="dropdown-menu-content"
+				:side-offset="8"
+				align="end">
+				<dropdown-menu-item
+					class="dropdown-menu-item"
+					@select="signOut"
+					>...</dropdown-menu-item
+				>
 				<dropdown-menu-separator class="dropdown-menu-separator" />
 			</dropdown-menu-content>
 		</dropdown-menu-portal>

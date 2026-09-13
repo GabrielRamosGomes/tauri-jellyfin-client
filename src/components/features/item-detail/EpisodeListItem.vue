@@ -2,25 +2,32 @@
 	<router-link
 		:to="{ name: 'item', params: { id: item.Id } }"
 		class="episode-card"
-		:class="{ 'episode-card--watched': isWatched }"
-	>
-		<ui-aspect-ratio :ratio="16 / 9" class="episode-thumb">
+		:class="{ 'episode-card--watched': isWatched }">
+		<ui-aspect-ratio
+			:ratio="16 / 9"
+			class="episode-thumb">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
 				:alt="item.Name ?? ''"
 				loading="lazy"
-				@error="imageFailed = true"
-			/>
+				@error="imageFailed = true" />
 
 			<div class="episode-play">
-				<play :size="20" fill="currentColor" />
+				<play
+					:size="20"
+					fill="currentColor" />
 			</div>
 
-			<ui-progress v-if="progress" :value="progress" class="episode-progress" />
+			<ui-progress
+				v-if="progress"
+				:value="progress"
+				class="episode-progress" />
 
 			<div class="episode-actions">
-				<item-actions :item="item" :size="16" />
+				<item-actions
+					:item="item"
+					:size="16" />
 			</div>
 		</ui-aspect-ratio>
 
@@ -32,7 +39,11 @@
 				<span v-if="premiereDate">{{ premiereDate }}</span>
 				<span v-if="runtimeMinutes">{{ runtimeMinutes }}m</span>
 			</div>
-			<p v-if="item.Overview" class="episode-overview">{{ item.Overview }}</p>
+			<p
+				v-if="item.Overview"
+				class="episode-overview">
+				{{ item.Overview }}
+			</p>
 		</div>
 	</router-link>
 </template>

@@ -1,19 +1,26 @@
 <template>
-	<form class="server-form" @submit.prevent="emit('submit')">
+	<form
+		class="server-form"
+		@submit.prevent="emit('submit')">
 		<div class="row">
 			<ui-input
 				v-model="serverUrl"
 				type="url"
 				placeholder="Server URL (e.g. http://192.168.1.5:8096)"
 				required
-				:disabled="loading"
-			/>
-			<ui-button type="submit" :disabled="loading">
+				:disabled="loading" />
+			<ui-button
+				type="submit"
+				:disabled="loading">
 				{{ loading ? 'Testing...' : 'Connect' }}
 			</ui-button>
 		</div>
 
-		<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+		<p
+			v-if="errorMessage"
+			class="error-msg">
+			{{ errorMessage }}
+		</p>
 	</form>
 </template>
 

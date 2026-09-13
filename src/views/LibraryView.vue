@@ -2,18 +2,39 @@
 	<div>
 		<div class="library-header">
 			<h1>{{ libraryName }}</h1>
-			<span v-if="items.length" class="library-count">{{ items.length }}</span>
+			<span
+				v-if="items.length"
+				class="library-count"
+				>{{ items.length }}</span
+			>
 		</div>
 
-		<div v-if="items.length" class="item-grid">
-			<media-item-card v-for="item in items" :key="item.Id" :item="item" />
+		<div
+			v-if="items.length"
+			class="item-grid">
+			<media-item-card
+				v-for="item in items"
+				:key="item.Id"
+				:item="item" />
 		</div>
-		<div v-else-if="loading" class="item-grid">
-			<media-item-card-skeleton v-for="n in 18" :key="n" />
+		<div
+			v-else-if="loading"
+			class="item-grid">
+			<media-item-card-skeleton
+				v-for="n in 18"
+				:key="n" />
 		</div>
-		<p v-else class="server-meta">No items in this library yet.</p>
+		<p
+			v-else
+			class="server-meta">
+			No items in this library yet.
+		</p>
 
-		<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+		<p
+			v-if="errorMessage"
+			class="error-msg">
+			{{ errorMessage }}
+		</p>
 	</div>
 </template>
 

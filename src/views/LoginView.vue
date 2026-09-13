@@ -8,8 +8,7 @@
 			:active-server-url="session?.serverUrl"
 			:loading="loading"
 			@switch="switchTo"
-			@forget="forget"
-		/>
+			@forget="forget" />
 
 		<login-form
 			v-if="serverInfo"
@@ -18,16 +17,14 @@
 			:loading="loading"
 			:error-message="errorMessage"
 			@submit="login"
-			@use-different-server="addServer"
-		/>
+			@use-different-server="addServer" />
 
 		<server-connect-form
 			v-else
 			v-model="serverUrl"
 			:loading="loading"
 			:error-message="errorMessage"
-			@submit="connect"
-		/>
+			@submit="connect" />
 	</main>
 </template>
 

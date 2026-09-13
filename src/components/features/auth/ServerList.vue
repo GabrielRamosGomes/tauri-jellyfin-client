@@ -1,15 +1,21 @@
 <template>
-	<ul v-if="servers.length" class="server-list">
-		<li v-for="server in servers" :key="server.serverUrl">
+	<ul
+		v-if="servers.length"
+		class="server-list">
+		<li
+			v-for="server in servers"
+			:key="server.serverUrl">
 			<span>{{ server.username }} @ {{ server.serverUrl }}</span>
 			<ui-button
 				size="sm"
 				:disabled="loading || server.serverUrl === activeServerUrl"
-				@click="emit('switch', server.serverUrl)"
-			>
+				@click="emit('switch', server.serverUrl)">
 				{{ server.serverUrl === activeServerUrl ? 'Active' : 'Switch' }}
 			</ui-button>
-			<ui-button variant="ghost" size="sm" @click="emit('forget', server.serverUrl)">
+			<ui-button
+				variant="ghost"
+				size="sm"
+				@click="emit('forget', server.serverUrl)">
 				Forget
 			</ui-button>
 		</li>

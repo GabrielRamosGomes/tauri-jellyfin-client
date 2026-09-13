@@ -3,49 +3,83 @@
 		<div class="item-detail-header-overlay">
 			<div class="item-detail-poster">
 				<ui-aspect-ratio :ratio="2 / 3">
-					<img v-if="posterUrl" :src="posterUrl" :alt="item.Name ?? ''" />
+					<img
+						v-if="posterUrl"
+						:src="posterUrl"
+						:alt="item.Name ?? ''" />
 				</ui-aspect-ratio>
 			</div>
 
 			<div class="item-detail-info">
-				<img v-if="logoUrl" :src="logoUrl" :alt="item.Name ?? ''" class="item-detail-logo" />
-				<h1 v-else class="item-detail-title">{{ item.Name }}</h1>
+				<img
+					v-if="logoUrl"
+					:src="logoUrl"
+					:alt="item.Name ?? ''"
+					class="item-detail-logo" />
+				<h1
+					v-else
+					class="item-detail-title">
+					{{ item.Name }}
+				</h1>
 
 				<div class="item-detail-meta">
 					<span v-if="item.ProductionYear">{{ item.ProductionYear }}</span>
 					<ui-badge v-if="item.OfficialRating">{{ item.OfficialRating }}</ui-badge>
-					<span v-if="communityRating" class="item-detail-rating">
-						<star :size="14" fill="currentColor" />
+					<span
+						v-if="communityRating"
+						class="item-detail-rating">
+						<star
+							:size="14"
+							fill="currentColor" />
 						{{ communityRating }}
 					</span>
 					<span v-if="runtimeMinutes">{{ runtimeMinutes }} min</span>
 					<span v-if="endsAt">Ends at {{ endsAt }}</span>
 				</div>
 
-				<div v-if="item.Genres?.length" class="item-detail-genres">
-					<ui-badge v-for="genre in item.Genres" :key="genre" variant="muted">{{ genre }}</ui-badge>
+				<div
+					v-if="item.Genres?.length"
+					class="item-detail-genres">
+					<ui-badge
+						v-for="genre in item.Genres"
+						:key="genre"
+						variant="muted"
+						>{{ genre }}</ui-badge
+					>
 				</div>
 
-				<p v-if="item.Overview" class="item-detail-overview">{{ item.Overview }}</p>
+				<p
+					v-if="item.Overview"
+					class="item-detail-overview">
+					{{ item.Overview }}
+				</p>
 
 				<div class="item-detail-actions">
-					<ui-button size="sm" class="item-detail-play-btn" @click="$emit('play')">
-						<play :size="18" fill="currentColor" />
+					<ui-button
+						size="sm"
+						class="item-detail-play-btn"
+						@click="$emit('play')">
+						<play
+							:size="18"
+							fill="currentColor" />
 						Play
 					</ui-button>
 
 					<item-actions :item="item" />
 
-					<div v-if="item.ExternalUrls?.length" class="item-detail-links">
+					<div
+						v-if="item.ExternalUrls?.length"
+						class="item-detail-links">
 						<button
 							v-for="(link, index) in item.ExternalUrls"
 							:key="link.Name ?? index"
 							type="button"
 							class="item-detail-link"
-							@click="openLink(link.Url)"
-						>
+							@click="openLink(link.Url)">
 							{{ link.Name }}
-							<external-link :size="12" aria-hidden="true" />
+							<external-link
+								:size="12"
+								aria-hidden="true" />
 						</button>
 					</div>
 				</div>

@@ -1,8 +1,16 @@
 <template>
 	<label class="ui-input-field">
-		<span v-if="label" class="ui-input-label">{{ label }}</span>
+		<span
+			v-if="label"
+			class="ui-input-label"
+			>{{ label }}</span
+		>
 		<div class="ui-input-wrapper">
-			<component :is="icon" v-if="icon" :size="18" class="ui-input-icon" />
+			<component
+				:is="icon"
+				v-if="icon"
+				:size="18"
+				class="ui-input-icon" />
 			<input
 				class="ui-input"
 				:class="{ 'ui-input--has-icon': icon, 'ui-input--has-toggle': type === 'password' }"
@@ -11,20 +19,26 @@
 				:value="modelValue"
 				:disabled="disabled"
 				:required="required"
-				@input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-			/>
+				@input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
 			<button
 				v-if="type === 'password'"
 				type="button"
 				class="ui-input-toggle"
 				:aria-label="revealed ? 'Hide password' : 'Show password'"
-				@click="revealed = !revealed"
-			>
-				<eye-off v-if="revealed" :size="18" />
-				<eye v-else :size="18" />
+				@click="revealed = !revealed">
+				<eye-off
+					v-if="revealed"
+					:size="18" />
+				<eye
+					v-else
+					:size="18" />
 			</button>
 		</div>
-		<span v-if="error" class="ui-input-error">{{ error }}</span>
+		<span
+			v-if="error"
+			class="ui-input-error"
+			>{{ error }}</span
+		>
 	</label>
 </template>
 

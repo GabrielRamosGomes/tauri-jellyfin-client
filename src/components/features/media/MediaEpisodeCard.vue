@@ -1,31 +1,49 @@
 <template>
-	<router-link :to="{ name: 'item', params: { id: item.Id } }" class="media-episode-card">
-		<ui-aspect-ratio :ratio="16 / 9" class="media-episode-media">
+	<router-link
+		:to="{ name: 'item', params: { id: item.Id } }"
+		class="media-episode-card">
+		<ui-aspect-ratio
+			:ratio="16 / 9"
+			class="media-episode-media">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
 				:alt="item.Name ?? ''"
-				@error="imageFailed = true"
-			/>
-			<span v-else class="media-episode-fallback">{{ item.Name }}</span>
+				@error="imageFailed = true" />
+			<span
+				v-else
+				class="media-episode-fallback"
+				>{{ item.Name }}</span
+			>
 
-			<ui-progress v-if="progress" :value="progress" class="media-episode-progress" />
+			<ui-progress
+				v-if="progress"
+				:value="progress"
+				class="media-episode-progress" />
 
 			<span
 				v-if="item.UserData?.Played"
 				class="media-item-badge media-item-badge-done"
-				aria-label="Watched"
-			>
-				<check :size="14" stroke-width="3" aria-hidden="true" />
+				aria-label="Watched">
+				<check
+					:size="14"
+					stroke-width="3"
+					aria-hidden="true" />
 			</span>
 
 			<div class="media-item-play">
-				<play :size="20" fill="currentColor" />
+				<play
+					:size="20"
+					fill="currentColor" />
 			</div>
 		</ui-aspect-ratio>
 
 		<p class="media-episode-title">{{ primaryTitle }}</p>
-		<p v-if="secondaryText" class="media-episode-subtitle">{{ secondaryText }}</p>
+		<p
+			v-if="secondaryText"
+			class="media-episode-subtitle">
+			{{ secondaryText }}
+		</p>
 	</router-link>
 </template>
 

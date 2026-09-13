@@ -1,23 +1,27 @@
 <template>
-	<ui-scrollable-row :title="title" :items="items">
+	<ui-scrollable-row
+		:title="title"
+		:items="items">
 		<template v-if="variant === 'landscape'">
 			<media-episode-card
 				v-for="item in items"
 				:key="item.Id"
 				:item="item"
-				class="media-row-card media-row-card--landscape"
-			/>
+				class="media-row-card media-row-card--landscape" />
 		</template>
 		<template v-else-if="variant === 'library'">
 			<library-card
 				v-for="item in items"
 				:key="item.Id"
 				:library="item"
-				class="media-row-card media-row-card--library"
-			/>
+				class="media-row-card media-row-card--library" />
 		</template>
 		<template v-else>
-			<media-item-card v-for="item in items" :key="item.Id" :item="item" class="media-row-card" />
+			<media-item-card
+				v-for="item in items"
+				:key="item.Id"
+				:item="item"
+				class="media-row-card" />
 		</template>
 	</ui-scrollable-row>
 </template>

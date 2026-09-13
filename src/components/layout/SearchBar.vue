@@ -4,8 +4,7 @@
 			v-model="query"
 			:icon="Search"
 			placeholder="Search titles, people..."
-			@keyup.enter="emit('submit', query)"
-		/>
+			@keyup.enter="emit('submit', query)" />
 	</div>
 </template>
 

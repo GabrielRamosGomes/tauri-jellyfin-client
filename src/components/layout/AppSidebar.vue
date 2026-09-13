@@ -2,11 +2,16 @@
 	<div
 		class="nav-drawer-backdrop"
 		:class="{ 'nav-drawer-backdrop--visible': isOpen }"
-		@click="close"
-	/>
+		@click="close" />
 
-	<aside class="nav-drawer" :class="{ 'nav-drawer--open': isOpen }">
-		<ui-button variant="ghost" size="sm" class="nav-drawer-close" @click="close">
+	<aside
+		class="nav-drawer"
+		:class="{ 'nav-drawer--open': isOpen }">
+		<ui-button
+			variant="ghost"
+			size="sm"
+			class="nav-drawer-close"
+			@click="close">
 			<panel-left-close :size="20" />
 			<span>Close</span>
 		</ui-button>
@@ -16,11 +21,15 @@
 
 			<hr class="nav-divider" />
 
-			<nav-group :items="libraryItems" empty-text="No libraries yet" />
+			<nav-group
+				:items="libraryItems"
+				empty-text="No libraries yet" />
 
 			<hr class="nav-divider" />
 
-			<nav-group label="Administration" :items="adminItems" />
+			<nav-group
+				label="Administration"
+				:items="adminItems" />
 		</nav>
 
 		<footer class="nav-drawer-footer">

@@ -1,6 +1,10 @@
 <template>
-	<router-link :to="{ name: 'item', params: { id: item.Id } }" class="media-item-card">
-		<ui-aspect-ratio :ratio="2 / 3" class="media-item-media">
+	<router-link
+		:to="{ name: 'item', params: { id: item.Id } }"
+		class="media-item-card">
+		<ui-aspect-ratio
+			:ratio="2 / 3"
+			class="media-item-media">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
@@ -9,25 +13,40 @@
 				height="600"
 				loading="lazy"
 				decoding="async"
-				@error="imageFailed = true"
-			/>
-			<span v-else class="media-item-title">{{ item.Name }}</span>
+				@error="imageFailed = true" />
+			<span
+				v-else
+				class="media-item-title"
+				>{{ item.Name }}</span
+			>
 
 			<span
 				v-if="item.UserData?.Played"
 				class="media-item-badge media-item-badge-done"
-				aria-label="Watched"
-			>
-				<check :size="14" stroke-width="3" aria-hidden="true" />
+				aria-label="Watched">
+				<check
+					:size="14"
+					stroke-width="3"
+					aria-hidden="true" />
 			</span>
-			<span v-else-if="unwatchedCount" class="media-item-badge">{{ unwatchedCount }}</span>
+			<span
+				v-else-if="unwatchedCount"
+				class="media-item-badge"
+				>{{ unwatchedCount }}</span
+			>
 
 			<div class="media-item-play">
-				<play :size="20" fill="currentColor" />
+				<play
+					:size="20"
+					fill="currentColor" />
 			</div>
 		</ui-aspect-ratio>
 		<p class="media-item-name">{{ item.Name }}</p>
-		<p v-if="item.ProductionYear" class="media-item-year">{{ item.ProductionYear }}</p>
+		<p
+			v-if="item.ProductionYear"
+			class="media-item-year">
+			{{ item.ProductionYear }}
+		</p>
 	</router-link>
 </template>
 

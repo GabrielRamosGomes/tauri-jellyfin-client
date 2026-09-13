@@ -1,24 +1,29 @@
 <template>
-	<section v-if="hasItems" class="scrollable-row">
+	<section
+		v-if="hasItems"
+		class="scrollable-row">
 		<div class="scrollable-row-header">
 			<h2 class="scrollable-row-title">{{ title }}</h2>
-			<div v-if="canScrollLeft || canScrollRight" class="scrollable-row-controls">
+			<div
+				v-if="canScrollLeft || canScrollRight"
+				class="scrollable-row-controls">
 				<ui-icon-button
 					:icon="ChevronLeft"
 					label="Scroll left"
 					:disabled="!canScrollLeft"
-					@click="scroll(-1)"
-				/>
+					@click="scroll(-1)" />
 				<ui-icon-button
 					:icon="ChevronRight"
 					label="Scroll right"
 					:disabled="!canScrollRight"
-					@click="scroll(1)"
-				/>
+					@click="scroll(1)" />
 			</div>
 		</div>
 
-		<div ref="trackRef" class="scrollable-row-track" :class="trackClass">
+		<div
+			ref="trackRef"
+			class="scrollable-row-track"
+			:class="trackClass">
 			<slot />
 		</div>
 	</section>

@@ -1,12 +1,14 @@
 <template>
-	<tabs-root v-if="groups.length" v-model="activeTab" class="person-tabs">
+	<tabs-root
+		v-if="groups.length"
+		v-model="activeTab"
+		class="person-tabs">
 		<tabs-list class="person-tabs-list">
 			<tabs-trigger
 				v-for="group in groups"
 				:key="group.key"
 				:value="group.key"
-				class="person-tabs-trigger"
-			>
+				class="person-tabs-trigger">
 				{{ group.label }}
 			</tabs-trigger>
 		</tabs-list>
@@ -15,22 +17,27 @@
 			v-for="group in groups"
 			:key="group.key"
 			:value="group.key"
-			class="person-tabs-content"
-		>
-			<div class="person-grid" :class="{ 'person-grid--landscape': group.key === 'episodes' }">
+			class="person-tabs-content">
+			<div
+				class="person-grid"
+				:class="{ 'person-grid--landscape': group.key === 'episodes' }">
 				<component
 					:is="group.key === 'episodes' ? MediaEpisodeCard : MediaItemCard"
 					v-for="item in group.items"
 					:key="item.Id"
 					:item="item"
-					class="person-grid-card"
-				/>
+					class="person-grid-card" />
 			</div>
 		</tabs-content>
 	</tabs-root>
 
-	<div v-else-if="loading" class="person-grid">
-		<media-item-card-skeleton v-for="n in 10" :key="n" class="person-grid-card" />
+	<div
+		v-else-if="loading"
+		class="person-grid">
+		<media-item-card-skeleton
+			v-for="n in 10"
+			:key="n"
+			class="person-grid-card" />
 	</div>
 </template>
 

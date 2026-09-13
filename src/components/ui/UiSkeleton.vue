@@ -3,8 +3,7 @@
 		class="ui-skeleton"
 		:class="{ 'ui-skeleton--circle': circle, 'ui-skeleton--static': animation === 'none' }"
 		:style="style"
-		aria-hidden="true"
-	/>
+		aria-hidden="true" />
 </template>
 
 <script setup lang="ts">

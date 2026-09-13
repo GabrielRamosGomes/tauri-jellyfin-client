@@ -3,8 +3,7 @@
 		:type="type"
 		class="ui-btn"
 		:class="[`ui-btn--${variant}`, `ui-btn--${size}`]"
-		:disabled="disabled"
-	>
+		:disabled="disabled">
 		<slot />
 	</button>
 </template>

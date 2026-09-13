@@ -1,17 +1,26 @@
 <template>
-	<ui-scrollable-row title="Cast" :items="people" track-class="cast-row-track">
+	<ui-scrollable-row
+		title="Cast"
+		:items="people"
+		track-class="cast-row-track">
 		<router-link
 			v-for="person in people"
 			:key="person.Id"
 			:to="{ name: 'person', params: { id: person.Id } }"
-			class="cast-card"
-		>
+			class="cast-card">
 			<div class="cast-avatar">
-				<img v-if="imageUrl(person)" :src="imageUrl(person)" :alt="person.Name ?? ''" />
+				<img
+					v-if="imageUrl(person)"
+					:src="imageUrl(person)"
+					:alt="person.Name ?? ''" />
 				<span v-else>{{ initials(person.Name) }}</span>
 			</div>
 			<p class="cast-name">{{ person.Name }}</p>
-			<p v-if="person.Role" class="cast-role">{{ person.Role }}</p>
+			<p
+				v-if="person.Role"
+				class="cast-role">
+				{{ person.Role }}
+			</p>
 		</router-link>
 	</ui-scrollable-row>
 </template>

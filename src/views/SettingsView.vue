@@ -10,8 +10,7 @@
 			<ui-select
 				:model-value="preference"
 				:options="themeOptions"
-				@update:model-value="setPreference($event as ThemePreference)"
-			/>
+				@update:model-value="setPreference($event as ThemePreference)" />
 		</div>
 	</div>
 </template>

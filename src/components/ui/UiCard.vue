@@ -1,5 +1,7 @@
 <template>
-	<div class="ui-card" :class="{ 'ui-card--padded': padded }">
+	<div
+		class="ui-card"
+		:class="{ 'ui-card--padded': padded }">
 		<slot />
 	</div>
 </template>

@@ -1,27 +1,48 @@
 <template>
 	<dropdown-menu-root v-if="session">
-		<dropdown-menu-trigger class="ui-avatar app-header-avatar" title="Account">
-			<img v-if="avatarUrl && !avatarFailed" :src="avatarUrl" alt="" @error="avatarFailed = true" />
+		<dropdown-menu-trigger
+			class="ui-avatar app-header-avatar"
+			title="Account">
+			<img
+				v-if="avatarUrl && !avatarFailed"
+				:src="avatarUrl"
+				alt=""
+				@error="avatarFailed = true" />
 			<span v-else>{{ accountInitial }}</span>
 		</dropdown-menu-trigger>
 
 		<dropdown-menu-portal>
-			<dropdown-menu-content class="dropdown-menu-content" :side-offset="8" align="end">
-				<dropdown-menu-item class="dropdown-menu-item" @select="signOut">
+			<dropdown-menu-content
+				class="dropdown-menu-content"
+				:side-offset="8"
+				align="end">
+				<dropdown-menu-item
+					class="dropdown-menu-item"
+					@select="signOut">
 					<log-out :size="16" />
 					<span>Sign Out</span>
 				</dropdown-menu-item>
 
 				<dropdown-menu-separator class="dropdown-menu-separator" />
 
-				<router-link :to="{ name: 'settings' }" custom v-slot="{ navigate }">
-					<dropdown-menu-item class="dropdown-menu-item" @select="() => navigate()">
+				<router-link
+					:to="{ name: 'settings' }"
+					custom
+					v-slot="{ navigate }">
+					<dropdown-menu-item
+						class="dropdown-menu-item"
+						@select="() => navigate()">
 						<settings :size="16" />
 						<span>Settings</span>
 					</dropdown-menu-item>
 				</router-link>
-				<router-link :to="{ name: 'login' }" custom v-slot="{ navigate }">
-					<dropdown-menu-item class="dropdown-menu-item" @select="() => navigate()">
+				<router-link
+					:to="{ name: 'login' }"
+					custom
+					v-slot="{ navigate }">
+					<dropdown-menu-item
+						class="dropdown-menu-item"
+						@select="() => navigate()">
 						<server :size="16" />
 						<span>Change Server</span>
 					</dropdown-menu-item>

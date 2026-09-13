@@ -3,7 +3,10 @@
 		<div class="item-detail-header-overlay">
 			<div class="item-detail-poster">
 				<ui-aspect-ratio :ratio="2 / 3">
-					<img v-if="posterUrl" :src="posterUrl" :alt="item.Name ?? ''" />
+					<img
+						v-if="posterUrl"
+						:src="posterUrl"
+						:alt="item.Name ?? ''" />
 				</ui-aspect-ratio>
 			</div>
 
@@ -11,8 +14,7 @@
 				<router-link
 					v-if="item.SeriesName && item.SeriesId"
 					class="season-kicker"
-					:to="{ name: 'item', params: { id: item.SeriesId } }"
-				>
+					:to="{ name: 'item', params: { id: item.SeriesId } }">
 					{{ item.SeriesName }}
 				</router-link>
 
@@ -23,8 +25,7 @@
 						class="season-nav"
 						:class="{ 'season-nav--disabled': !prevSeason }"
 						:to="prevSeason ? { name: 'item', params: { id: prevSeason.Id } } : undefined"
-						:aria-label="prevSeason ? `Go to ${prevSeason.Name}` : undefined"
-					>
+						:aria-label="prevSeason ? `Go to ${prevSeason.Name}` : undefined">
 						<chevron-left :size="20" />
 					</component>
 
@@ -36,8 +37,7 @@
 						class="season-nav"
 						:class="{ 'season-nav--disabled': !nextSeason }"
 						:to="nextSeason ? { name: 'item', params: { id: nextSeason.Id } } : undefined"
-						:aria-label="nextSeason ? `Go to ${nextSeason.Name}` : undefined"
-					>
+						:aria-label="nextSeason ? `Go to ${nextSeason.Name}` : undefined">
 						<chevron-right :size="20" />
 					</component>
 				</div>
@@ -46,37 +46,57 @@
 					<span v-if="item.ProductionYear">{{ item.ProductionYear }}</span>
 					<span v-if="episodeCount">{{ episodeCount }} episodes</span>
 					<span v-if="totalRuntime">{{ totalRuntime }}</span>
-					<span v-if="communityRating" class="item-detail-rating">
-						<star :size="14" fill="currentColor" />
+					<span
+						v-if="communityRating"
+						class="item-detail-rating">
+						<star
+							:size="14"
+							fill="currentColor" />
 						{{ communityRating }}
 					</span>
 				</div>
 
-				<div v-if="episodeCount" class="season-progress">
-					<ui-progress :value="watchedPercent" class="season-progress-track" />
+				<div
+					v-if="episodeCount"
+					class="season-progress">
+					<ui-progress
+						:value="watchedPercent"
+						class="season-progress-track" />
 					<span class="season-progress-label">{{ watchedCount }} / {{ episodeCount }} watched</span>
 				</div>
 
-				<p v-if="item.Overview" class="item-detail-overview">{{ item.Overview }}</p>
+				<p
+					v-if="item.Overview"
+					class="item-detail-overview">
+					{{ item.Overview }}
+				</p>
 
 				<div class="item-detail-actions">
-					<ui-button size="sm" class="item-detail-play-btn" @click="playResume">
-						<play :size="18" fill="currentColor" />
+					<ui-button
+						size="sm"
+						class="item-detail-play-btn"
+						@click="playResume">
+						<play
+							:size="18"
+							fill="currentColor" />
 						{{ playLabel }}
 					</ui-button>
 
 					<item-actions :item="item" />
 
-					<div v-if="item.ExternalUrls?.length" class="item-detail-links">
+					<div
+						v-if="item.ExternalUrls?.length"
+						class="item-detail-links">
 						<button
 							v-for="(link, index) in item.ExternalUrls"
 							:key="link.Name ?? index"
 							type="button"
 							class="item-detail-link"
-							@click="openLink(link.Url)"
-						>
+							@click="openLink(link.Url)">
 							{{ link.Name }}
-							<external-link :size="12" aria-hidden="true" />
+							<external-link
+								:size="12"
+								aria-hidden="true" />
 						</button>
 					</div>
 				</div>

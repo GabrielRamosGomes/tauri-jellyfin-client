@@ -1,5 +1,7 @@
 <template>
-	<div v-if="showSkeleton" class="series-content-row">
+	<div
+		v-if="showSkeleton"
+		class="series-content-row">
 		<div class="next-up-section">
 			<h2 class="scrollable-row-title">Next Up</h2>
 			<episode-card-skeleton class="next-up-card" />
@@ -8,23 +10,40 @@
 		<div class="series-seasons">
 			<h2 class="scrollable-row-title">Seasons</h2>
 			<div class="series-seasons-skeleton">
-				<media-item-card-skeleton v-for="n in 6" :key="n" />
+				<media-item-card-skeleton
+					v-for="n in 6"
+					:key="n" />
 			</div>
 		</div>
 	</div>
 
-	<div v-else-if="nextUpItem" class="series-content-row">
+	<div
+		v-else-if="nextUpItem"
+		class="series-content-row">
 		<div class="next-up-section">
 			<h2 class="scrollable-row-title">Next Up</h2>
-			<media-episode-card :item="nextUpItem" class="next-up-card" />
+			<media-episode-card
+				:item="nextUpItem"
+				class="next-up-card" />
 		</div>
 
-		<media-row v-if="children.length" title="Seasons" :items="children" class="series-seasons" />
+		<media-row
+			v-if="children.length"
+			title="Seasons"
+			:items="children"
+			class="series-seasons" />
 	</div>
 
 	<template v-else>
-		<media-row v-if="children.length" title="Seasons" :items="children" />
-		<p v-else class="server-meta">Nothing here yet.</p>
+		<media-row
+			v-if="children.length"
+			title="Seasons"
+			:items="children" />
+		<p
+			v-else
+			class="server-meta">
+			Nothing here yet.
+		</p>
 	</template>
 </template>
 

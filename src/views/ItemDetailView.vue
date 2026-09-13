@@ -1,19 +1,37 @@
 <template>
-	<item-detail-layout v-if="item" :item="item">
-		<season-header v-if="item.Type === 'Season'" :item="item" :episodes="episodes" />
-		<item-detail-header v-else :item="item" />
+	<item-detail-layout
+		v-if="item"
+		:item="item">
+		<season-header
+			v-if="item.Type === 'Season'"
+			:item="item"
+			:episodes="episodes" />
+		<item-detail-header
+			v-else
+			:item="item" />
 
-		<series-content v-if="item.Type === 'Series'" :item="item" />
+		<series-content
+			v-if="item.Type === 'Series'"
+			:item="item" />
 		<season-content
 			v-else-if="item.Type === 'Season'"
 			:episodes="episodes"
-			:loading="episodesLoading"
-		/>
+			:loading="episodesLoading" />
 
-		<cast-row v-if="item.People?.length" :people="item.People" />
+		<cast-row
+			v-if="item.People?.length"
+			:people="item.People" />
 	</item-detail-layout>
-	<p v-else-if="loading" class="server-meta">Loading...</p>
-	<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+	<p
+		v-else-if="loading"
+		class="server-meta">
+		Loading...
+	</p>
+	<p
+		v-if="errorMessage"
+		class="error-msg">
+		{{ errorMessage }}
+	</p>
 </template>
 
 <script setup lang="ts">

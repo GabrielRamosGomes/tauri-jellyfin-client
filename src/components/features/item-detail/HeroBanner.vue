@@ -1,8 +1,14 @@
 <template>
-	<section class="hero-banner" :style="backdropStyle">
+	<section
+		class="hero-banner"
+		:style="backdropStyle">
 		<div class="hero-banner-overlay">
 			<div class="hero-banner-content">
-				<p v-if="isEpisode" class="hero-banner-eyebrow">{{ episodeLabel }}</p>
+				<p
+					v-if="isEpisode"
+					class="hero-banner-eyebrow">
+					{{ episodeLabel }}
+				</p>
 				<h1 class="hero-banner-title">{{ title }}</h1>
 
 				<div class="hero-banner-meta">
@@ -11,17 +17,30 @@
 					<span v-if="runtimeMinutes">{{ runtimeMinutes }} min</span>
 				</div>
 
-				<p v-if="item.Overview" class="hero-banner-overview">{{ item.Overview }}</p>
+				<p
+					v-if="item.Overview"
+					class="hero-banner-overview">
+					{{ item.Overview }}
+				</p>
 
-				<router-link :to="{ name: 'item', params: { id: item.Id } }" custom v-slot="{ navigate }">
+				<router-link
+					:to="{ name: 'item', params: { id: item.Id } }"
+					custom
+					v-slot="{ navigate }">
 					<ui-button @click="navigate">
-						<play :size="18" fill="currentColor" />
+						<play
+							:size="18"
+							fill="currentColor" />
 						{{ progress ? 'Resume' : 'Play' }}
 					</ui-button>
 				</router-link>
 
-				<div v-if="progress" class="hero-banner-progress">
-					<div class="hero-banner-progress-bar" :style="{ width: `${progress}%` }" />
+				<div
+					v-if="progress"
+					class="hero-banner-progress">
+					<div
+						class="hero-banner-progress-bar"
+						:style="{ width: `${progress}%` }" />
 				</div>
 			</div>
 		</div>

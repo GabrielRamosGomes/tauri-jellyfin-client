@@ -1,5 +1,7 @@
 <template>
-	<form class="server-form login-form" @submit.prevent="emit('submit')">
+	<form
+		class="server-form login-form"
+		@submit.prevent="emit('submit')">
 		<h1 class="login-title">Login</h1>
 		<p class="server-meta login-subtitle">{{ serverInfo.ServerName }} ({{ serverInfo.Version }})</p>
 
@@ -9,20 +11,24 @@
 			label="Username"
 			placeholder="Username"
 			required
-			:disabled="loading"
-		/>
+			:disabled="loading" />
 		<ui-input
 			v-model="credentials.password"
 			:icon="KeyRound"
 			type="password"
 			label="Password"
 			placeholder="Password"
-			:disabled="loading"
-		/>
+			:disabled="loading" />
 
-		<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+		<p
+			v-if="errorMessage"
+			class="error-msg">
+			{{ errorMessage }}
+		</p>
 
-		<ui-button type="submit" :disabled="loading">
+		<ui-button
+			type="submit"
+			:disabled="loading">
 			{{ loading ? 'Signing in...' : 'Login' }}
 		</ui-button>
 
@@ -30,8 +36,7 @@
 			variant="ghost"
 			size="sm"
 			class="login-change-server"
-			@click="emit('useDifferentServer')"
-		>
+			@click="emit('useDifferentServer')">
 			Change Server
 		</ui-button>
 	</form>

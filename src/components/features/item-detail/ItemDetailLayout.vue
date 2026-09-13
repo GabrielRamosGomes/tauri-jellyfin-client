@@ -1,10 +1,11 @@
 <template>
-	<div class="item-detail-page" :style="pageTintStyle">
+	<div
+		class="item-detail-page"
+		:style="pageTintStyle">
 		<div
 			class="item-detail-backdrop"
 			:class="{ 'item-detail-backdrop--blur': isSeason }"
-			:style="backdropStyle"
-		/>
+			:style="backdropStyle" />
 		<div class="item-detail-scrim" />
 
 		<div class="item-detail-content">

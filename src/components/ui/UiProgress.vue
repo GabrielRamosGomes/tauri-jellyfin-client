@@ -1,9 +1,10 @@
 <template>
-	<progress-root :model-value="percent" class="ui-progress">
+	<progress-root
+		:model-value="percent"
+		class="ui-progress">
 		<progress-indicator
 			class="ui-progress-indicator"
-			:style="{ transform: `translateX(-${100 - percent}%)` }"
-		/>
+			:style="{ transform: `translateX(-${100 - percent}%)` }" />
 	</progress-root>
 </template>
 
