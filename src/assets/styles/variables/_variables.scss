@@ -46,6 +46,9 @@
 	--color-success-dot: #1fae74;
 
 	--color-hover-overlay: rgba(0, 0, 0, 0.05);
+
+	--color-favorite: color-mix(in srgb, var(--color-error) 85%, black);
+	--color-watched: color-mix(in srgb, var(--color-success-dot) 85%, black);
 }
 
 @media (prefers-color-scheme: dark) {

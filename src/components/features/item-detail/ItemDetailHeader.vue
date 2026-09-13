@@ -37,7 +37,7 @@
 						:label="isFavorite ? 'Remove from favorites' : 'Add to favorites'"
 						:disabled="pending"
 						class="item-detail-action"
-						:class="{ 'item-detail-action--favorite': isFavorite }"
+						:class="{ 'ui-icon-btn--favorite': isFavorite }"
 						@click="toggleFavorite"
 					/>
 					<ui-icon-button
@@ -45,7 +45,7 @@
 						:label="isWatched ? 'Mark as unwatched' : 'Mark as watched'"
 						:disabled="pending"
 						class="item-detail-action"
-						:class="{ 'item-detail-action--watched': isWatched }"
+						:class="{ 'ui-icon-btn--watched': isWatched }"
 						@click="toggleWatched"
 					/>
 

@@ -74,7 +74,7 @@
 }
 
 .episode-badge-done {
-	background-color: var(--color-success-dot);
+	background-color: var(--color-watched);
 }
 
 .episode-actions {
@@ -108,18 +108,9 @@
 	opacity: 1;
 }
 
-// An already-set state stays visible even without hover.
-.episode-action--favorite.ui-icon-btn,
-.episode-action--watched.ui-icon-btn {
+.episode-actions .ui-icon-btn--favorite,
+.episode-actions .ui-icon-btn--watched {
 	opacity: 1;
-}
-
-.episode-action--favorite.ui-icon-btn {
-	background-color: var(--color-error);
-}
-
-.episode-action--watched.ui-icon-btn {
-	background-color: var(--color-success-dot);
 }
 
 .episode-progress {

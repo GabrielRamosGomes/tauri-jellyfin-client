@@ -27,6 +27,16 @@
 	color: var(--color-primary);
 }
 
+.ui-icon-btn.ui-icon-btn--favorite {
+	background-color: var(--color-favorite);
+	color: #ffffff;
+}
+
+.ui-icon-btn.ui-icon-btn--watched {
+	background-color: var(--color-watched);
+	color: #ffffff;
+}
+
 .ui-icon-btn:disabled {
 	opacity: 0.6;
 	cursor: not-allowed;

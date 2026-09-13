@@ -99,7 +99,7 @@ $person-wash: color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 40%, v
 
 .person-fav {
 	&.person-fav--active {
-		color: var(--color-error);
+		color: var(--color-favorite);
 	}
 }
 

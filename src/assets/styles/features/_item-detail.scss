@@ -167,16 +167,6 @@
 	}
 }
 
-.item-detail-actions .item-detail-action--favorite {
-	background-color: var(--color-error);
-	color: #ffffff;
-}
-
-.item-detail-actions .item-detail-action--watched {
-	background-color: var(--color-success-dot);
-	color: #ffffff;
-}
-
 .item-detail-links {
 	display: flex;
 	flex-wrap: wrap;

@@ -26,9 +26,21 @@
 	]);
 
 	const episodes = computed(() => {
+		const seasonNumber = props.item.IndexNumber;
 		const seen = new Set<number>();
 
 		return children.value.filter((child) => {
+			// Only real episodes of THIS season — drop movies/extras and specials
+			// (season 0) that get surfaced alongside a season's children.
+			if (child.Type !== 'Episode') return false;
+			if (
+				seasonNumber != null &&
+				child.ParentIndexNumber != null &&
+				child.ParentIndexNumber !== seasonNumber
+			) {
+				return false;
+			}
+
 			const index = child.IndexNumber;
 			if (index === undefined || index === null || seen.has(index)) return false;
 

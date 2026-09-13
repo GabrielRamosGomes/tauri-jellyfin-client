@@ -93,7 +93,6 @@
 	const birthDate = computed(() => {
 		if (!props.person.PremiereDate) return undefined;
 
-		// No locale arg → respects the OS locale/format (e.g. 27/12/1976).
 		return new Date(props.person.PremiereDate).toLocaleDateString();
 	});
 
