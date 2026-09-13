@@ -20,6 +20,7 @@
 				:disabled="disabled"
 				:required="required"
 				@input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
+
 			<button
 				v-if="type === 'password'"
 				type="button"

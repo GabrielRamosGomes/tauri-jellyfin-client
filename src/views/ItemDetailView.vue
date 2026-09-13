@@ -6,6 +6,9 @@
 			v-if="item.Type === 'Season'"
 			:item="item"
 			:episodes="episodes" />
+		<episode-header
+			v-else-if="item.Type === 'Episode'"
+			:item="item" />
 		<item-detail-header
 			v-else
 			:item="item" />
@@ -35,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+	import EpisodeHeader from '@/components/features/item-detail/EpisodeHeader.vue';
 	import ItemDetailHeader from '@/components/features/item-detail/ItemDetailHeader.vue';
 	import ItemDetailLayout from '@/components/features/item-detail/ItemDetailLayout.vue';
 	import SeasonContent from '@/components/features/item-detail/SeasonContent.vue';

@@ -77,7 +77,6 @@ export async function getItemsByPerson(api: Api, userId: string, personId: strin
 	return data.Items ?? [];
 }
 
-// Items can have multiple backdrops; hero image just needs the first.
 export function getBackdropUrl(api: Api, item: BaseItemDto) {
 	const urls = getImageApi(api).getItemBackdropImageUrls(item);
 	return urls[0];

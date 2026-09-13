@@ -31,8 +31,6 @@
 	background-color: var(--color-favorite);
 	color: #ffffff;
 
-	// Hover darkens the fill instead of reverting to a caller's neutral hover,
-	// which would read as "not selected".
 	&:hover {
 		background-color: color-mix(in srgb, var(--color-favorite) 80%, black);
 	}

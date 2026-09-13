@@ -66,7 +66,6 @@
 		refreshLibrarySections,
 	} = useHomeSections();
 
-	// Show skeleton rows only on the first load, before anything has arrived.
 	const showSkeleton = computed(
 		() =>
 			loading.value &&

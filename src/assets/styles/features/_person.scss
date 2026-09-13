@@ -40,8 +40,6 @@ $person-wash: color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 40%, v
 	gap: v.$space-2xl;
 }
 
-// --- Header ---------------------------------------------------------------
-
 .person-header {
 	display: grid;
 	grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
@@ -132,8 +130,6 @@ $person-wash: color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 40%, v
 	border-radius: v.$radius-full;
 }
 
-// --- Filmography tabs -----------------------------------------------------
-
 .person-tabs-list {
 	display: flex;
 	gap: v.$space-lg;
@@ -152,13 +148,12 @@ $person-wash: color-mix(in srgb, var(--item-detail-tint, var(--color-bg)) 40%, v
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
 	cursor: pointer;
-	border-radius: 0; // reset global button radius so the underline stays square
+	border-radius: 0;
 	border-bottom: 2px solid transparent;
 	transition:
 		color v.$transition-fast,
 		border-color v.$transition-fast;
 
-	// Override the global `button` fill so tabs stay flat (underline only).
 	&,
 	&:hover,
 	&:active {
