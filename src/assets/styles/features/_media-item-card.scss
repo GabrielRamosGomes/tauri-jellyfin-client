@@ -129,12 +129,6 @@
 	transition: transform v.$transition-fast;
 	animation: media-item-card-in 0.3s ease-out backwards;
 
-	@for $i from 1 through 16 {
-		&:nth-child(#{$i}) {
-			animation-delay: #{$i * 0.03}s;
-		}
-	}
-
 	&:hover {
 		transform: scale(1.05);
 		z-index: 2;
@@ -162,4 +156,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
+}
+
+.media-item-skeleton {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
 }

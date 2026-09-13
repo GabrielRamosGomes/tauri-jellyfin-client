@@ -8,7 +8,9 @@
 		<div v-if="items.length" class="item-grid">
 			<media-item-card v-for="item in items" :key="item.Id" :item="item" />
 		</div>
-		<p v-else-if="loading" class="server-meta">Loading...</p>
+		<div v-else-if="loading" class="item-grid">
+			<media-item-card-skeleton v-for="n in 18" :key="n" />
+		</div>
 		<p v-else class="server-meta">No items in this library yet.</p>
 
 		<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
@@ -17,6 +19,7 @@
 
 <script setup lang="ts">
 	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
+	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { computed } from 'vue';

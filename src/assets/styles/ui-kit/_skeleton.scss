@@ -1,0 +1,36 @@
+// UiSkeleton.vue — generic loading placeholder. Size/shape come from props
+// (inline styles); this partial owns the look and the shimmer.
+@use '../variables' as v;
+
+@keyframes skeleton-shimmer {
+	from {
+		background-position: 200% 0;
+	}
+
+	to {
+		background-position: -200% 0;
+	}
+}
+
+.ui-skeleton {
+	width: 100%;
+	height: 1rem;
+	border-radius: v.$radius-sm;
+	background-color: var(--color-surface);
+	background-image: linear-gradient(
+		90deg,
+		var(--color-surface) 0%,
+		var(--color-hover-overlay) 50%,
+		var(--color-surface) 100%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-shimmer 1.3s ease-in-out infinite;
+}
+
+.ui-skeleton--circle {
+	border-radius: v.$radius-full;
+}
+
+.ui-skeleton--static {
+	animation: none;
+}
