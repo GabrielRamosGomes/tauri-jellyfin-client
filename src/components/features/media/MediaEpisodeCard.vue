@@ -9,9 +9,7 @@
 			/>
 			<span v-else class="media-episode-fallback">{{ item.Name }}</span>
 
-			<div v-if="progress" class="media-episode-progress">
-				<div class="media-episode-progress-bar" :style="{ width: `${progress}%` }" />
-			</div>
+			<ui-progress v-if="progress" :value="progress" class="media-episode-progress" />
 
 			<span
 				v-if="item.UserData?.Played"
@@ -35,6 +33,7 @@
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
+	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { Check, Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';

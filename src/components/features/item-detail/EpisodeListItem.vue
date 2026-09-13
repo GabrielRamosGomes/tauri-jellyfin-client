@@ -17,9 +17,7 @@
 				<play :size="20" fill="currentColor" />
 			</div>
 
-			<div v-if="progress" class="episode-progress">
-				<div class="episode-progress-bar" :style="{ width: `${progress}%` }" />
-			</div>
+			<ui-progress v-if="progress" :value="progress" class="episode-progress" />
 
 			<div class="episode-actions">
 				<ui-icon-button
@@ -61,6 +59,7 @@
 
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
+	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { Check, Heart, Play } from 'lucide-vue-next';

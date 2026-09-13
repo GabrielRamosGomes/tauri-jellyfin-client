@@ -80,13 +80,9 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	width: auto;
 	height: 4px;
 	background-color: rgba(0, 0, 0, 0.5);
-}
-
-.media-episode-progress-bar {
-	height: 100%;
-	background-color: var(--color-primary);
 }
 
 .media-episode-title {

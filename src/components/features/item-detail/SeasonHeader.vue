@@ -51,9 +51,7 @@
 				</div>
 
 				<div v-if="episodeCount" class="season-progress">
-					<div class="season-progress-track">
-						<div class="season-progress-fill" :style="{ width: `${watchedPercent}%` }" />
-					</div>
+					<ui-progress :value="watchedPercent" class="season-progress-track" />
 					<span class="season-progress-label">{{ watchedCount }} / {{ episodeCount }} watched</span>
 				</div>
 
@@ -106,6 +104,7 @@
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
+	import UiProgress from '@/components/ui/UiProgress.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useSeasons } from '@/composables/jellyfin/useSeasons';
