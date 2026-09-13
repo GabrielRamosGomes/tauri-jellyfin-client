@@ -35,3 +35,4 @@
   - [ ] Cmd/Ctrl+K command palette for jump-to-title/library/settings
   - [ ] System tray mini-player
   - [ ] Playlist/Episode editing menus (like download, edit metadata, see jellyfin client for ex)
+  - [ ] Add Skeleton loaders (I'm too lazy to do at step 2)
