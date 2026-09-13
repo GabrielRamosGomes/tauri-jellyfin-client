@@ -11,7 +11,7 @@
 				:disabled="loading" />
 			<ui-button
 				type="submit"
-				:disabled="loading">
+				:loading="loading">
 				{{ loading ? 'Testing...' : 'Connect' }}
 			</ui-button>
 		</div>

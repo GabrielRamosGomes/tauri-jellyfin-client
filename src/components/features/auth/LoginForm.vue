@@ -28,7 +28,7 @@
 
 		<ui-button
 			type="submit"
-			:disabled="loading">
+			:loading="loading">
 			{{ loading ? 'Signing in...' : 'Login' }}
 		</ui-button>
 

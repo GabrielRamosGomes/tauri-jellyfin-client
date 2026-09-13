@@ -22,11 +22,11 @@
 			v-if="item.People?.length"
 			:people="item.People" />
 	</item-detail-layout>
-	<p
+	<div
 		v-else-if="loading"
-		class="server-meta">
-		Loading...
-	</p>
+		class="page-loader">
+		<ui-spinner :size="40" />
+	</div>
 	<p
 		v-if="errorMessage"
 		class="error-msg">
@@ -41,6 +41,7 @@
 	import SeasonHeader from '@/components/features/item-detail/SeasonHeader.vue';
 	import SeriesContent from '@/components/features/item-detail/SeriesContent.vue';
 	import CastRow from '@/components/features/media/CastRow.vue';
+	import UiSpinner from '@/components/ui/UiSpinner.vue';
 	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
 	import { useSeasonEpisodes } from '@/composables/jellyfin/useSeasonEpisodes';
 	import { computed } from 'vue';
