@@ -263,19 +263,15 @@
 	margin-left: v.$space-sm;
 }
 
-.item-detail-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
+// ExternalLinks.vue renders ghost UiButtons; override to the pill look.
+// `.item-detail-links .ui-btn` (0,2,0) beats `.ui-btn--ghost` (0,1,0) regardless
+// of load order (ui-kit is @used after features in main.scss).
+.item-detail-links .ui-btn {
 	padding: 6px 12px;
 	border: 1px solid rgba(255, 255, 255, 0.3);
 	border-radius: v.$radius-full;
-	background: none;
 	color: #ffffff;
 	font-size: v.$font-size-xs;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background-color v.$transition-fast;
 
 	&:hover {
 		background-color: rgba(255, 255, 255, 0.12);

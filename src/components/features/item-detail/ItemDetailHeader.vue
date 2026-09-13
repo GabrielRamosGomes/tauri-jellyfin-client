@@ -40,21 +40,7 @@
 
 				<item-actions :item="item" />
 
-				<div
-					v-if="item.ExternalUrls?.length"
-					class="item-detail-links">
-					<button
-						v-for="(link, index) in item.ExternalUrls"
-						:key="link.Name ?? index"
-						type="button"
-						class="item-detail-link"
-						@click="openExternal(link.Url)">
-						{{ link.Name }}
-						<external-link
-							:size="12"
-							aria-hidden="true" />
-					</button>
-				</div>
+				<external-links :links="item.ExternalUrls" />
 			</div>
 
 			<div
@@ -102,6 +88,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import ExternalLinks from '@/components/features/item-detail/ExternalLinks.vue';
 	import MediaFacts from '@/components/features/item-detail/MediaFacts.vue';
 	import ItemActions from '@/components/features/media/ItemActions.vue';
 	import UiBadge from '@/components/ui/UiBadge.vue';
@@ -110,8 +97,7 @@
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { useMediaStreams } from '@/composables/jellyfin/useMediaStreams';
 	import { formatDuration, formatEndsAt, formatRating } from '@/utils/format';
-	import { openExternal } from '@/utils/openExternal';
-	import { Captions, ExternalLink, Play, Star, Volume2 } from 'lucide-vue-next';
+	import { Captions, Play, Star, Volume2 } from 'lucide-vue-next';
 	import { computed, toRef } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
