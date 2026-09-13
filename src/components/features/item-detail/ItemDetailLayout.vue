@@ -1,6 +1,10 @@
 <template>
 	<div class="item-detail-page" :style="pageTintStyle">
-		<div class="item-detail-backdrop" :style="backdropStyle" />
+		<div
+			class="item-detail-backdrop"
+			:class="{ 'item-detail-backdrop--blur': isSeason }"
+			:style="backdropStyle"
+		/>
 		<div class="item-detail-scrim" />
 
 		<div class="item-detail-content">
@@ -17,11 +21,17 @@
 	import { computed, onBeforeUnmount, watch } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	const { backdropUrl } = useMediaImages();
+	const { backdropUrl, libraryImageUrl } = useMediaImages();
 	const { color: tintColor, setFromImage, clear } = useDominantColor();
 
+	const isSeason = computed(() => props.item.Type === 'Season');
+
+	function backdropFor(item: BaseItemDto) {
+		return isSeason.value ? libraryImageUrl(item) : backdropUrl(item);
+	}
+
 	const backdropStyle = computed(() => {
-		const url = backdropUrl(props.item);
+		const url = backdropFor(props.item);
 		return url ? { backgroundImage: `url(${url})` } : {};
 	});
 
@@ -31,7 +41,10 @@
 
 	watch(
 		() => props.item,
-		(value) => setFromImage(backdropUrl(value)),
+		(value) => {
+			if (isSeason.value) clear();
+			else setFromImage(backdropFor(value));
+		},
 		{ immediate: true },
 	);
 

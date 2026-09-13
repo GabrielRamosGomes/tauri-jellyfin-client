@@ -14,15 +14,22 @@ export function useItemActions(item: Ref<BaseItemDto>) {
 		const { session } = useAuthSession();
 		if (!api.value || !session.value || !item.value?.Id || pending.value) return;
 
+		// Optimistic: flip the state now, roll back only if the request fails.
+		const previous = item.value.UserData;
+		const nextValue = !previous?.IsFavorite;
+		item.value.UserData = { ...previous, IsFavorite: nextValue };
+
 		pending.value = true;
 		try {
-			const nextValue = !item.value.UserData?.IsFavorite;
 			item.value.UserData = await setFavorite(
 				api.value,
 				session.value.userId,
 				item.value.Id,
 				nextValue,
 			);
+		} catch (error) {
+			item.value.UserData = previous;
+			console.error('Failed to update favorite:', error);
 		} finally {
 			pending.value = false;
 		}
@@ -33,15 +40,22 @@ export function useItemActions(item: Ref<BaseItemDto>) {
 		const { session } = useAuthSession();
 		if (!api.value || !session.value || !item.value?.Id || pending.value) return;
 
+		// Optimistic: flip the state now, roll back only if the request fails.
+		const previous = item.value.UserData;
+		const nextValue = !previous?.Played;
+		item.value.UserData = { ...previous, Played: nextValue };
+
 		pending.value = true;
 		try {
-			const nextValue = !item.value.UserData?.Played;
 			item.value.UserData = await setWatched(
 				api.value,
 				session.value.userId,
 				item.value.Id,
 				nextValue,
 			);
+		} catch (error) {
+			item.value.UserData = previous;
+			console.error('Failed to update watched:', error);
 		} finally {
 			pending.value = false;
 		}
