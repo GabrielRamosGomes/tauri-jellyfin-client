@@ -1,6 +1,6 @@
 <template>
 	<router-link :to="{ name: 'item', params: { id: item.Id } }" class="media-item-card">
-		<div class="media-item-media">
+		<ui-aspect-ratio :ratio="2 / 3" class="media-item-media">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
@@ -25,7 +25,7 @@
 			<div class="media-item-play">
 				<play :size="20" fill="currentColor" />
 			</div>
-		</div>
+		</ui-aspect-ratio>
 		<p class="media-item-name">{{ item.Name }}</p>
 		<p v-if="item.ProductionYear" class="media-item-year">{{ item.ProductionYear }}</p>
 	</router-link>
@@ -34,6 +34,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
 	import { Check, Play } from 'lucide-vue-next';
 	import { computed, ref } from 'vue';

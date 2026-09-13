@@ -4,7 +4,7 @@
 		class="episode-card"
 		:class="{ 'episode-card--watched': isWatched }"
 	>
-		<div class="episode-thumb">
+		<ui-aspect-ratio :ratio="16 / 9" class="episode-thumb">
 			<img
 				v-if="imageUrl && !imageFailed"
 				:src="imageUrl"
@@ -41,7 +41,7 @@
 					@click.stop.prevent="toggleWatched"
 				/>
 			</div>
-		</div>
+		</ui-aspect-ratio>
 
 		<div class="episode-info">
 			<p class="episode-name">
@@ -59,6 +59,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';

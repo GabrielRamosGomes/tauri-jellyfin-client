@@ -2,7 +2,9 @@
 	<div class="item-detail-header season-header">
 		<div class="item-detail-header-overlay">
 			<div class="item-detail-poster">
-				<img v-if="posterUrl" :src="posterUrl" :alt="item.Name ?? ''" />
+				<ui-aspect-ratio :ratio="2 / 3">
+					<img v-if="posterUrl" :src="posterUrl" :alt="item.Name ?? ''" />
+				</ui-aspect-ratio>
 			</div>
 
 			<div class="item-detail-info">
@@ -101,6 +103,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';

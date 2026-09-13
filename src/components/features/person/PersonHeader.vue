@@ -1,9 +1,9 @@
 <template>
 	<div class="person-header">
-		<div class="person-photo">
+		<ui-aspect-ratio :ratio="3 / 4" class="person-photo">
 			<img v-if="photoUrl" :src="photoUrl" :alt="person.Name ?? ''" />
 			<span v-else>{{ initials }}</span>
-		</div>
+		</ui-aspect-ratio>
 
 		<div class="person-main">
 			<div class="person-name-row">
@@ -56,6 +56,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';

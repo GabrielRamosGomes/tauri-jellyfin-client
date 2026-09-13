@@ -16,7 +16,6 @@
 			height?: string;
 			radius?: string;
 			circle?: boolean;
-			aspectRatio?: string;
 			animation?: 'wave' | 'none';
 		}>(),
 		{ animation: 'wave' },
@@ -33,14 +32,8 @@
 		}
 
 		if (props.width) s.width = props.width;
+		if (props.height) s.height = props.height;
 		if (props.radius) s.borderRadius = props.radius;
-
-		if (props.aspectRatio) {
-			s.aspectRatio = props.aspectRatio;
-			s.height = 'auto';
-		} else if (props.height) {
-			s.height = props.height;
-		}
 
 		return s;
 	});
