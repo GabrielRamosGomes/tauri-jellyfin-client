@@ -1,5 +1,9 @@
 <template>
-	<router-link :to="{ name: 'item', params: { id: item.Id } }" class="episode-card">
+	<router-link
+		:to="{ name: 'item', params: { id: item.Id } }"
+		class="episode-card"
+		:class="{ 'episode-card--watched': isWatched }"
+	>
 		<div class="episode-thumb">
 			<img
 				v-if="imageUrl && !imageFailed"

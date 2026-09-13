@@ -106,6 +106,98 @@
 	text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
 }
 
+// --- Season header extras ---
+// Season content is tall, so top-align it with the poster instead of the
+// bottom-anchored default used for series/movies.
+.season-header,
+.season-header .item-detail-header-overlay {
+	align-items: flex-start;
+}
+
+.season-kicker {
+	display: inline-block;
+	margin: 0 0 v.$space-xs;
+	color: #ffffff;
+	opacity: 0.85;
+	font-size: v.$font-size-sm;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	text-decoration: none;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+
+	&:hover {
+		opacity: 1;
+		text-decoration: underline;
+	}
+}
+
+.season-title-row {
+	display: flex;
+	align-items: center;
+	gap: v.$space-sm;
+	margin: 0 0 v.$space-sm;
+
+	.item-detail-title {
+		margin: 0;
+	}
+}
+
+.season-nav {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	flex: 0 0 auto;
+	border-radius: v.$radius-full;
+	color: #ffffff;
+	background-color: rgba(255, 255, 255, 0.12);
+	text-decoration: none;
+	transition: background-color v.$transition-fast;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.22);
+	}
+}
+
+.season-nav--disabled {
+	opacity: 0.3;
+	pointer-events: none;
+}
+
+.season-progress {
+	display: flex;
+	align-items: center;
+	gap: v.$space-sm;
+	max-width: 420px;
+	margin: 0 0 v.$space-md;
+}
+
+.season-progress-track {
+	flex: 1 1 auto;
+	height: 6px;
+	border-radius: v.$radius-full;
+	background-color: rgba(255, 255, 255, 0.25);
+	overflow: hidden;
+}
+
+.season-progress-fill {
+	height: 100%;
+	background-color: var(--color-primary);
+	transition: width v.$transition-fast;
+}
+
+.season-progress-label {
+	flex: 0 0 auto;
+	font-size: v.$font-size-xs;
+	font-weight: 600;
+	color: #ffffff;
+	opacity: 0.9;
+	white-space: nowrap;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
 .item-detail-logo {
 	max-width: min(420px, 100%);
 	max-height: 120px;
