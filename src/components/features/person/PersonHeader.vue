@@ -30,7 +30,7 @@
 					variant="ghost"
 					size="sm"
 					class="person-bio-toggle"
-					@click="expanded = !expanded"
+					@click="toggleBio"
 				>
 					{{ expanded ? 'Read less' : 'Read more' }}
 				</ui-button>
@@ -60,9 +60,10 @@
 	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useItemActions } from '@/composables/jellyfin/useItemActions';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { useClampToggle } from '@/composables/ui/useClampToggle';
 	import { openUrl } from '@tauri-apps/plugin-opener';
 	import { ExternalLink, Heart } from 'lucide-vue-next';
-	import { computed, nextTick, onBeforeUnmount, ref, toRef, watch } from 'vue';
+	import { computed, toRef } from 'vue';
 
 	const props = defineProps<{ person: BaseItemDto }>();
 	const { libraryImageUrl } = useMediaImages();
@@ -70,37 +71,12 @@
 	const personRef = toRef(props, 'person');
 	const { pending, toggleFavorite } = useItemActions(personRef);
 
-	const bioEl = ref<HTMLParagraphElement>();
-	const expanded = ref(false);
-	const canToggle = ref(false);
-
-	function measure() {
-		const el = bioEl.value;
-		if (!el || expanded.value) return; // only meaningful while clamped
-		canToggle.value = el.scrollHeight > el.clientHeight + 1;
-	}
-
-	const resizeObserver = new ResizeObserver(() => measure());
-
-	watch(
-		bioEl,
-		(el, _prev, onCleanup) => {
-			if (!el) return;
-			resizeObserver.observe(el);
-			onCleanup(() => resizeObserver.unobserve(el));
-		},
-		{ immediate: true },
-	);
-
-	watch(
-		() => props.person.Overview,
-		() => {
-			expanded.value = false;
-			nextTick(measure);
-		},
-	);
-
-	onBeforeUnmount(() => resizeObserver.disconnect());
+	const {
+		el: bioEl,
+		expanded,
+		canToggle,
+		toggle: toggleBio,
+	} = useClampToggle(() => props.person.Overview);
 
 	const isFavorite = computed(() => props.person.UserData?.IsFavorite ?? false);
 	const photoUrl = computed(() => libraryImageUrl(props.person));
