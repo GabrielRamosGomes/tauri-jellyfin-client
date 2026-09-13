@@ -9,7 +9,7 @@
   - [x] Fetch library categories
   - [x] Render media grids with pagination
   - [x] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
-  - [ ] Work on UI framework to unify app styles
+  - [x] Inital UI implementation
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
 
 - [ ] 3. Playback / DirectPlayer
