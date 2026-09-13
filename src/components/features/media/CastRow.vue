@@ -1,10 +1,10 @@
 <template>
 	<ui-scrollable-row
 		title="Cast"
-		:items="people"
+		:items="cast"
 		track-class="cast-row-track">
 		<router-link
-			v-for="person in people"
+			v-for="person in cast"
 			:key="person.Id"
 			:to="{ name: 'person', params: { id: person.Id } }"
 			class="cast-card">
@@ -30,9 +30,17 @@
 
 	import UiScrollableRow from '@/components/ui/UiScrollableRow.vue';
 	import { useMediaImages } from '@/composables/jellyfin/useMediaImages';
+	import { PersonKind } from '@jellyfin/sdk/lib/generated-client/models';
+	import { computed } from 'vue';
 
-	defineProps<{ people: BaseItemPerson[] }>();
+	const props = defineProps<{ people: BaseItemPerson[] }>();
 	const { personImageUrl } = useMediaImages();
+
+	const cast = computed(() =>
+		props.people.filter(
+			(person) => person.Type === PersonKind.Actor || person.Type === PersonKind.GuestStar,
+		),
+	);
 
 	function imageUrl(person: BaseItemPerson) {
 		return personImageUrl(person);

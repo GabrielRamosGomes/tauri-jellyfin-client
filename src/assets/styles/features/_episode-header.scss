@@ -1,84 +1,50 @@
-// EpisodeHeader.vue — three zones: still (left), info (center), media (right).
 @use '../variables' as v;
 
 .episode-header {
+	min-height: auto;
 	align-items: flex-start;
 }
 
-// Two-zone layout: left column stacks the still + media panel, right holds info.
-.episode-header .item-detail-header-overlay {
-	display: grid;
-	grid-template-columns: clamp(320px, 34vw, 480px) minmax(0, 1fr);
-	gap: v.$space-xl;
-	align-items: start;
-
-	@media (max-width: 780px) {
-		grid-template-columns: minmax(0, 1fr);
-	}
+.episode-header .movie-header-content {
+	max-width: min(1100px, 100%);
 }
 
-.episode-aside {
+.episode-top {
 	display: flex;
-	flex-direction: column;
-	gap: v.$space-lg;
-	min-width: 0;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: v.$space-xl;
+	margin-bottom: v.$space-lg;
 }
 
-.episode-detail-thumb {
+.episode-still {
+	flex: 0 0 clamp(240px, 26vw, 340px);
 	border-radius: v.$radius-md;
 	overflow: hidden;
 	background-color: var(--color-surface);
 	box-shadow: v.$shadow-lg;
 }
 
-// Right-hand glass panel grouping the playback controls.
-.episode-media-panel {
-	display: flex;
-	flex-direction: column;
-	gap: v.$space-sm;
-	padding: v.$space-lg;
-	border-radius: v.$radius-lg;
-	border: 1px solid rgba(255, 255, 255, 0.12);
-	background-color: rgba(0, 0, 0, 0.38);
-	backdrop-filter: blur(12px);
+.episode-headline {
+	flex: 1 1 380px;
+	min-width: 0;
 }
 
-.episode-media-title {
-	margin: 0 0 v.$space-xs;
-	font-size: v.$font-size-sm;
-	font-weight: 700;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
-	color: #ffffff;
-	opacity: 0.7;
-}
-
-// Rows inside the glass panel read as translucent slots, not opaque chips.
-.episode-media-panel .episode-media-static,
-.episode-media-panel .ui-dropdown-trigger {
-	background-color: rgba(255, 255, 255, 0.08);
-	border-color: rgba(255, 255, 255, 0.14);
-	color: #ffffff;
-	text-shadow: none;
-
-	.ui-dropdown-icon,
-	.ui-dropdown-chevron {
-		color: rgba(255, 255, 255, 0.7);
-	}
-}
-
-.episode-media-panel .ui-dropdown-trigger:hover,
-.episode-media-panel .ui-dropdown-trigger[data-state='open'] {
-	background-color: rgba(255, 255, 255, 0.16);
-	border-color: rgba(255, 255, 255, 0.35);
-}
-
-.episode-media-static {
+.movie-track-static {
 	display: flex;
 	align-items: center;
-	gap: v.$space-md;
-	padding: v.$space-md;
+	gap: v.$space-sm;
+	min-width: 0;
+	padding: v.$space-sm v.$space-md;
 	border-radius: v.$radius-md;
-	border: 1px solid var(--color-border-subtle);
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #ffffff;
 	font-size: v.$font-size-sm;
+	font-weight: 600;
+
+	svg {
+		flex-shrink: 0;
+		color: rgba(255, 255, 255, 0.75);
+	}
 }

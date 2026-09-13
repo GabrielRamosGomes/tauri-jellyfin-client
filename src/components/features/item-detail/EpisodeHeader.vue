@@ -1,8 +1,8 @@
 <template>
-	<div class="item-detail-header episode-header">
-		<div class="item-detail-header-overlay">
-			<div class="episode-aside">
-				<div class="episode-detail-thumb">
+	<div class="item-detail-header movie-header episode-header">
+		<div class="movie-header-content">
+			<div class="episode-top">
+				<div class="episode-still">
 					<ui-aspect-ratio :ratio="16 / 9">
 						<img
 							v-if="thumbUrl"
@@ -11,121 +11,128 @@
 					</ui-aspect-ratio>
 				</div>
 
-				<aside
-					v-if="videoLabel || hasAudio || hasSubtitles"
-					class="episode-media-panel">
-					<h2 class="episode-media-title">Media</h2>
+				<div class="episode-headline">
+					<router-link
+						v-if="item.SeriesName && item.SeriesId"
+						class="season-kicker"
+						:to="{ name: 'item', params: { id: item.SeriesId } }">
+						{{ item.SeriesName }}
+					</router-link>
 
-					<div
-						v-if="videoLabel"
-						class="episode-media-static">
-						<film
-							:size="18"
-							class="ui-dropdown-icon" />
-						<span class="ui-dropdown-value">{{ videoLabel }}</span>
+					<div class="season-title-row">
+						<component
+							:is="prevEpisode ? 'router-link' : 'span'"
+							v-if="hasSiblings"
+							class="season-nav"
+							:class="{ 'season-nav--disabled': !prevEpisode }"
+							:to="prevEpisode ? { name: 'item', params: { id: prevEpisode.Id } } : undefined"
+							:aria-label="prevEpisode ? `Go to ${prevEpisode.Name}` : undefined">
+							<chevron-left :size="20" />
+						</component>
+
+						<h1 class="item-detail-title">{{ episodeLabel }}{{ item.Name }}</h1>
+
+						<component
+							:is="nextEpisode ? 'router-link' : 'span'"
+							v-if="hasSiblings"
+							class="season-nav"
+							:class="{ 'season-nav--disabled': !nextEpisode }"
+							:to="nextEpisode ? { name: 'item', params: { id: nextEpisode.Id } } : undefined"
+							:aria-label="nextEpisode ? `Go to ${nextEpisode.Name}` : undefined">
+							<chevron-right :size="20" />
+						</component>
 					</div>
 
+					<div class="item-detail-meta">
+						<ui-badge v-if="resolutionLabel">{{ resolutionLabel }}</ui-badge>
+						<ui-badge v-if="videoRange">{{ videoRange }}</ui-badge>
+						<span v-if="item.ProductionYear">{{ item.ProductionYear }}</span>
+						<ui-badge v-if="item.OfficialRating">{{ item.OfficialRating }}</ui-badge>
+						<span
+							v-if="communityRating"
+							class="item-detail-rating">
+							<star
+								:size="14"
+								fill="currentColor" />
+							{{ communityRating }}
+						</span>
+						<span v-if="runtimeMinutes">{{ runtimeMinutes }} min</span>
+						<span v-if="endsAt">Ends at {{ endsAt }}</span>
+					</div>
+
+					<div class="item-detail-actions">
+						<ui-button
+							size="sm"
+							class="item-detail-play-btn"
+							@click="$emit('play')">
+							<play
+								:size="18"
+								fill="currentColor" />
+							Play
+						</ui-button>
+
+						<item-actions :item="item" />
+
+						<div
+							v-if="item.ExternalUrls?.length"
+							class="item-detail-links">
+							<button
+								v-for="(link, index) in item.ExternalUrls"
+								:key="link.Name ?? index"
+								type="button"
+								class="item-detail-link"
+								@click="openLink(link.Url)">
+								{{ link.Name }}
+								<external-link
+									:size="12"
+									aria-hidden="true" />
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div
+				v-if="videoLabel || hasAudio || hasSubtitles"
+				class="movie-tracks">
+				<div
+					v-if="videoLabel"
+					class="movie-track-row">
+					<span class="movie-track-label">Video</span>
+					<span class="movie-track-static">
+						<film :size="16" />
+						{{ videoLabel }}
+					</span>
+				</div>
+				<div
+					v-if="hasAudio"
+					class="movie-track-row">
+					<span class="movie-track-label">Audio</span>
 					<ui-dropdown
-						v-if="hasAudio"
 						v-model="selectedAudio"
 						:options="audioOptions"
 						:icon="Volume2"
 						aria-label="Audio track" />
-
+				</div>
+				<div
+					v-if="hasSubtitles"
+					class="movie-track-row">
+					<span class="movie-track-label">Subtitles</span>
 					<ui-dropdown
-						v-if="hasSubtitles"
 						v-model="selectedSubtitle"
 						:options="subtitleOptions"
 						:icon="Captions"
 						aria-label="Subtitles" />
-				</aside>
-			</div>
-
-			<div class="item-detail-info">
-				<router-link
-					v-if="item.SeriesName && item.SeriesId"
-					class="season-kicker"
-					:to="{ name: 'item', params: { id: item.SeriesId } }">
-					{{ item.SeriesName }}
-				</router-link>
-
-				<div class="season-title-row">
-					<component
-						:is="prevEpisode ? 'router-link' : 'span'"
-						v-if="hasSiblings"
-						class="season-nav"
-						:class="{ 'season-nav--disabled': !prevEpisode }"
-						:to="prevEpisode ? { name: 'item', params: { id: prevEpisode.Id } } : undefined"
-						:aria-label="prevEpisode ? `Go to ${prevEpisode.Name}` : undefined">
-						<chevron-left :size="20" />
-					</component>
-
-					<h1 class="item-detail-title">{{ episodeLabel }}{{ item.Name }}</h1>
-
-					<component
-						:is="nextEpisode ? 'router-link' : 'span'"
-						v-if="hasSiblings"
-						class="season-nav"
-						:class="{ 'season-nav--disabled': !nextEpisode }"
-						:to="nextEpisode ? { name: 'item', params: { id: nextEpisode.Id } } : undefined"
-						:aria-label="nextEpisode ? `Go to ${nextEpisode.Name}` : undefined">
-						<chevron-right :size="20" />
-					</component>
-				</div>
-
-				<div class="item-detail-meta">
-					<ui-badge v-if="resolutionLabel">{{ resolutionLabel }}</ui-badge>
-					<ui-badge v-if="videoRange">{{ videoRange }}</ui-badge>
-					<span v-if="item.ProductionYear">{{ item.ProductionYear }}</span>
-					<ui-badge v-if="item.OfficialRating">{{ item.OfficialRating }}</ui-badge>
-					<span
-						v-if="communityRating"
-						class="item-detail-rating">
-						<star
-							:size="14"
-							fill="currentColor" />
-						{{ communityRating }}
-					</span>
-					<span v-if="runtimeMinutes">{{ runtimeMinutes }} min</span>
-					<span v-if="endsAt">Ends at {{ endsAt }}</span>
-				</div>
-
-				<p
-					v-if="item.Overview"
-					class="item-detail-overview">
-					{{ item.Overview }}
-				</p>
-
-				<div class="item-detail-actions">
-					<ui-button
-						size="sm"
-						class="item-detail-play-btn"
-						@click="$emit('play')">
-						<play
-							:size="18"
-							fill="currentColor" />
-						Play
-					</ui-button>
-
-					<item-actions :item="item" />
-
-					<div
-						v-if="item.ExternalUrls?.length"
-						class="item-detail-links">
-						<button
-							v-for="(link, index) in item.ExternalUrls"
-							:key="link.Name ?? index"
-							type="button"
-							class="item-detail-link"
-							@click="openLink(link.Url)">
-							{{ link.Name }}
-							<external-link
-								:size="12"
-								aria-hidden="true" />
-						</button>
-					</div>
 				</div>
 			</div>
+
+			<p
+				v-if="item.Overview"
+				class="item-detail-overview">
+				{{ item.Overview }}
+			</p>
+
+			<media-facts :item="item" />
 		</div>
 	</div>
 </template>
@@ -133,6 +140,7 @@
 <script setup lang="ts">
 	import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
+	import MediaFacts from '@/components/features/item-detail/MediaFacts.vue';
 	import ItemActions from '@/components/features/media/ItemActions.vue';
 	import UiAspectRatio from '@/components/ui/UiAspectRatio.vue';
 	import UiBadge from '@/components/ui/UiBadge.vue';
