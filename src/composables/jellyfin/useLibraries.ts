@@ -1,34 +1,21 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
 import { getLibraryViews } from '@/api/jellyfin/library';
-import { ref } from 'vue';
 
-import { useAuthSession } from './useAuthSession';
-import { useServerConnection } from './useServerConnection';
+import { useJellyfinResource } from './useJellyfinResource';
 
-const loading = ref(false);
-const errorMessage = ref('');
-
-const libraries = ref<BaseItemDto[]>([]);
-
-async function refresh() {
-	const { api } = useServerConnection();
-	const { session } = useAuthSession();
-
-	if (!api.value || !session.value) return;
-
-	loading.value = true;
-	errorMessage.value = '';
-
-	try {
-		libraries.value = await getLibraryViews(api.value, session.value.userId);
-	} catch (error) {
-		errorMessage.value = error instanceof Error ? error.message : 'Failed to load libraries.';
-		console.error('Error fetching library views:', errorMessage.value);
-	} finally {
-		loading.value = false;
-	}
-}
+// Singleton: libraries are app-wide. No `watch` — the app shell triggers the
+// initial `refresh` once a session exists.
+const {
+	data: libraries,
+	loading,
+	errorMessage,
+	refresh,
+} = useJellyfinResource({
+	fetcher: ({ api, userId }) => getLibraryViews(api, userId),
+	initial: [] as BaseItemDto[],
+	errorLabel: 'Failed to load libraries.',
+});
 
 export function useLibraries() {
 	return { libraries, loading, errorMessage, refresh };

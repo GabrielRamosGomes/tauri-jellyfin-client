@@ -138,3 +138,13 @@ Every subfolder has an `_index.scss` that `@forward`s its partials, so `main.scs
 ## General
 
 - No Pinia — state lives in singleton composables (see `src/composables/`).
+
+## Comments
+
+Keep comments sparse. The code should read for itself; a comment earns its place only by explaining **why** something non-obvious is done (a gotcha, a workaround, a deliberate trade-off). Do not:
+
+- Restate what the code already says (`// loading ref`, `// returns the items`).
+- Add per-field doc comments to prop/option interfaces or narrate each step of a function.
+- Write JSDoc blocks or section-divider banners on small internal helpers/composables.
+
+A single short line on a genuinely surprising decision is good; a comment on every declaration is noise. Prefer a clear name over a comment. When in doubt, leave it out.
