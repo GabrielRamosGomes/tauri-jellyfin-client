@@ -1,5 +1,5 @@
-import { useAuthSession } from '@/composables/useAuthSession';
-import { useServerConnection } from '@/composables/useServerConnection';
+import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
+import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 import { createRouter, createWebHistory } from 'vue-router';
 
 declare module 'vue-router' {
@@ -38,8 +38,7 @@ const router = createRouter({
 				{
 					path: 'settings',
 					name: 'settings',
-					component: () => import('@/views/ComingSoonView.vue'),
-					props: { title: 'Settings' },
+					component: () => import('@/views/SettingsView.vue'),
 				},
 				{
 					path: 'library/:id',
@@ -51,6 +50,11 @@ const router = createRouter({
 					path: 'item/:id',
 					name: 'item',
 					component: () => import('@/views/ItemDetailView.vue'),
+				},
+				{
+					path: 'person/:id',
+					name: 'person',
+					component: () => import('@/views/PersonDetailView.vue'),
 				},
 			],
 		},

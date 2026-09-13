@@ -1,0 +1,50 @@
+@use '../variables' as v;
+
+.episode-header {
+	min-height: auto;
+	align-items: flex-start;
+}
+
+.episode-header .movie-header-content {
+	max-width: min(1100px, 100%);
+}
+
+.episode-top {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: v.$space-xl;
+	margin-bottom: v.$space-lg;
+}
+
+.episode-still {
+	flex: 0 0 clamp(240px, 26vw, 340px);
+	border-radius: v.$radius-md;
+	overflow: hidden;
+	background-color: var(--color-surface);
+	box-shadow: v.$shadow-lg;
+}
+
+.episode-headline {
+	flex: 1 1 380px;
+	min-width: 0;
+}
+
+.movie-track-static {
+	display: flex;
+	align-items: center;
+	gap: v.$space-sm;
+	min-width: 0;
+	padding: v.$space-sm v.$space-md;
+	border-radius: v.$radius-md;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	background-color: rgba(255, 255, 255, 0.1);
+	color: #ffffff;
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+
+	svg {
+		flex-shrink: 0;
+		color: rgba(255, 255, 255, 0.75);
+	}
+}

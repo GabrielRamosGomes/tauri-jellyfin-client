@@ -1,0 +1,100 @@
+// Base reset + generic element styles (unstyled server-form/login inputs
+// still fall back to these until they're migrated to UiInput/UiButton).
+@use '../variables' as v;
+
+:root {
+	color-scheme: light dark;
+	font-family: v.$font-family;
+	font-size: 16px;
+	line-height: 1.5;
+	font-weight: 400;
+
+	color: var(--color-text);
+	background-color: var(--color-bg);
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	max-width: 480px;
+	margin: 0 auto;
+	padding: 10vh 24px 24px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.row {
+	display: flex;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+input,
+button {
+	border-radius: 8px;
+	border: 1px solid var(--color-border);
+	padding: 0.6em 1em;
+	font-size: 1em;
+	font-weight: 500;
+	font-family: inherit;
+	color: var(--color-text);
+	background-color: var(--color-surface);
+	transition:
+		border-color 0.2s,
+		background-color 0.2s;
+	outline: none;
+}
+
+input {
+	flex: 1;
+	min-width: 0;
+}
+
+input:focus {
+	border-color: var(--color-primary);
+}
+
+button {
+	cursor: pointer;
+	border-color: transparent;
+	background-color: var(--color-primary);
+	color: #ffffff;
+
+	&:hover {
+		background-color: var(--color-primary-hover);
+	}
+
+	&:active {
+		background-color: var(--color-primary-active);
+	}
+}
+
+button:disabled,
+input:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+.server-meta {
+	margin: 0;
+	color: var(--color-muted);
+	font-size: 0.9em;
+}
+
+.error-msg {
+	margin: 0;
+	color: var(--color-error);
+	font-size: 0.9em;
+}

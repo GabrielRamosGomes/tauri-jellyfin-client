@@ -1,0 +1,55 @@
+@use '../variables' as v;
+
+.library-card {
+	display: block;
+	position: relative;
+	text-decoration: none;
+	color: inherit;
+	transition: transform v.$transition-fast;
+
+	&:hover {
+		transform: scale(1.03);
+		z-index: 2;
+
+		.library-card-media {
+			box-shadow: v.$shadow-lg;
+		}
+	}
+}
+
+.library-card-media {
+	border-radius: 8px;
+	overflow: hidden;
+	background-color: var(--color-surface);
+	transition: box-shadow v.$transition-fast;
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		color: transparent;
+	}
+}
+
+.library-card-title {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	text-align: center;
+	font-weight: 700;
+	font-size: 1.1em;
+	color: #ffffff;
+	text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.library-card-caption {
+	margin: 6px 0 0;
+	font-size: 0.85em;
+	font-weight: 500;
+	color: var(--color-text);
+}

@@ -13,8 +13,9 @@
 		"windows": [
 			{
 				"title": "tauri-jellyfin-client",
-				"width": 800,
-				"height": 600
+				"width": 1290,
+				"height": 960,
+				"maximized": true
 			}
 		],
 		"security": {

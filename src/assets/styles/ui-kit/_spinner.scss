@@ -1,0 +1,31 @@
+@use '../variables' as v;
+
+@keyframes ui-spinner-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.ui-spinner {
+	display: inline-block;
+	border-style: solid;
+	border-width: 3px;
+	border-color: color-mix(in srgb, currentColor 25%, transparent);
+	border-top-color: currentColor;
+	border-radius: v.$radius-full;
+	animation: ui-spinner-spin 0.7s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.ui-spinner {
+		animation-duration: 1.6s;
+	}
+}
+
+.page-loader {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 50vh;
+	color: var(--color-primary);
+}

@@ -1,0 +1,11 @@
+.ui-aspect-ratio > img,
+.ui-aspect-ratio > .ui-skeleton {
+	width: 100%;
+	height: 100%;
+}
+
+.ui-aspect-ratio > img {
+	object-fit: cover;
+	display: block;
+	color: transparent;
+}

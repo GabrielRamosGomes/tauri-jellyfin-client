@@ -1,0 +1,202 @@
+// EpisodeListItem.vue — season episode cards, laid out 4 per row.
+@use '../variables' as v;
+
+.episode-list {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: v.$space-lg;
+	margin: 16px 0;
+
+	@media (max-width: 1400px) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@media (max-width: 1000px) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	@media (max-width: 640px) {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.episode-card {
+	display: flex;
+	flex-direction: column;
+	text-decoration: none;
+	color: inherit;
+	animation: episode-in 0.35s ease both;
+}
+
+@keyframes episode-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+// Stagger the first couple of rows so they cascade in rather than pop together.
+@for $i from 1 through 8 {
+	.episode-card:nth-child(#{$i}) {
+		animation-delay: #{($i - 1) * 45}ms;
+	}
+}
+
+.episode-card--watched:hover .episode-thumb {
+	opacity: 1;
+}
+
+.episode-thumb {
+	border-radius: v.$radius-md;
+	overflow: hidden;
+	background-color: var(--color-surface);
+
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		color: transparent;
+	}
+}
+
+.episode-play {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #ffffff;
+	background-color: rgba(0, 0, 0, 0.3);
+	opacity: 0;
+	transition: opacity v.$transition-fast;
+
+	.episode-card:hover & {
+		opacity: 1;
+	}
+}
+
+.episode-badge {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	min-width: 22px;
+	height: 22px;
+	padding: 0 6px;
+	border-radius: v.$radius-full;
+	background-color: rgba(0, 0, 0, 0.65);
+	color: #ffffff;
+	font-size: v.$font-size-xs;
+	font-weight: 700;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.episode-badge-done {
+	background-color: var(--color-watched);
+}
+
+.episode-actions {
+	position: absolute;
+	right: v.$space-sm;
+	bottom: v.$space-sm;
+	display: flex;
+	gap: v.$space-xs;
+}
+
+.episode-actions .item-action {
+	width: 32px;
+	height: 32px;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: #ffffff;
+	backdrop-filter: blur(4px);
+
+	// Hidden at rest; the whole set appears on hover/focus.
+	opacity: 0;
+	transition:
+		opacity v.$transition-fast,
+		background-color v.$transition-fast;
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+}
+
+.episode-card:hover .episode-actions .item-action,
+.episode-actions:focus-within .item-action {
+	opacity: 1;
+}
+
+.episode-actions .ui-icon-btn--favorite,
+.episode-actions .ui-icon-btn--watched {
+	opacity: 1;
+}
+
+.episode-progress {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: auto;
+	height: 4px;
+	background-color: rgba(255, 255, 255, 0.25);
+}
+
+.episode-info {
+	min-width: 0;
+	margin-top: v.$space-sm;
+}
+
+// --- Loading skeleton (mirrors the episode card) ---
+.episode-skeleton {
+	display: flex;
+	flex-direction: column;
+}
+
+.episode-skeleton-info {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: v.$space-sm;
+}
+
+.episode-name {
+	margin: 0;
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+.episode-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin: 4px 0 6px;
+	font-size: v.$font-size-sm;
+	color: var(--color-muted);
+}
+
+.episode-rating {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: #ffd166;
+}
+
+.episode-overview {
+	margin: 0;
+	font-size: v.$font-size-sm;
+	line-height: 1.4;
+	// A step brighter than --color-muted so it stays readable over the backdrop.
+	color: color-mix(in srgb, var(--color-text) 72%, transparent);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}

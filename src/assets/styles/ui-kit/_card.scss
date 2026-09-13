@@ -1,0 +1,13 @@
+// UiCard.vue
+@use '../variables' as v;
+
+.ui-card {
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border-subtle);
+	border-radius: v.$radius-lg;
+	box-shadow: v.$shadow-sm;
+}
+
+.ui-card--padded {
+	padding: v.$space-lg;
+}

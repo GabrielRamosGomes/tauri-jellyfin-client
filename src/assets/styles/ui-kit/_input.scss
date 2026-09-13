@@ -1,0 +1,63 @@
+// UiInput.vue
+@use '../variables' as v;
+
+.ui-input-field {
+	display: flex;
+	flex-direction: column;
+	gap: v.$space-xs;
+	width: 100%;
+	text-align: left;
+}
+
+.ui-input-label {
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+.ui-input-error {
+	font-size: v.$font-size-xs;
+	color: var(--color-error);
+}
+
+.ui-input-wrapper {
+	position: relative;
+}
+
+.ui-input {
+	width: 100%;
+}
+
+.ui-input--has-icon {
+	padding-left: 40px;
+}
+
+.ui-input--has-toggle {
+	padding-right: 40px;
+}
+
+.ui-input-icon {
+	position: absolute;
+	left: 12px;
+	top: 50%;
+	transform: translateY(-50%);
+	color: var(--color-muted);
+	pointer-events: none;
+}
+
+.ui-input-toggle {
+	position: absolute;
+	right: 8px;
+	top: 50%;
+	transform: translateY(-50%);
+	padding: 4px;
+	border: none;
+	background: none;
+	color: var(--color-muted);
+	cursor: pointer;
+	display: flex;
+
+	&:hover {
+		color: var(--color-text);
+	}
+}

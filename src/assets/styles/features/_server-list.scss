@@ -1,0 +1,30 @@
+@use '../variables' as v;
+
+.server-list {
+	width: 100%;
+	list-style: none;
+	padding: 0;
+	margin: 0 0 16px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+
+	li {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border: 1px solid var(--color-border-subtle);
+		border-radius: 8px;
+		background-color: var(--color-surface);
+		font-size: 0.9em;
+
+		span {
+			flex: 1;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			text-align: left;
+		}
+	}
+}

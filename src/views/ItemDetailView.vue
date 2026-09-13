@@ -1,65 +1,65 @@
 <template>
-	<div v-if="item">
-		<item-detail-header :item="item" />
+	<item-detail-layout
+		v-if="item"
+		:item="item">
+		<season-header
+			v-if="item.Type === 'Season'"
+			:item="item"
+			:episodes="episodes" />
+		<episode-header
+			v-else-if="item.Type === 'Episode'"
+			:item="item" />
+		<item-detail-header
+			v-else
+			:item="item" />
 
-		<div v-if="showChildren" class="item-detail-children">
-			<h2>{{ childrenLabel }}</h2>
+		<series-content
+			v-if="item.Type === 'Series'"
+			:item="item" />
+		<season-content
+			v-else-if="item.Type === 'Season'"
+			:episodes="episodes"
+			:loading="episodesLoading" />
 
-			<template v-if="children.length">
-				<div v-if="item.Type === 'Series'" class="item-grid">
-					<media-item-card v-for="child in children" :key="child.Id" :item="child" />
-				</div>
-				<div v-else class="episode-list">
-					<episode-list-item v-for="child in episodes" :key="child.Id" :item="child" />
-				</div>
-			</template>
-			<p v-else-if="childrenLoading" class="server-meta">Loading...</p>
-			<p v-else class="server-meta">Nothing here yet.</p>
-		</div>
+		<cast-row
+			v-if="item.People?.length"
+			:people="item.People" />
+	</item-detail-layout>
+	<div
+		v-else-if="loading"
+		class="page-loader">
+		<ui-spinner :size="40" />
 	</div>
-	<p v-else-if="loading" class="server-meta">Loading...</p>
-	<p v-if="errorMessage" class="error-msg">{{ errorMessage }}</p>
+	<p
+		v-if="errorMessage"
+		class="error-msg">
+		{{ errorMessage }}
+	</p>
 </template>
 
 <script setup lang="ts">
-	import EpisodeListItem from '@/components/EpisodeListItem.vue';
-	import ItemDetailHeader from '@/components/ItemDetailHeader.vue';
-	import MediaItemCard from '@/components/MediaItemCard.vue';
-	import { useChildItems } from '@/composables/useChildItems';
-	import { useItemDetail } from '@/composables/useItemDetail';
-	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
+	import EpisodeHeader from '@/components/features/item-detail/EpisodeHeader.vue';
+	import ItemDetailHeader from '@/components/features/item-detail/ItemDetailHeader.vue';
+	import ItemDetailLayout from '@/components/features/item-detail/ItemDetailLayout.vue';
+	import SeasonContent from '@/components/features/item-detail/SeasonContent.vue';
+	import SeasonHeader from '@/components/features/item-detail/SeasonHeader.vue';
+	import SeriesContent from '@/components/features/item-detail/SeriesContent.vue';
+	import CastRow from '@/components/features/media/CastRow.vue';
+	import UiSpinner from '@/components/ui/UiSpinner.vue';
+	import { useItemDetail } from '@/composables/jellyfin/useItemDetail';
+	import { useSeasonEpisodes } from '@/composables/jellyfin/useSeasonEpisodes';
 	import { computed } from 'vue';
 	import { useRoute } from 'vue-router';
 
 	const route = useRoute();
 	const itemId = computed(() => route.params.id as string);
-
 	const { item, loading, errorMessage } = useItemDetail(itemId);
 
-	const showChildren = computed(
-		() => item.value?.Type === 'Series' || item.value?.Type === 'Season',
+	// Episodes are fetched once here so both the season header (meta, progress,
+	// resume) and the episode grid share a single request.
+	const seasonId = computed(() => (item.value?.Type === 'Season' ? (item.value.Id ?? '') : ''));
+	const seasonNumber = computed(() =>
+		item.value?.Type === 'Season' ? (item.value.IndexNumber ?? undefined) : undefined,
 	);
-	const childrenLabel = computed(() => (item.value?.Type === 'Series' ? 'Seasons' : 'Episodes'));
-
-	const childParentId = computed(() => (showChildren.value ? (item.value?.Id ?? '') : ''));
-
-	const { items: children, loading: childrenLoading } = useChildItems(childParentId, [
-		ItemSortBy.IndexNumber,
-	]);
-
-	// Some seasons contain extras (recaps, shorts) filed alongside regular
-	// episodes that reuse an adjacent episode's IndexNumber instead of having
-	// their own — drop those from the list rather than showing duplicate
-	// episode numbers.
-	const episodes = computed(() => {
-		const seen = new Set<number>();
-
-		return children.value.filter((child) => {
-			const index = child.IndexNumber;
-			if (index === undefined || index === null || seen.has(index)) return false;
-
-			seen.add(index);
-			return true;
-		});
-	});
+	const { episodes, loading: episodesLoading } = useSeasonEpisodes(seasonId, seasonNumber);
 </script>

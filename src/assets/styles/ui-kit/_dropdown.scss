@@ -1,0 +1,106 @@
+@use '../variables' as v;
+
+.ui-dropdown-trigger {
+	display: flex;
+	align-items: center;
+	gap: v.$space-md;
+	width: 100%;
+	padding: v.$space-sm v.$space-md;
+	border-radius: v.$radius-md;
+	border: 1px solid var(--color-border-subtle);
+	background-color: var(--color-surface);
+	color: var(--color-text);
+	font-family: inherit;
+	font-size: v.$font-size-sm;
+	text-align: left;
+	cursor: pointer;
+	outline: none;
+	transition:
+		border-color v.$transition-fast,
+		background-color v.$transition-fast;
+
+	&:hover,
+	&:active,
+	&:focus-visible,
+	&[data-state='open'] {
+		background-color: var(--color-surface);
+		border-color: var(--color-primary);
+	}
+
+	&[data-disabled] {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+.ui-dropdown-icon {
+	flex-shrink: 0;
+	color: var(--color-muted);
+}
+
+.ui-dropdown-value {
+	flex: 1 1 auto;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 600;
+}
+
+.ui-dropdown-chevron {
+	flex-shrink: 0;
+	color: var(--color-muted);
+}
+
+.ui-dropdown-content {
+	width: var(--reka-select-trigger-width);
+	max-height: var(--reka-select-content-available-height);
+	min-width: 220px;
+	padding: v.$space-xs;
+	border-radius: v.$radius-md;
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border-subtle);
+	box-shadow: v.$shadow-md;
+	z-index: 60;
+	overflow-y: auto;
+}
+
+.ui-dropdown-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: v.$space-md;
+	padding: v.$space-sm v.$space-md;
+	border-radius: v.$radius-sm;
+	color: var(--color-text);
+	font-size: v.$font-size-sm;
+	cursor: pointer;
+	outline: none;
+
+	&:hover,
+	&[data-highlighted] {
+		background-color: var(--color-hover-overlay);
+	}
+
+	&[data-state='checked'] {
+		color: var(--color-primary);
+	}
+}
+
+.ui-dropdown-item-body {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-width: 0;
+}
+
+.ui-dropdown-item-desc {
+	font-size: v.$font-size-xs;
+	color: var(--color-muted);
+}
+
+.ui-dropdown-item-indicator {
+	display: flex;
+	flex-shrink: 0;
+	color: var(--color-primary);
+}

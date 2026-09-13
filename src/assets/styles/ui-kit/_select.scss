@@ -1,0 +1,70 @@
+// UiSelect.vue (Reka UI Select primitives)
+@use '../variables' as v;
+
+.ui-select-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: v.$space-sm;
+	min-width: 140px;
+	padding: 0.5em 0.8em;
+	border-radius: v.$radius-md;
+	border: 1px solid var(--color-border);
+	background-color: var(--color-surface);
+	color: var(--color-text);
+	font-family: inherit;
+	font-size: v.$font-size-md;
+	cursor: pointer;
+	outline: none;
+	transition: border-color v.$transition-fast;
+
+	&:hover,
+	&[data-state='open'] {
+		border-color: var(--color-primary);
+	}
+
+	&[data-disabled] {
+		opacity: 0.6;
+		cursor: not-allowed;
+	}
+}
+
+.ui-select-icon {
+	display: flex;
+	flex-shrink: 0;
+	color: var(--color-muted);
+}
+
+.ui-select-content {
+	width: var(--reka-select-trigger-width);
+	min-width: 160px;
+	padding: v.$space-xs;
+	border-radius: v.$radius-md;
+	background-color: var(--color-surface);
+	border: 1px solid var(--color-border-subtle);
+	box-shadow: v.$shadow-md;
+	z-index: 60;
+}
+
+.ui-select-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: v.$space-sm;
+	padding: v.$space-sm;
+	border-radius: v.$radius-sm;
+	color: var(--color-text);
+	font-size: v.$font-size-md;
+	cursor: pointer;
+	outline: none;
+
+	&:hover,
+	&[data-highlighted] {
+		background-color: var(--color-hover-overlay);
+	}
+}
+
+.ui-select-item-indicator {
+	display: flex;
+	color: var(--color-primary);
+}
