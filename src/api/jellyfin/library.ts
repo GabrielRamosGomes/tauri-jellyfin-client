@@ -37,11 +37,17 @@ export function getLibraryImageUrl(api: Api, library: BaseItemDto) {
 	return url;
 }
 
+export interface NameFilter {
+	nameStartsWith?: string;
+	nameLessThan?: string;
+}
+
 export async function getChildItems(
 	api: Api,
 	userId: string,
 	parentId: string,
 	sortBy: ItemSortBy[] = [ItemSortBy.SortName],
+	nameFilter: NameFilter = {},
 ) {
 	const itemsApi = getItemsApi(api);
 	const { data } = await itemsApi.getItems({
@@ -51,6 +57,7 @@ export async function getChildItems(
 		sortBy,
 		sortOrder: [SortOrder.Ascending],
 		fields: [ItemFields.Overview],
+		...nameFilter,
 	});
 
 	return data.Items ?? [];

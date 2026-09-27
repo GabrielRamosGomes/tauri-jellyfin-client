@@ -1,0 +1,61 @@
+@use '../variables' as v;
+
+$rail-width: v.$space-xl;
+
+.library-body {
+	padding-right: $rail-width + v.$space-xl;
+
+	.library-empty {
+		margin: v.$space-md 0;
+	}
+}
+
+.alphabet-rail {
+	position: fixed;
+	top: calc(50% + #{v.$header-height * 0.5});
+	right: v.$space-xl;
+	z-index: 10;
+	transform: translateY(-50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 2px;
+	width: $rail-width;
+	padding: v.$space-xs;
+	max-height: calc(100vh - #{v.$header-height + v.$space-xl * 2});
+	overflow-y: auto;
+	scrollbar-width: none;
+	border-radius: v.$radius-full;
+	background-color: var(--color-surface);
+}
+
+.alphabet-rail-letter {
+	width: 100%;
+	padding: 2px v.$space-xs;
+	border: none;
+	border-radius: v.$radius-sm;
+	background: none;
+	color: var(--color-muted);
+	font-size: v.$font-size-xs;
+	font-weight: 700;
+	cursor: pointer;
+	transition:
+		color v.$transition-fast,
+		background-color v.$transition-fast;
+
+	&:hover:not(:disabled, [data-state='on']),
+	&:focus-visible {
+		color: var(--color-text);
+		background-color: var(--color-hover-overlay);
+		outline: none;
+	}
+
+	&[data-state='on'] {
+		color: var(--color-text);
+		background-color: var(--color-primary-soft-bg);
+	}
+
+	&:disabled {
+		cursor: progress;
+	}
+}
