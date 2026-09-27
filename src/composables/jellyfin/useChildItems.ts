@@ -1,26 +1,21 @@
 import type { BaseItemDto, ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
 
-import { getChildItems, type NameFilter } from '@/api/jellyfin/library';
-import { toValue, type MaybeRefOrGetter, type Ref } from 'vue';
+import { getChildItems } from '@/api/jellyfin/library';
+import { type Ref } from 'vue';
 
 import { useJellyfinResource } from './useJellyfinResource';
 
-export function useChildItems(
-	parentId: Ref<string>,
-	sortBy?: ItemSortBy[],
-	nameFilter: MaybeRefOrGetter<NameFilter> = {},
-) {
+export function useChildItems(parentId: Ref<string>, sortBy?: ItemSortBy[]) {
 	const {
 		data: items,
 		loading,
 		errorMessage,
 		refresh,
 	} = useJellyfinResource({
-		fetcher: ({ api, userId }) =>
-			getChildItems(api, userId, parentId.value, sortBy, toValue(nameFilter)),
+		fetcher: ({ api, userId }) => getChildItems(api, userId, parentId.value, sortBy),
 		initial: [] as BaseItemDto[],
 		errorLabel: 'Failed to load items.',
-		watch: [parentId, () => toValue(nameFilter)],
+		watch: parentId,
 		enabled: () => !!parentId.value,
 	});
 

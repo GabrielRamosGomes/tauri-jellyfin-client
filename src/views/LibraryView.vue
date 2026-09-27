@@ -3,21 +3,26 @@
 		<div class="library-header">
 			<h1>{{ libraryName }}</h1>
 			<span
-				v-if="items.length"
+				v-if="total"
 				class="library-count"
-				>{{ items.length }}</span
+				>{{ total }}</span
 			>
 		</div>
 
 		<div class="library-body">
-			<div
-				v-if="items.length"
-				class="item-grid">
-				<media-item-card
-					v-for="item in items"
-					:key="item.Id"
-					:item="item" />
-			</div>
+			<template v-if="items.length">
+				<div class="item-grid">
+					<media-item-card
+						v-for="item in items"
+						:key="item.Id"
+						:item="item" />
+				</div>
+				<div
+					v-if="loading && hasMore"
+					class="library-loading-more">
+					<ui-spinner :size="28" />
+				</div>
+			</template>
 			<div
 				v-else-if="loading"
 				class="item-grid">
@@ -53,9 +58,11 @@
 	import AlphabetRail from '@/components/features/library/AlphabetRail.vue';
 	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
 	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
-	import { useChildItems } from '@/composables/jellyfin/useChildItems';
+	import UiSpinner from '@/components/ui/UiSpinner.vue';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
+	import { useLibraryItems } from '@/composables/jellyfin/useLibraryItems';
 	import { ALL_LETTERS, useAlphabetFilter } from '@/composables/ui/useAlphabetFilter';
+	import { useInfiniteScroll } from '@vueuse/core';
 	import { computed, watch } from 'vue';
 	import { useRoute } from 'vue-router';
 
@@ -72,5 +79,16 @@
 	// Sync so the letter resets before the items watcher runs; otherwise a library switch fires two fetches.
 	watch(libraryId, () => (letter.value = ALL_LETTERS), { flush: 'sync' });
 
-	const { items, loading, errorMessage } = useChildItems(libraryId, undefined, nameFilter);
+	const { items, total, loading, errorMessage, hasMore, loadMore } = useLibraryItems(
+		libraryId,
+		nameFilter,
+	);
+
+	watch(letter, () => window.scrollTo({ top: 0 }));
+
+	// The document is the scroll container (AppShell grows with content), not .app-content.
+	useInfiniteScroll(window, loadMore, {
+		distance: 600,
+		canLoadMore: () => hasMore.value && !loading.value,
+	});
 </script>

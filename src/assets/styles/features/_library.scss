@@ -10,6 +10,12 @@ $rail-width: v.$space-xl;
 	}
 }
 
+.library-loading-more {
+	display: flex;
+	justify-content: center;
+	padding: v.$space-lg 0;
+}
+
 .alphabet-rail {
 	position: fixed;
 	top: calc(50% + #{v.$header-height * 0.5});

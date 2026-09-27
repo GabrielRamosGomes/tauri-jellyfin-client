@@ -37,17 +37,11 @@ export function getLibraryImageUrl(api: Api, library: BaseItemDto) {
 	return url;
 }
 
-export interface NameFilter {
-	nameStartsWith?: string;
-	nameLessThan?: string;
-}
-
 export async function getChildItems(
 	api: Api,
 	userId: string,
 	parentId: string,
 	sortBy: ItemSortBy[] = [ItemSortBy.SortName],
-	nameFilter: NameFilter = {},
 ) {
 	const itemsApi = getItemsApi(api);
 	const { data } = await itemsApi.getItems({
@@ -57,10 +51,41 @@ export async function getChildItems(
 		sortBy,
 		sortOrder: [SortOrder.Ascending],
 		fields: [ItemFields.Overview],
-		...nameFilter,
 	});
 
 	return data.Items ?? [];
+}
+
+export interface NameFilter {
+	nameStartsWith?: string;
+	nameLessThan?: string;
+}
+
+export interface LibraryPageQuery {
+	startIndex: number;
+	limit: number;
+	nameFilter?: NameFilter;
+}
+
+export async function getLibraryItems(
+	api: Api,
+	userId: string,
+	parentId: string,
+	{ startIndex, limit, nameFilter }: LibraryPageQuery,
+) {
+	const itemsApi = getItemsApi(api);
+	const { data } = await itemsApi.getItems({
+		userId,
+		parentId,
+		recursive: false,
+		sortBy: [ItemSortBy.SortName],
+		sortOrder: [SortOrder.Ascending],
+		startIndex,
+		limit,
+		...nameFilter,
+	});
+
+	return { items: data.Items ?? [], total: data.TotalRecordCount ?? 0 };
 }
 
 export async function getItemDetail(api: Api, userId: string, itemId: string) {
