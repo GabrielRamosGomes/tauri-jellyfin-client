@@ -10,29 +10,32 @@
   - [x] Render media grids with pagination
   - [x] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
   - [x] First UI version
-  - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
+  - [x] Basic library sorting and filtering (Name, Date, Unwatched)
+  - [ ] Improve switch/connect server screens
 
-- [ ] 2.5 Ui/Unit Tests
+- [ ] 3. Ui/Unit Tests
+  - [ ] Added vitest for unit/component tests
+  - [ ] Actually add CI/CD
 
-- [ ] 3. Playback / DirectPlayer
+- [ ] 4. Playback / DirectPlayer
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
   - [ ] Pass raw stream URL directly to libmpv
   - [ ] Enable GPU hardware decoding (hwdec=auto)
   - [ ] Core playback controls (Play, Pause, Seek, Volume, Fullscreen)
   - [ ] Sync playback progress to server (/Sessions/Playing/Progress)
 
-- [ ] 4. Extra Media Features
+- [ ] 5. Extra Media Features
   - [ ] Parse MediaStreams for UI badges (Dolby Vision, HDR10+, Atmos, DTS)
   - [ ] Intro Skip button (jumoog/Intro-Skipper timestamps integration)
   - [ ] Media segment / chapter markers on progress bar
   - [ ] Queue playback & auto-play next episode
 
-- [ ] 5. Server Administration (Admin Users Only)
+- [ ] 6. Server Administration (Admin Users Only)
   - [ ] Detect admin users and gate the Administration nav section accordingly
   - [ ] Dashboard (server activity / stats overview)
   - [ ] Metadata Manager (edit item metadata from the client)
 
-- [ ] 6. Nice to Haves
+- [ ] 7. Nice to Haves
   - [ ] Translations
   - [ ] Cmd/Ctrl+K command palette for jump-to-title/library/settings
   - [ ] System tray mini-player
