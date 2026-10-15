@@ -13,6 +13,7 @@ export function useLibraryItems(libraryId: Ref<string>, query: Ref<LibraryQuery>
 	const total = ref(0);
 	const loading = ref(false);
 	const errorMessage = ref('');
+	let requestSeq = 0;
 
 	const hasMore = computed(() => items.value.length < total.value);
 
@@ -21,6 +22,7 @@ export function useLibraryItems(libraryId: Ref<string>, query: Ref<LibraryQuery>
 		const { session } = useAuthSession();
 		if (!api.value || !session.value || !libraryId.value) return;
 
+		const seq = ++requestSeq;
 		loading.value = true;
 		errorMessage.value = '';
 		try {
@@ -29,13 +31,16 @@ export function useLibraryItems(libraryId: Ref<string>, query: Ref<LibraryQuery>
 				limit: PAGE_SIZE,
 				...query.value,
 			});
+			if (seq !== requestSeq) return;
 			items.value = startIndex === 0 ? page.items : [...items.value, ...page.items];
 			total.value = page.total;
 		} catch (error) {
-			errorMessage.value = error instanceof Error ? error.message : 'Failed to load library.';
+			if (seq === requestSeq) {
+				errorMessage.value = error instanceof Error ? error.message : 'Failed to load library.';
+			}
 			console.error('Failed to load library.', error);
 		} finally {
-			loading.value = false;
+			if (seq === requestSeq) loading.value = false;
 		}
 	}
 

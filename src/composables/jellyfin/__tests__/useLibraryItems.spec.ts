@@ -113,6 +113,49 @@ describe('useLibraryItems', () => {
 		expect(vi.mocked(getLibraryItems).mock.calls[2][3].startIndex).toBe(0);
 	});
 
+	describe('when the query changes while a next page is loading', () => {
+		function filterMidPage() {
+			const stalePage = deferred<ReturnType<typeof page>>();
+			const filteredPage = deferred<ReturnType<typeof page>>();
+			vi.mocked(getLibraryItems)
+				.mockResolvedValueOnce(page(['a1'], 2))
+				.mockReturnValueOnce(stalePage.promise)
+				.mockReturnValueOnce(filteredPage.promise);
+			return { library: load(), stalePage, filteredPage };
+		}
+
+		it('drops the unfiltered page instead of appending it to the filtered results', async () => {
+			const { library, stalePage, filteredPage } = filterMidPage();
+			await flushPromises();
+			library.loadMore();
+			library.query.value = { ...byName, genreIds: ['g1'] };
+			await flushPromises();
+
+			filteredPage.resolve(page(['g1'], 1));
+			await flushPromises();
+			stalePage.resolve(page(['a2'], 2));
+			await flushPromises();
+
+			expect(library.ids()).toEqual(['g1']);
+			expect(library.total.value).toBe(1);
+			expect(library.loading.value).toBe(false);
+		});
+
+		it('stays loading until the filtered page arrives', async () => {
+			const { library, stalePage } = filterMidPage();
+			await flushPromises();
+			library.loadMore();
+			library.query.value = { ...byName, genreIds: ['g1'] };
+			await flushPromises();
+
+			stalePage.resolve(page(['a2'], 2));
+			await flushPromises();
+
+			expect(library.loading.value).toBe(true);
+			expect(library.ids()).toEqual(['a1']);
+		});
+	});
+
 	it('keeps the already loaded items when loading more fails', async () => {
 		vi.spyOn(console, 'error').mockImplementation(() => {});
 		vi.mocked(getLibraryItems)
