@@ -17,11 +17,10 @@
 				:key="episode.Id"
 				:item="episode" />
 		</div>
-		<p
+		<ui-empty-state
 			v-else
-			class="server-meta">
-			Nothing here yet.
-		</p>
+			title="No episodes yet"
+			:icon="Clapperboard" />
 	</div>
 </template>
 
@@ -30,6 +29,8 @@
 
 	import EpisodeCardSkeleton from '@/components/features/item-detail/EpisodeCardSkeleton.vue';
 	import EpisodeListItem from '@/components/features/item-detail/EpisodeListItem.vue';
+	import UiEmptyState from '@/components/ui/UiEmptyState.vue';
+	import { Clapperboard } from 'lucide-vue-next';
 
 	defineProps<{ episodes: BaseItemDto[]; loading: boolean }>();
 </script>

@@ -6,7 +6,7 @@ import { computed, ref, watch, type Ref } from 'vue';
 import { useAuthSession } from './useAuthSession';
 import { useServerConnection } from './useServerConnection';
 
-const PAGE_SIZE = 30;
+const PAGE_SIZE = 100;
 
 export function useLibraryItems(libraryId: Ref<string>, nameFilter: Ref<NameFilter>) {
 	const items = ref<BaseItemDto[]>([]);

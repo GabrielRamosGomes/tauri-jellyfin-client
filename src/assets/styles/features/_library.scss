@@ -6,7 +6,7 @@ $rail-width: v.$space-xl;
 	padding-right: $rail-width + v.$space-xl;
 
 	.library-empty {
-		margin: v.$space-md 0;
+		min-height: calc(100vh - #{v.$header-height + v.$space-3xl * 3});
 	}
 }
 

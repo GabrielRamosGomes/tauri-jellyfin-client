@@ -24,11 +24,11 @@
 				title="My Collection"
 				:items="libraries"
 				variant="library" />
-			<p
+			<ui-empty-state
 				v-if="!libraries.length"
-				class="server-meta">
-				No libraries yet.
-			</p>
+				title="No libraries yet"
+				description="Add a library on your Jellyfin server to get started."
+				:icon="LibraryBig" />
 
 			<media-row
 				title="Up Next"
@@ -51,8 +51,10 @@
 	import HeroBanner from '@/components/features/item-detail/HeroBanner.vue';
 	import MediaRow from '@/components/features/media/MediaRow.vue';
 	import MediaRowSkeleton from '@/components/features/media/MediaRowSkeleton.vue';
+	import UiEmptyState from '@/components/ui/UiEmptyState.vue';
 	import { useHomeSections } from '@/composables/jellyfin/useHomeSections';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
+	import { LibraryBig } from 'lucide-vue-next';
 	import { computed, onMounted, watch } from 'vue';
 
 	const { libraries } = useLibraries();

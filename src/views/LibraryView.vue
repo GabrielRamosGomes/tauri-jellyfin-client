@@ -30,15 +30,22 @@
 					v-for="n in 18"
 					:key="n" />
 			</div>
-			<p
+			<ui-empty-state
 				v-else
-				class="server-meta library-empty">
-				{{
+				class="library-empty"
+				:title="letter === ALL_LETTERS ? 'This library is empty' : `No titles under ${letter}`"
+				:description="
 					letter === ALL_LETTERS
-						? 'No items in this library yet.'
-						: `No titles under ${letter}.`
-				}}
-			</p>
+						? 'Items will show up here once your server adds them.'
+						: 'Try another letter or browse the whole library.'
+				">
+				<ui-button
+					v-if="letter !== ALL_LETTERS"
+					variant="secondary"
+					@click="letter = ALL_LETTERS">
+					Show all titles
+				</ui-button>
+			</ui-empty-state>
 
 			<alphabet-rail
 				v-if="items.length || letter !== ALL_LETTERS"
@@ -58,6 +65,8 @@
 	import AlphabetRail from '@/components/features/library/AlphabetRail.vue';
 	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
 	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
+	import UiButton from '@/components/ui/UiButton.vue';
+	import UiEmptyState from '@/components/ui/UiEmptyState.vue';
 	import UiSpinner from '@/components/ui/UiSpinner.vue';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
 	import { useLibraryItems } from '@/composables/jellyfin/useLibraryItems';
