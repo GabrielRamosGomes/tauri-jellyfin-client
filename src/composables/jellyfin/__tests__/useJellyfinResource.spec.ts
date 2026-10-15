@@ -6,6 +6,18 @@ import { flushPromises } from '@vue/test-utils';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ref } from 'vue';
 
+function watchEpisodes() {
+	signIn();
+	const id = ref('episode-1');
+	const older = deferred<string>();
+	const newer = deferred<string>();
+	const fetcher = vi.fn().mockReturnValueOnce(older.promise).mockReturnValueOnce(newer.promise);
+	const [resource] = withScope(() =>
+		useJellyfinResource({ fetcher, initial: '', watch: id, enabled: () => !!id.value }),
+	);
+	return { ...resource, id, older, newer };
+}
+
 beforeEach(() => {
 	signOut();
 });
@@ -44,6 +56,47 @@ describe('useJellyfinResource', () => {
 		id.value = 'item-2';
 		await flushPromises();
 		expect(data.value).toBe('detail of item-2');
+	});
+
+	describe('when the watched source changes before the previous response arrives', () => {
+		it('keeps the newer data when the older response arrives last', async () => {
+			const { data, loading, id, older, newer } = watchEpisodes();
+			id.value = 'episode-2';
+			await flushPromises();
+
+			newer.resolve('detail of episode-2');
+			await flushPromises();
+			older.resolve('detail of episode-1');
+			await flushPromises();
+
+			expect(data.value).toBe('detail of episode-2');
+			expect(loading.value).toBe(false);
+		});
+
+		it('ignores a late failure of the older request', async () => {
+			vi.spyOn(console, 'error').mockImplementation(() => {});
+			const { errorMessage, loading, id, older } = watchEpisodes();
+			id.value = 'episode-2';
+			await flushPromises();
+
+			older.reject(new Error('timeout'));
+			await flushPromises();
+
+			expect(errorMessage.value).toBe('');
+			expect(loading.value).toBe(true);
+		});
+
+		it('stays reset when a response arrives after it was disabled', async () => {
+			const { data, loading, id, older } = watchEpisodes();
+			id.value = '';
+			await flushPromises();
+
+			older.resolve('detail of episode-1');
+			await flushPromises();
+
+			expect(data.value).toBe('');
+			expect(loading.value).toBe(false);
+		});
 	});
 
 	it('resets to the initial value without fetching when disabled', async () => {
