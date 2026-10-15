@@ -35,7 +35,7 @@ describe('useNextUp', () => {
 		expect(nextUpItem.value).toBeUndefined();
 	});
 
-	it('clears the previous series’ episode when there is no series to look up', async () => {
+	it('clears the previous series episode when there is no series to look up', async () => {
 		vi.mocked(getNextUp).mockResolvedValue([makeItem({ Id: 's1e4' })]);
 		const seriesId = ref('series-1');
 		const [{ nextUpItem }] = withScope(() => useNextUp(seriesId));
