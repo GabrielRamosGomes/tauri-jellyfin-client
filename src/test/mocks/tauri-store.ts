@@ -1,4 +1,7 @@
-const files = new Map<string, Map<string, unknown>>();
+// Kept on globalThis so the "disk" survives vi.resetModules(), letting a spec simulate an app restart.
+const FILES = Symbol.for('fake-tauri-store-files');
+const globalFiles = globalThis as { [FILES]?: Map<string, Map<string, unknown>> };
+const files = (globalFiles[FILES] ??= new Map());
 
 function fileData(path: string) {
 	let data = files.get(path);

@@ -2,12 +2,16 @@
 import '@testing-library/jest-dom/vitest';
 import { clearMocks as clearTauriMocks } from '@tauri-apps/api/mocks';
 import { cleanup } from '@testing-library/vue';
-import { afterEach } from 'vitest';
+import { afterEach, vi } from 'vitest';
+
+import { stopScopes } from './utils';
 
 afterEach(() => {
 	// Testing Library only auto-cleans when vitest globals are on, and we keep them off.
 	cleanup();
+	stopScopes();
 	clearTauriMocks();
+	vi.useRealTimers();
 });
 
 // jsdom gaps that Reka UI's popper/select primitives rely on.

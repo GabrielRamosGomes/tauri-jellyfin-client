@@ -61,8 +61,10 @@ src/
     UiSelect.vue
     __tests__/UiSelect.spec.ts
   test/                    → shared test infrastructure only, never specs
-    setup.ts               → jest-dom matchers, Testing Library cleanup, jsdom polyfills
-    utils.ts               → render/mount helpers (withRouter, seedSession, ...)
+    setup.ts               → jest-dom matchers; after each test: cleanup, stop scopes, clear Tauri
+                             mocks, real timers; jsdom polyfills. Must never import app modules.
+    utils.ts               → withScope(), deferred(). App-free, because setup.ts imports it
+    session.ts             → signIn() / signOut(): seed or clear the connection + session singletons
     fixtures/jellyfin.ts   → data factories (makeItem, makeSession, ...)
     mocks/tauri-store.ts   → in-memory LazyStore (+ readFakeStore, resetFakeStores)
     mocks/tauri-keychain.ts → mockKeychain(): in-memory stand-in for the Rust secure_* commands
@@ -106,20 +108,33 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
 
 ### `src/composables/`: the core of the suite
 
-- **Mock the `@/api/*` module(s) the composable imports. Never mock another composable.** Composables
-  that read `useServerConnection`/`useAuthSession` get real instances, seeded through their public API
-  (`useServerConnection().use(fakeServer)`, `useAuthSession().session.value = makeSession()`). Put
-  that seeding in a `src/test/utils.ts` helper once two specs need it.
+- **Never mock another composable.** For the api layer:
+  - `@/api/jellyfin/*` → automock it (`vi.mock('@/api/jellyfin/library')`, no factory) and set
+    return values per test with `vi.mocked(getLibraryItems).mockResolvedValue(...)`.
+  - `@/api/storage/*` → don't mock it. Mock the Tauri boundary under it (store fake + `mockKeychain()`),
+    so persistence is exercised for real ("after logout, `restoreActive()` returns null").
+- Composables that read `useServerConnection`/`useAuthSession` get real instances: `signIn()` in
+  `beforeEach` (after `signOut()` to clear the previous test), `signOut()` to test signed-out guards.
 - **Singleton state persists across tests in the same file.** Reset it in `beforeEach` through the
-  composable's public actions (`clearData()`, `reset()`, writing the returned refs). Only fall back to
-  `vi.resetModules()` + `await import(...)` for hidden module state with no public reset (e.g. a cache),
-  and re-import any mocked module after the reset so you hold the fresh `vi.fn` handles.
+  composable's public actions (`clearData()`, `reset()`, writing the returned refs). For hidden module
+  state with no public reset (`useTheme`'s init flag), `vi.resetModules()` + `await import(...)` a fresh
+  copy. The fake store survives that reload like a file on disk, so it doubles as an app restart. For a
+  hidden cache (`useDominantColor`), give every test its own keys instead.
 - **Choose the harness by what the composable uses:**
   - only `ref`/`computed`/plain functions → call it directly.
-  - `watch`/`watchEffect`/`onScopeDispose` (`useJellyfinResource`, `useLibraryItems`, `useDebounce`)
-    → run it inside `effectScope()` and `scope.stop()` in `afterEach`, which also exercises dispose logic.
-  - `onMounted`/`onUnmounted`/`inject`/`useRoute` → mount it in a host component (a `withSetup` helper
-    in `src/test/utils.ts`) and unmount in `afterEach`.
+  - `watch`/`watchEffect`/`onScopeDispose`/vueuse (`useJellyfinResource`, `useDebounce`,
+    `useServerStatus`) → `const [result, scope] = withScope(() => useX(...))`. Scopes are stopped after
+    each test automatically. Call `scope.stop()` yourself to test unmount behavior.
+  - `onMounted`/`onUnmounted`/`inject`/`useRoute` → mount it in a host component and unmount in
+    `afterEach`. (No composable needs this yet. Add a `withSetup` helper to `src/test/utils.ts` when one does.)
+- **Async control**: use `deferred()` to hold a request open and assert in-between states (loading,
+  "checking", stale responses), and `flushPromises()` after a watcher-triggered load. With fake timers,
+  `vi.advanceTimersByTimeAsync()` also flushes the promises the timer callback starts.
+- **Races are first-class edge cases**: for anything that fetches on a changing source (route id,
+  filters, image URL), test what happens when an older response arrives after a newer one.
+- **Layout-dependent composables** (`useClampToggle`): fake `scrollHeight`/`clientHeight` with
+  `Object.defineProperty`, and `vi.stubGlobal('ResizeObserver', ...)` with a class that captures the
+  callback so the test can fire resizes. `vi.unstubAllGlobals()` in `afterEach`.
 - Test the state contract every async composable here exposes: `loading` toggles around the call,
   `errorMessage` is set from the thrown `Error` (and the fallback string for non-`Error` throws), data
   is replaced or appended correctly (pagination in `useLibraryItems`), and guards short-circuit when
