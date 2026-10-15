@@ -12,6 +12,8 @@
   - [x] First UI version
   - [ ] Basic library sorting and filtering (Name, Date, Unwatched)
 
+- [ ] 2.5 Ui/Unit Tests
+
 - [ ] 3. Playback / DirectPlayer
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding
   - [ ] Pass raw stream URL directly to libmpv

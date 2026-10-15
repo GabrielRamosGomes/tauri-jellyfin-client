@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-	import { ALL_LETTERS, ALPHABET } from '@/composables/ui/useAlphabetFilter';
+	import { ALL_LETTERS, ALPHABET } from '@/composables/jellyfin/useLibraryQuery';
 	import { ToggleGroupItem, ToggleGroupRoot } from 'reka-ui';
 
 	defineProps<{ disabled?: boolean }>();

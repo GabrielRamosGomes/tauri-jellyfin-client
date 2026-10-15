@@ -7,6 +7,16 @@
 				class="library-count"
 				>{{ total }}</span
 			>
+
+			<library-toolbar
+				v-model:watched="watched"
+				v-model:genre-ids="genreIds"
+				:genres="genres"
+				:sort-key="sortKey"
+				:ascending="sortOrder === SortOrder.Ascending"
+				:disabled="loading"
+				@update:sort-key="setSort"
+				@toggle-order="toggleOrder" />
 		</div>
 
 		<div class="library-body">
@@ -33,22 +43,22 @@
 			<ui-empty-state
 				v-else
 				class="library-empty"
-				:title="letter === ALL_LETTERS ? 'This library is empty' : `No titles under ${letter}`"
+				:title="emptyTitle"
 				:description="
-					letter === ALL_LETTERS
-						? 'Items will show up here once your server adds them.'
-						: 'Try another letter or browse the whole library.'
+					hasActiveFilter
+						? 'Try different filters or browse the whole library.'
+						: 'Items will show up here once your server adds them.'
 				">
 				<ui-button
-					v-if="letter !== ALL_LETTERS"
+					v-if="hasActiveFilter"
 					variant="secondary"
-					@click="letter = ALL_LETTERS">
-					Show all titles
+					@click="clearFilters">
+					Clear filters
 				</ui-button>
 			</ui-empty-state>
 
 			<alphabet-rail
-				v-if="items.length || letter !== ALL_LETTERS"
+				v-if="sortKey === 'name' && (items.length || hasActiveFilter)"
 				v-model="letter"
 				:disabled="loading" />
 		</div>
@@ -63,14 +73,17 @@
 
 <script setup lang="ts">
 	import AlphabetRail from '@/components/features/library/AlphabetRail.vue';
+	import LibraryToolbar from '@/components/features/library/LibraryToolbar.vue';
 	import MediaItemCard from '@/components/features/media/MediaItemCard.vue';
 	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
 	import UiButton from '@/components/ui/UiButton.vue';
 	import UiEmptyState from '@/components/ui/UiEmptyState.vue';
 	import UiSpinner from '@/components/ui/UiSpinner.vue';
 	import { useLibraries } from '@/composables/jellyfin/useLibraries';
+	import { useLibraryGenres } from '@/composables/jellyfin/useLibraryGenres';
 	import { useLibraryItems } from '@/composables/jellyfin/useLibraryItems';
-	import { ALL_LETTERS, useAlphabetFilter } from '@/composables/ui/useAlphabetFilter';
+	import { ALL_LETTERS, useLibraryQuery } from '@/composables/jellyfin/useLibraryQuery';
+	import { SortOrder } from '@jellyfin/sdk/lib/generated-client/models';
 	import { useInfiniteScroll } from '@vueuse/core';
 	import { computed, watch } from 'vue';
 	import { useRoute } from 'vue-router';
@@ -83,17 +96,38 @@
 		() => libraries.value.find((library) => library.Id === libraryId.value)?.Name ?? 'Library',
 	);
 
-	const { letter, nameFilter } = useAlphabetFilter();
+	const {
+		letter,
+		sortKey,
+		sortOrder,
+		watched,
+		genreIds,
+		hasActiveFilter,
+		query,
+		setSort,
+		toggleOrder,
+		clearFilters,
+	} = useLibraryQuery();
 
-	// Sync so the letter resets before the items watcher runs; otherwise a library switch fires two fetches.
-	watch(libraryId, () => (letter.value = ALL_LETTERS), { flush: 'sync' });
+	// Sync so filters reset before the items watcher runs; otherwise a library switch fires two fetches.
+	watch(libraryId, clearFilters, { flush: 'sync' });
+
+	const { genres } = useLibraryGenres(libraryId);
 
 	const { items, total, loading, errorMessage, hasMore, loadMore } = useLibraryItems(
 		libraryId,
-		nameFilter,
+		query,
 	);
 
-	watch(letter, () => window.scrollTo({ top: 0 }));
+	const emptyTitle = computed(() => {
+		if (genreIds.value.length) return 'No titles match these filters';
+		const status = watched.value === 'all' ? '' : `${watched.value} `;
+		if (letter.value !== ALL_LETTERS) return `No ${status}titles under ${letter.value}`;
+		if (status) return `No ${status}titles`;
+		return 'This library is empty';
+	});
+
+	watch(query, () => window.scrollTo({ top: 0 }));
 
 	// The document is the scroll container (AppShell grows with content), not .app-content.
 	useInfiniteScroll(window, loadMore, {

@@ -1,6 +1,6 @@
 import type { BaseItemDto } from '@jellyfin/sdk/lib/generated-client/models';
 
-import { getLibraryItems, type NameFilter } from '@/api/jellyfin/library';
+import { getLibraryItems, type LibraryQuery } from '@/api/jellyfin/library';
 import { computed, ref, watch, type Ref } from 'vue';
 
 import { useAuthSession } from './useAuthSession';
@@ -8,7 +8,7 @@ import { useServerConnection } from './useServerConnection';
 
 const PAGE_SIZE = 100;
 
-export function useLibraryItems(libraryId: Ref<string>, nameFilter: Ref<NameFilter>) {
+export function useLibraryItems(libraryId: Ref<string>, query: Ref<LibraryQuery>) {
 	const items = ref<BaseItemDto[]>([]);
 	const total = ref(0);
 	const loading = ref(false);
@@ -27,7 +27,7 @@ export function useLibraryItems(libraryId: Ref<string>, nameFilter: Ref<NameFilt
 			const page = await getLibraryItems(api.value, session.value.userId, libraryId.value, {
 				startIndex,
 				limit: PAGE_SIZE,
-				nameFilter: nameFilter.value,
+				...query.value,
 			});
 			items.value = startIndex === 0 ? page.items : [...items.value, ...page.items];
 			total.value = page.total;
@@ -44,7 +44,7 @@ export function useLibraryItems(libraryId: Ref<string>, nameFilter: Ref<NameFilt
 		return fetchPage(items.value.length);
 	}
 
-	watch([libraryId, nameFilter], () => fetchPage(0), { immediate: true });
+	watch([libraryId, query], () => fetchPage(0), { immediate: true });
 
 	return { items, total, loading, errorMessage, hasMore, loadMore };
 }
