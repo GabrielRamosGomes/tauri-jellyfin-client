@@ -39,8 +39,8 @@ user can review and commit before the next one starts. Don't run ahead into the 
 - `globals: false`. Import `describe`/`it`/`expect`/`vi` from `vitest` explicitly in every file.
 - Config sets `clearMocks: true` and `restoreMocks: true`. Still configure mock return values inside
   each test or `beforeEach`, never in a `vi.mock` factory, so one test's setup can't leak into the next.
-- Package manager is **pnpm**: `pnpm test` (watch), `pnpm test:run`, `pnpm test:coverage`,
-  `pnpm vitest run path/to/file.spec.ts` for one file.
+- Package manager is **pnpm**: `pnpm test:run` (watch), `pnpm vitest run` (once), `pnpm test:cov`
+  (coverage report), `pnpm vitest run path/to/file.spec.ts` for one file.
 
 ## File layout
 
@@ -63,8 +63,9 @@ src/
   test/                    → shared test infrastructure only, never specs
     setup.ts               → jest-dom matchers, Testing Library cleanup, jsdom polyfills
     utils.ts               → render/mount helpers (withRouter, seedSession, ...)
-    fixtures/              → data factories (makeItem, makeSession, ...)
-    mocks/                 → reusable fakes (in-memory LazyStore, fake Jellyfin Api, ...)
+    fixtures/jellyfin.ts   → data factories (makeItem, makeSession, ...)
+    mocks/tauri-store.ts   → in-memory LazyStore (+ readFakeStore, resetFakeStores)
+    mocks/tauri-keychain.ts → mockKeychain(): in-memory stand-in for the Rust secure_* commands
 ```
 
 - Name specs `<SourceFileName>.spec.ts`, matching the source file's name exactly.
@@ -95,9 +96,11 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
   Assert the **request params** sent to the SDK and the **shape returned** (`?? []` defaults, totals,
   filtering such as `getLatestMedia` dropping episodes, branching such as `getLandscapeImageUrl`).
   Don't write tests for one-line pass-throughs that hold no logic.
-- **Storage (`api/storage/*`)**: `keychain.ts` calls `invoke` → use `mockIPC` from
-  `@tauri-apps/api/mocks` (and `clearMocks()` in `afterEach`). `@tauri-apps/plugin-store` → `vi.mock` it
-  with the in-memory `LazyStore` fake from `src/test/mocks/`. Assert observable behavior through the
+- **Storage (`api/storage/*`)**: anything reaching `invoke` (the keychain) → `mockKeychain()` from
+  `src/test/mocks/tauri-keychain.ts`, or raw `mockIPC` to assert the command contract. Tauri's
+  `clearMocks()` already runs after every test from `setup.ts`. `@tauri-apps/plugin-store` →
+  `vi.mock('@tauri-apps/plugin-store', () => import('@/test/mocks/tauri-store'))` and call
+  `resetFakeStores()` in `beforeEach`. Assert observable behavior through the
   module's own API (save then get round-trips, clear removes, active server is unset, ...), not which
   store keys were written.
 
@@ -201,4 +204,6 @@ When choosing what to cover next, go in this order. Skip pure-markup components 
       (`pnpm vitest run --sequence.shuffle`).
 - [ ] Every async step is awaited. No snapshot-only or `wrapper.vm` assertions.
 - [ ] Failure paths covered, not just the happy path.
-- [ ] `pnpm test:run`, `pnpm lint` and `vue-tsc --noEmit` all pass (specs under `src/` are type-checked).
+- [ ] Each new test fails when the behavior it guards is broken (temporarily break the source to check).
+- [ ] `pnpm vitest run`, `pnpm lint`, `pnpm format:check` and `pnpm vue-tsc --noEmit` all pass (specs
+      under `src/` are type-checked).

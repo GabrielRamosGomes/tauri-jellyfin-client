@@ -1,10 +1,14 @@
 // oxlint-disable-next-line import/no-unassigned-import -- registers jest-dom matchers and their types
 import '@testing-library/jest-dom/vitest';
+import { clearMocks as clearTauriMocks } from '@tauri-apps/api/mocks';
 import { cleanup } from '@testing-library/vue';
 import { afterEach } from 'vitest';
 
-// Testing Library only auto-cleans when vitest globals are on, and we keep them off.
-afterEach(() => cleanup());
+afterEach(() => {
+	// Testing Library only auto-cleans when vitest globals are on, and we keep them off.
+	cleanup();
+	clearTauriMocks();
+});
 
 // jsdom gaps that Reka UI's popper/select primitives rely on.
 globalThis.ResizeObserver ??= class {
