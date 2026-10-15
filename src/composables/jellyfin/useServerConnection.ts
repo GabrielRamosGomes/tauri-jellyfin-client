@@ -1,17 +1,15 @@
-import type { Api, Jellyfin } from '@jellyfin/sdk';
-import type { PublicSystemInfo } from '@jellyfin/sdk/lib/generated-client/models';
+import type { ConnectedServer } from '@/api/jellyfin/types';
+import type { Jellyfin } from '@jellyfin/sdk';
 
 import { connectToServer, createClient } from '@/api/jellyfin/jellyfin';
-import { ref, shallowRef } from 'vue';
+import { computed, ref, shallowRef } from 'vue';
 
 const loading = ref(false);
 const errorMessage = ref('');
 
 const sdk = shallowRef<Jellyfin>();
-const api = shallowRef<Api>();
-
-const serverUrl = ref('');
-const serverInfo = ref<PublicSystemInfo | null>(null);
+const current = shallowRef<ConnectedServer>();
+const api = computed(() => current.value?.api);
 
 async function ensureSdk() {
 	if (!sdk.value) sdk.value = await createClient();
@@ -19,19 +17,14 @@ async function ensureSdk() {
 	return sdk.value;
 }
 
-async function connect(url: string) {
+// Validates a server without touching the live connection, so the app keeps working
+// while the user is only trying out another server.
+async function probe(url: string) {
 	loading.value = true;
 	errorMessage.value = '';
 
 	try {
-		const client = await ensureSdk();
-		const server = await connectToServer(client, url);
-
-		serverUrl.value = server.serverUrl;
-		serverInfo.value = server.info;
-		api.value = server.api;
-
-		return server;
+		return await connectToServer(await ensureSdk(), url);
 	} catch (error) {
 		errorMessage.value =
 			error instanceof Error ? error.message : 'Failed to connect to Jellyfin Server';
@@ -44,12 +37,33 @@ async function connect(url: string) {
 	}
 }
 
+function use(server: ConnectedServer, accessToken?: string) {
+	if (accessToken) server.api.accessToken = accessToken;
+	current.value = server;
+}
+
+async function connect(url: string, accessToken?: string) {
+	const server = await probe(url);
+	if (server) use(server, accessToken);
+
+	return server;
+}
+
 function reset() {
-	serverUrl.value = '';
-	serverInfo.value = null;
-	api.value = undefined;
+	current.value = undefined;
 }
 
 export function useServerConnection() {
-	return { sdk, api, serverUrl, serverInfo, loading, errorMessage, connect, reset };
+	return {
+		sdk,
+		api,
+		current,
+		loading,
+		errorMessage,
+		probe,
+		use,
+		connect,
+		reset,
+		getSdk: ensureSdk,
+	};
 }

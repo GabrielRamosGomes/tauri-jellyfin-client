@@ -1,41 +1,58 @@
 <template>
-	<main class="container">
-		<h1 v-if="!isSignOutMode">Jellyfin Tauri</h1>
-
-		<server-list
-			v-if="!isSignOutMode"
-			:servers="servers"
-			:active-server-url="session?.serverUrl"
-			:loading="loading"
-			@switch="switchTo"
-			@forget="forget" />
+	<main class="container login-page">
+		<ui-icon-button
+			v-if="canGoBack"
+			class="login-back"
+			:icon="ArrowLeft"
+			label="Back"
+			:size="20"
+			@click="goBack" />
 
 		<login-form
-			v-if="serverInfo"
+			v-if="pendingServer"
 			v-model="credentials"
-			:server-info="serverInfo"
+			:server-info="pendingServer.info"
 			:loading="loading"
 			:error-message="errorMessage"
 			@submit="login"
 			@use-different-server="addServer" />
 
-		<server-connect-form
-			v-else
-			v-model="serverUrl"
-			:loading="loading"
-			:error-message="errorMessage"
+		<template v-else>
+			<h1>Jellyfin Tauri</h1>
+			<p class="server-meta">Choose a server to continue</p>
+
+			<server-list
+				:servers="servers"
+				:health="health"
+				:active-server-url="activeServerUrl"
+				:loading="loading"
+				@switch="switchTo"
+				@forget="forget"
+				@add="addDialogOpen = true" />
+		</template>
+
+		<add-server-dialog
+			v-model:open="addDialogOpen"
+			v-model:url="serverUrlInput"
+			:loading="connectLoading"
+			:error-message="connectError"
 			@submit="connect" />
 	</main>
 </template>
 
 <script setup lang="ts">
+	import type { ConnectedServer } from '@/api/jellyfin/types';
+
+	import AddServerDialog from '@/components/features/auth/AddServerDialog.vue';
 	import LoginForm from '@/components/features/auth/LoginForm.vue';
-	import ServerConnectForm from '@/components/features/auth/ServerConnectForm.vue';
 	import ServerList from '@/components/features/auth/ServerList.vue';
+	import UiIconButton from '@/components/ui/UiIconButton.vue';
 	import { useAuthSession } from '@/composables/jellyfin/useAuthSession';
 	import { useServerConnection } from '@/composables/jellyfin/useServerConnection';
 	import { useServers } from '@/composables/jellyfin/useServers';
-	import { computed, onMounted } from 'vue';
+	import { useServerStatus } from '@/composables/jellyfin/useServerStatus';
+	import { ArrowLeft } from 'lucide-vue-next';
+	import { computed, onMounted, ref, shallowRef, watch } from 'vue';
 	import { useRoute, useRouter } from 'vue-router';
 
 	const route = useRoute();
@@ -43,11 +60,11 @@
 
 	const {
 		api,
-		serverUrl,
-		serverInfo,
+		current,
 		loading: connectLoading,
 		errorMessage: connectError,
-		connect: connectToUrl,
+		probe,
+		use,
 		reset,
 	} = useServerConnection();
 
@@ -57,62 +74,122 @@
 		loading: authLoading,
 		errorMessage: authError,
 		login: authenticate,
-		logout: deactivate,
 		activate,
 		clearData,
 	} = useAuthSession();
 
-	const { servers, refresh: refreshServers, remove: removeServer } = useServers();
+	const {
+		servers,
+		activeServerUrl,
+		refresh: refreshServers,
+		remove: removeServer,
+	} = useServers();
+	const { health } = useServerStatus(servers);
 
 	const loading = computed(() => connectLoading.value || authLoading.value);
 	const errorMessage = computed(() => authError.value || connectError.value);
 
-	// Signing out lands here with ?mode=signout: keep the existing server
-	// connection so the username/password form shows immediately. Arriving any
-	// other way (e.g. "Change Server") always resets to "pick a server" mode.
+	// Signing out lands here with ?mode=signout and goes straight to the credentials form for
+	// the server just signed out of. Any other arrival (e.g. "Change Server") shows the picker.
 	const isSignOutMode = computed(() => route.query.mode === 'signout');
 
+	// The server being tried out lives here, apart from the live connection, so the rest of
+	// the app keeps working (and Back is instant) until a login actually succeeds.
+	const pendingServer = shallowRef<ConnectedServer | null>(null);
+	const serverUrlInput = ref('');
+	const addDialogOpen = ref(false);
+
+	const canGoBack = computed(() => !pendingServer.value && !!api.value && !!session.value);
+
+	watch(addDialogOpen, (open) => {
+		if (open) connectError.value = '';
+	});
+
 	onMounted(async () => {
-		await clearData();
-		if (!isSignOutMode.value) reset();
+		credentials.value = { username: '', password: '' };
+
+		if (isSignOutMode.value && current.value) {
+			pendingServer.value = current.value;
+			reset();
+		}
 
 		await refreshServers();
 	});
 
+	function goBack() {
+		router.push({ name: 'home' });
+	}
+
+	function normalizeUrl(url: string) {
+		return url.trim().replace(/\/+$/, '').toLowerCase();
+	}
+
+	function findSavedServer(url: string, serverId?: string | null) {
+		return servers.value.find(
+			(saved) =>
+				normalizeUrl(saved.serverUrl) === normalizeUrl(url) ||
+				(!!serverId && saved.serverId === serverId),
+		);
+	}
+
 	async function connect() {
-		await connectToUrl(serverUrl.value);
+		if (findSavedServer(serverUrlInput.value)) {
+			connectError.value = 'This server is already in your list.';
+			return;
+		}
+
+		const server = await probe(serverUrlInput.value);
+		if (!server) return;
+
+		// The same server can be reached through another address (LAN IP vs domain),
+		// so compare the resolved URL and the server's own id too.
+		if (findSavedServer(server.serverUrl, server.info.Id)) {
+			connectError.value = `${server.info.ServerName ?? 'This server'} is already in your list.`;
+			return;
+		}
+
+		pendingServer.value = server;
+		addDialogOpen.value = false;
 	}
 
 	async function login() {
-		if (!api.value) return;
-		await authenticate(api.value);
+		const server = pendingServer.value;
+		if (!server) return;
 
-		if (session.value) {
-			await refreshServers();
-			router.push({ name: 'home' });
-		}
+		const newSession = await authenticate(server.api);
+		if (!newSession) return;
+
+		use(server);
+		await refreshServers();
+		router.push({ name: 'home' });
 	}
 
 	function addServer() {
-		clearData();
-		reset();
+		pendingServer.value = null;
+		credentials.value = { username: '', password: '' };
+		authError.value = '';
 	}
 
 	async function switchTo(url: string) {
-		const full = await activate(url);
-		if (!full) return;
+		if (url === activeServerUrl.value) return;
 
-		const server = await connectToUrl(full.serverUrl);
+		// Probe first so a failed connection leaves the current session untouched.
+		const server = await probe(url);
 		if (!server) return;
 
-		server.api.accessToken = full.accessToken;
+		const saved = await activate(url);
+		if (!saved) return;
+
+		use(server, saved.accessToken);
 		router.push({ name: 'home' });
 	}
 
 	async function forget(url: string) {
+		const wasLive = url === session.value?.serverUrl;
 		await removeServer(url);
-		if (session.value?.serverUrl === url) {
-			await deactivate();
+
+		if (wasLive) {
+			await clearData();
 			reset();
 		}
 	}

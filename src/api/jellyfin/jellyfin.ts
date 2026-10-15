@@ -9,6 +9,7 @@ import { AuthenticatedSession, ClientAppInfo, ConnectedServer, JellyfinUser } fr
 const CLIENT_NAME = 'Jellyfin Tauri';
 const CLIENT_VERSION = version;
 const DEVICE_NAME = 'Desktop';
+const PING_TIMEOUT_MS = 5000;
 
 async function getOrCreateDeviceId(): Promise<string> {
 	let deviceId = await authStorage.getDeviceId();
@@ -70,6 +71,13 @@ export async function connectToServer(sdk: Jellyfin, serverUrl: string): Promise
 		info: response.data,
 		api: api,
 	};
+}
+
+export async function pingServer(sdk: Jellyfin, serverUrl: string) {
+	const systemApi = getSystemApi(createApiClient(sdk, serverUrl));
+	const { data } = await systemApi.getPublicSystemInfo({ timeout: PING_TIMEOUT_MS });
+
+	return data;
 }
 
 export async function getCurrentUser(api: Api) {

@@ -75,13 +75,11 @@ router.beforeEach(async (to) => {
 	const saved = await restoreActive();
 	if (!saved) return { name: 'login', query: { redirect: to.fullPath } };
 
-	const server = await connect(saved.serverUrl);
+	const server = await connect(saved.serverUrl, saved.accessToken);
 	if (!server) {
 		await logout();
 		return { name: 'login', query: { redirect: to.fullPath } };
 	}
-
-	server.api.accessToken = saved.accessToken;
 });
 
 export default router;

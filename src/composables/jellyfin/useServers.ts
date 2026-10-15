@@ -4,9 +4,11 @@ import { authStorage } from '@/api/storage/auth';
 import { ref } from 'vue';
 
 const servers = ref<StoredSessionMeta[]>([]);
+const activeServerUrl = ref<string | null>(null);
 
 async function refresh() {
 	servers.value = await authStorage.listSessions();
+	activeServerUrl.value = await authStorage.getActiveServerUrl();
 }
 
 async function remove(serverUrl: string) {
@@ -15,5 +17,5 @@ async function remove(serverUrl: string) {
 }
 
 export function useServers() {
-	return { servers, refresh, remove };
+	return { servers, activeServerUrl, refresh, remove };
 }

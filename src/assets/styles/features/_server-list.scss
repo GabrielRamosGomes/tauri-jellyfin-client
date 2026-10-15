@@ -1,30 +1,322 @@
 @use '../variables' as v;
 
+$server-icon-size: v.$space-3xl;
+
+@keyframes server-status-pulse {
+	from {
+		transform: scale(1);
+		opacity: 0.7;
+	}
+
+	to {
+		transform: scale(2.8);
+		opacity: 0;
+	}
+}
+
+@keyframes add-server-dialog-in {
+	from {
+		opacity: 0;
+		transform: translate(-50%, -48%) scale(0.97);
+	}
+
+	to {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+.login-page {
+	max-width: 1120px;
+
+	.login-form {
+		max-width: 480px;
+	}
+}
+
+.login-back {
+	position: fixed;
+	top: v.$space-lg;
+	left: v.$space-lg;
+}
+
 .server-list {
 	width: 100%;
 	list-style: none;
-	padding: 0;
-	margin: 0 0 16px;
-	display: flex;
-	flex-direction: column;
-	gap: 8px;
+	margin-top: v.$space-lg;
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+	gap: v.$space-lg;
 
 	li {
 		display: flex;
-		align-items: center;
-		gap: 8px;
-		padding: 8px 12px;
-		border: 1px solid var(--color-border-subtle);
-		border-radius: 8px;
-		background-color: var(--color-surface);
-		font-size: 0.9em;
+	}
+}
 
-		span {
-			flex: 1;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-			text-align: left;
+// Server card
+
+.server-card {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	text-align: left;
+	transition: border-color v.$transition-fast;
+
+	&:hover {
+		border-color: var(--color-border);
+	}
+}
+
+.server-card--active,
+.server-card--active:hover {
+	border-color: var(--color-primary);
+}
+
+.server-card-banner {
+	position: relative;
+	height: 96px;
+	padding: v.$space-md;
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-start;
+	background: linear-gradient(135deg, var(--color-primary-soft-bg), transparent 70%),
+		var(--color-border-subtle);
+}
+
+.server-card-icon {
+	position: absolute;
+	left: v.$space-lg;
+	bottom: -$server-icon-size * 0.5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: $server-icon-size;
+	height: $server-icon-size;
+	border: 1px solid var(--color-border);
+	border-radius: v.$radius-md;
+	background-color: var(--color-surface);
+	color: var(--color-text);
+	box-shadow: v.$shadow-sm;
+}
+
+.server-card-status {
+	display: inline-flex;
+	align-items: center;
+	gap: v.$space-sm;
+	padding: 2px v.$space-sm;
+	border-radius: v.$radius-full;
+	background-color: color-mix(in srgb, var(--color-bg) 70%, transparent);
+	font-size: v.$font-size-xs;
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+.server-card-body {
+	flex: 1;
+	padding: $server-icon-size * 0.5 + v.$space-md v.$space-lg 0;
+	display: flex;
+	flex-direction: column;
+	gap: v.$space-xs;
+
+	p {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+}
+
+.server-card-name {
+	font-size: v.$font-size-xl;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.server-card-url {
+	font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+	font-size: v.$font-size-sm;
+	color: var(--color-muted);
+}
+
+.server-card-user {
+	display: flex;
+	align-items: center;
+	gap: v.$space-xs;
+	margin-top: v.$space-sm;
+	font-size: v.$font-size-md;
+	color: var(--color-muted);
+}
+
+.server-card-footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: v.$space-lg;
+
+	// Pull the 34px button back so its 16px icon lines up with the text above.
+	.ui-icon-btn {
+		margin-left: calc((16px - 34px) / 2);
+	}
+}
+
+.server-card-connected {
+	display: inline-flex;
+	align-items: center;
+	gap: v.$space-xs;
+	font-size: v.$font-size-sm;
+	font-weight: 600;
+	color: var(--color-muted);
+}
+
+// Status dot
+
+.server-status-dot {
+	position: relative;
+	flex-shrink: 0;
+	width: 8px;
+	height: 8px;
+	border-radius: v.$radius-full;
+	background-color: var(--color-muted);
+	transition: background-color v.$transition-fast;
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background-color: inherit;
+	}
+}
+
+.server-status-dot--checking {
+	opacity: 0.5;
+}
+
+.server-status-dot--online {
+	background-color: var(--color-success-dot);
+
+	&::after {
+		animation: server-status-pulse 2s ease-out infinite;
+	}
+}
+
+.server-status-dot--offline {
+	background-color: var(--color-error);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.server-status-dot::after {
+		animation: none;
+	}
+}
+
+// Add server card
+
+.server-add-card {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: v.$space-sm;
+	min-height: 320px;
+	padding: v.$space-lg;
+	border: 2px dashed var(--color-border);
+	border-radius: v.$radius-lg;
+	background: none;
+	color: var(--color-text);
+	transition:
+		border-color v.$transition-fast,
+		background-color v.$transition-fast;
+
+	&:hover:not(:disabled) {
+		border-color: var(--color-primary);
+		background-color: var(--color-primary-glow);
+
+		.server-add-card-icon {
+			color: var(--color-primary);
 		}
 	}
+
+	&:active:not(:disabled) {
+		background-color: var(--color-primary-soft-bg);
+	}
+
+	// Beats the global button:hover/:active fills, which also apply while disabled.
+	&:disabled {
+		background: none;
+	}
+}
+
+.server-add-card-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: $server-icon-size + v.$space-md;
+	height: $server-icon-size + v.$space-md;
+	margin-bottom: v.$space-xs;
+	border-radius: v.$radius-full;
+	background-color: var(--color-surface);
+	color: var(--color-muted);
+	transition: color v.$transition-fast;
+}
+
+.server-add-card-title {
+	font-size: v.$font-size-lg;
+	font-weight: 700;
+}
+
+// Add server dialog
+
+.add-server-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 60;
+	background-color: rgba(0, 0, 0, 0.6);
+	backdrop-filter: blur(4px);
+}
+
+.add-server-dialog {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	z-index: 61;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: v.$space-xs;
+	width: min(480px, calc(100vw - #{v.$space-xl * 2}));
+	padding: v.$space-xl;
+	border: 1px solid var(--color-border-subtle);
+	border-radius: v.$radius-lg;
+	background-color: var(--color-surface);
+	box-shadow: v.$shadow-lg;
+	text-align: center;
+	animation: add-server-dialog-in 0.15s ease-out;
+}
+
+.add-server-dialog-icon {
+	margin-bottom: v.$space-sm;
+	color: var(--color-text);
+}
+
+.add-server-dialog-title {
+	font-size: v.$font-size-xl;
+	font-weight: 700;
+}
+
+.add-server-dialog-form {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: v.$space-md;
+	margin-top: v.$space-lg;
+	text-align: left;
+}
+
+.add-server-dialog-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: v.$space-sm;
 }

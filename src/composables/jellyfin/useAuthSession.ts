@@ -11,7 +11,7 @@ const errorMessage = ref('');
 const session = ref<AuthenticatedSession | null>(null);
 const credentials = ref<JellyfinUser>({ username: '', password: '' });
 
-async function login(api: Api) {
+async function login(api: Api): Promise<AuthenticatedSession | null> {
 	loading.value = true;
 	errorMessage.value = '';
 
@@ -21,9 +21,13 @@ async function login(api: Api) {
 
 		session.value = userSession;
 		credentials.value.password = ''; // We don't want to keep the password stored as plain text during runtime
+
+		return userSession;
 	} catch (error) {
 		errorMessage.value = error instanceof Error ? error.message : 'Login failed.';
 		console.error('Error authenticating with Jellyfin server:', errorMessage.value);
+
+		return null;
 	} finally {
 		loading.value = false;
 	}

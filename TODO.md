@@ -11,7 +11,7 @@
   - [x] Detailed media view with backdrops (synopsis, year, runtime, stream specs, seasons)
   - [x] First UI version
   - [x] Basic library sorting and filtering (Name, Date, Unwatched)
-  - [ ] Improve switch/connect server screens
+  - [x] Improve switch/connect server screens
 
 - [ ] 3. Ui/Unit Tests
   - [ ] Added vitest for unit/component tests
