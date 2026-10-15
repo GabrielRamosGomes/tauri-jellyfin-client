@@ -1,4 +1,5 @@
-import { nextTick, onBeforeUnmount, ref, watch, type WatchSource } from 'vue';
+import { useResizeObserver } from '@vueuse/core';
+import { nextTick, ref, watch, type WatchSource } from 'vue';
 
 export function useClampToggle(source: WatchSource) {
 	const el = ref<HTMLElement>();
@@ -15,24 +16,12 @@ export function useClampToggle(source: WatchSource) {
 		expanded.value = !expanded.value;
 	}
 
-	const resizeObserver = new ResizeObserver(() => measure());
-
-	watch(
-		el,
-		(node, _prev, onCleanup) => {
-			if (!node) return;
-			resizeObserver.observe(node);
-			onCleanup(() => resizeObserver.unobserve(node));
-		},
-		{ immediate: true },
-	);
+	useResizeObserver(el, measure);
 
 	watch(source, () => {
 		expanded.value = false;
 		nextTick(measure);
 	});
-
-	onBeforeUnmount(() => resizeObserver.disconnect());
 
 	return { el, expanded, canToggle, toggle };
 }

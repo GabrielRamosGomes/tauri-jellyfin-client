@@ -12,6 +12,7 @@ import {
 	ItemSortBy,
 	SortOrder,
 } from '@jellyfin/sdk/lib/generated-client/models';
+import { getFilterApi } from '@jellyfin/sdk/lib/utils/api/filter-api';
 import { getImageApi } from '@jellyfin/sdk/lib/utils/api/image-api';
 import { getItemsApi } from '@jellyfin/sdk/lib/utils/api/items-api';
 import { getPlaystateApi } from '@jellyfin/sdk/lib/utils/api/playstate-api';
@@ -54,6 +55,61 @@ export async function getChildItems(
 	});
 
 	return data.Items ?? [];
+}
+
+export interface NameFilter {
+	nameStartsWith?: string;
+	nameLessThan?: string;
+}
+
+export interface LibraryQuery {
+	sortBy: ItemSortBy[];
+	sortOrder: SortOrder;
+	filters?: ItemFilter[];
+	genreIds?: string[];
+	nameFilter?: NameFilter;
+}
+
+export interface LibraryPageQuery extends LibraryQuery {
+	startIndex: number;
+	limit: number;
+}
+
+export async function getLibraryItems(
+	api: Api,
+	userId: string,
+	parentId: string,
+	{ startIndex, limit, sortBy, sortOrder, filters, genreIds, nameFilter }: LibraryPageQuery,
+) {
+	const itemsApi = getItemsApi(api);
+	const { data } = await itemsApi.getItems({
+		userId,
+		parentId,
+		recursive: false,
+		sortBy,
+		sortOrder: [sortOrder],
+		filters,
+		genreIds,
+		startIndex,
+		limit,
+		...nameFilter,
+	});
+
+	return { items: data.Items ?? [], total: data.TotalRecordCount ?? 0 };
+}
+
+export interface LibraryGenre {
+	Id: string;
+	Name: string;
+}
+
+export async function getLibraryGenres(api: Api, userId: string, parentId: string) {
+	const filterApi = getFilterApi(api);
+	const { data } = await filterApi.getQueryFilters({ userId, parentId, recursive: true });
+
+	return (data.Genres ?? []).filter(
+		(genre): genre is LibraryGenre => !!genre.Id && !!genre.Name,
+	);
 }
 
 export async function getItemDetail(api: Api, userId: string, itemId: string) {

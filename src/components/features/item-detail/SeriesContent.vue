@@ -39,11 +39,10 @@
 			v-if="children.length"
 			title="Seasons"
 			:items="children" />
-		<p
+		<ui-empty-state
 			v-else
-			class="server-meta">
-			Nothing here yet.
-		</p>
+			title="No seasons yet"
+			:icon="Clapperboard" />
 	</template>
 </template>
 
@@ -54,9 +53,11 @@
 	import MediaEpisodeCard from '@/components/features/media/MediaEpisodeCard.vue';
 	import MediaItemCardSkeleton from '@/components/features/media/MediaItemCardSkeleton.vue';
 	import MediaRow from '@/components/features/media/MediaRow.vue';
+	import UiEmptyState from '@/components/ui/UiEmptyState.vue';
 	import { useChildItems } from '@/composables/jellyfin/useChildItems';
 	import { useNextUp } from '@/composables/jellyfin/useNextUp';
 	import { ItemSortBy } from '@jellyfin/sdk/lib/generated-client/models';
+	import { Clapperboard } from 'lucide-vue-next';
 	import { computed } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();

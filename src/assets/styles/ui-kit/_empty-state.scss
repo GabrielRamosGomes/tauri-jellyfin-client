@@ -1,0 +1,34 @@
+@use '../variables' as v;
+
+.ui-empty-state {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: v.$space-sm;
+	padding: v.$space-3xl v.$space-lg;
+	text-align: center;
+	color: var(--color-muted);
+}
+
+.ui-empty-state-icon {
+	margin-bottom: v.$space-sm;
+	opacity: 0.6;
+}
+
+.ui-empty-state-title {
+	font-size: v.$font-size-xl;
+	font-weight: 700;
+	color: var(--color-text);
+}
+
+.ui-empty-state-desc {
+	max-width: 40ch;
+	font-size: v.$font-size-md;
+}
+
+.ui-empty-state-actions {
+	display: flex;
+	gap: v.$space-sm;
+	margin-top: v.$space-md;
+}
