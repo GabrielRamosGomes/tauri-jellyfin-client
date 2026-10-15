@@ -78,12 +78,7 @@
 		clearData,
 	} = useAuthSession();
 
-	const {
-		servers,
-		activeServerUrl,
-		refresh: refreshServers,
-		remove: removeServer,
-	} = useServers();
+	const { servers, activeServerUrl, refresh: refreshServers, remove: removeServer } = useServers();
 	const { health } = useServerStatus(servers);
 
 	const loading = computed(() => connectLoading.value || authLoading.value);

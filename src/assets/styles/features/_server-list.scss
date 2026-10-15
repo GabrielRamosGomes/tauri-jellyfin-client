@@ -80,7 +80,8 @@ $server-icon-size: v.$space-3xl;
 	display: flex;
 	justify-content: flex-end;
 	align-items: flex-start;
-	background: linear-gradient(135deg, var(--color-primary-soft-bg), transparent 70%),
+	background:
+		linear-gradient(135deg, var(--color-primary-soft-bg), transparent 70%),
 		var(--color-border-subtle);
 }
 

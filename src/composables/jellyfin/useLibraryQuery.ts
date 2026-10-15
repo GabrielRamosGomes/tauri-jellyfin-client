@@ -16,7 +16,10 @@ const SORTS: Record<LibrarySortKey, { sortBy: ItemSortBy[]; order: SortOrder }> 
 		sortBy: [ItemSortBy.PremiereDate, ItemSortBy.ProductionYear, ItemSortBy.SortName],
 		order: SortOrder.Descending,
 	},
-	rating: { sortBy: [ItemSortBy.CommunityRating, ItemSortBy.SortName], order: SortOrder.Descending },
+	rating: {
+		sortBy: [ItemSortBy.CommunityRating, ItemSortBy.SortName],
+		order: SortOrder.Descending,
+	},
 };
 
 const WATCHED_FILTERS: Record<WatchedFilter, ItemFilter[] | undefined> = {

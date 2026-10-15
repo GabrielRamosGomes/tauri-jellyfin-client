@@ -107,9 +107,7 @@ export async function getLibraryGenres(api: Api, userId: string, parentId: strin
 	const filterApi = getFilterApi(api);
 	const { data } = await filterApi.getQueryFilters({ userId, parentId, recursive: true });
 
-	return (data.Genres ?? []).filter(
-		(genre): genre is LibraryGenre => !!genre.Id && !!genre.Name,
-	);
+	return (data.Genres ?? []).filter((genre): genre is LibraryGenre => !!genre.Id && !!genre.Name);
 }
 
 export async function getItemDetail(api: Api, userId: string, itemId: string) {
