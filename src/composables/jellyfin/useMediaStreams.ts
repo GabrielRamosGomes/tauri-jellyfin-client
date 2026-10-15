@@ -29,11 +29,13 @@ export function useMediaStreams(item: Ref<BaseItemDto>) {
 
 	const videoLabel = computed(() => video.value?.DisplayTitle ?? undefined);
 
+	// Same thresholds as jellyfin-web, so cropped (scope) and anamorphic encodes still rank by width.
 	const resolutionLabel = computed(() => {
-		const height = video.value?.Height;
-		if (!height) return undefined;
-		if (height >= 2160) return '4K';
-		if (height >= 720) return 'HD';
+		const width = video.value?.Width ?? 0;
+		const height = video.value?.Height ?? 0;
+		if (!width && !height) return undefined;
+		if (width >= 3800 || height >= 2000) return '4K';
+		if (width >= 1200 || height >= 700) return 'HD';
 		return 'SD';
 	});
 

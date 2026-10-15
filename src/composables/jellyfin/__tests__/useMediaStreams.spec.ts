@@ -40,13 +40,15 @@ describe('useMediaStreams', () => {
 	});
 
 	it.each([
-		[2160, '4K'],
-		[1080, 'HD'],
-		[720, 'HD'],
-		[576, 'SD'],
-		[undefined, undefined],
-	])('labels a %s-pixel-tall video as %s', (Height, label) => {
-		const { resolutionLabel } = streamsOf([video({ Height })]);
+		[3840, 2160, '4K'],
+		[3840, 1600, '4K'],
+		[1920, 1080, 'HD'],
+		[1920, 800, 'HD'],
+		[1280, 720, 'HD'],
+		[720, 576, 'SD'],
+		[undefined, undefined, undefined],
+	])('labels a %sx%s video as %s', (Width, Height, label) => {
+		const { resolutionLabel } = streamsOf([video({ Width, Height })]);
 
 		expect(resolutionLabel.value).toBe(label);
 	});
