@@ -11,7 +11,9 @@
 				@click="router.back()" />
 			<router-link
 				:to="{ name: 'home' }"
-				class="ui-icon-btn app-header-home">
+				class="ui-icon-btn app-header-home"
+				aria-label="Home"
+				title="Home">
 				<home :size="18" />
 			</router-link>
 		</div>

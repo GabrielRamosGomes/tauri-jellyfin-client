@@ -22,10 +22,14 @@ describe('ExternalLinks', () => {
 
 	it.each([
 		['no links', []],
-		['links missing from the response', null],
-	])('renders nothing for %s', (_, value) => {
+		['links nulled by the server', null],
+		['an item without the field at all', undefined],
+	])('renders nothing, and warns about nothing, for %s', (_, value) => {
+		const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
 		render(ExternalLinks, { props: { links: value } });
 
 		expect(screen.queryByRole('button')).not.toBeInTheDocument();
+		expect(warn).not.toHaveBeenCalled();
 	});
 });

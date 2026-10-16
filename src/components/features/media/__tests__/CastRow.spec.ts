@@ -3,12 +3,12 @@ import type { BaseItemDto, BaseItemPerson } from '@jellyfin/sdk/lib/generated-cl
 import { getItemDetail, getLibraryImageUrl, getPersonImageUrl } from '@/api/jellyfin/library';
 import CastRow from '@/components/features/media/CastRow.vue';
 import { makeItem } from '@/test/fixtures/jellyfin';
+import { renderAt } from '@/test/router';
 import { signIn, signOut } from '@/test/session';
 import { deferred } from '@/test/utils';
 import { PersonKind } from '@jellyfin/sdk/lib/generated-client/models';
-import { fireEvent, render, screen } from '@testing-library/vue';
+import { fireEvent, screen } from '@testing-library/vue';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { createMemoryHistory, createRouter } from 'vue-router';
 
 vi.mock('@/api/jellyfin/library');
 
@@ -21,11 +21,7 @@ const andrew: BaseItemPerson = {
 };
 
 function renderCast(people: BaseItemPerson[] = [andrew]) {
-	const router = createRouter({
-		history: createMemoryHistory(),
-		routes: [{ path: '/person/:id', name: 'person', component: { render: () => null } }],
-	});
-	render(CastRow, { props: { people }, global: { plugins: [router] } });
+	return renderAt(CastRow, '/item/movie-1', { props: { people } });
 }
 
 beforeEach(() => {
@@ -40,8 +36,8 @@ beforeEach(() => {
 });
 
 describe('CastRow', () => {
-	it('lists actors and guest stars, not the crew', () => {
-		renderCast([
+	it('lists actors and guest stars, not the crew', async () => {
+		await renderCast([
 			andrew,
 			{ Id: 'p-guest', Name: 'Guest Star', Type: PersonKind.GuestStar },
 			{ Id: 'p-fincher', Name: 'David Fincher', Type: PersonKind.Director },
@@ -52,10 +48,19 @@ describe('CastRow', () => {
 		expect(screen.queryByText('David Fincher')).not.toBeInTheDocument();
 	});
 
+	it('links each cast member to their own page', async () => {
+		await renderCast();
+
+		expect(screen.getByRole('link', { name: /Andrew Garfield/ })).toHaveAttribute(
+			'href',
+			'/person/p-andrew',
+		);
+	});
+
 	it('swaps a photo that fails to load for initials, then for the refreshed photo', async () => {
 		const refreshed = deferred<BaseItemDto>();
 		vi.mocked(getItemDetail).mockReturnValue(refreshed.promise);
-		renderCast();
+		await renderCast();
 
 		await fireEvent.error(screen.getByRole('img', { name: 'Andrew Garfield' }));
 
@@ -69,7 +74,7 @@ describe('CastRow', () => {
 
 	it('keeps the initials when the photo cannot be recovered', async () => {
 		vi.mocked(getItemDetail).mockResolvedValue(makeItem({ Id: 'p-andrew', ImageTags: {} }));
-		renderCast();
+		await renderCast();
 
 		await fireEvent.error(screen.getByRole('img', { name: 'Andrew Garfield' }));
 

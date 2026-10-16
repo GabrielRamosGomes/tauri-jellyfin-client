@@ -65,6 +65,8 @@ src/
                              mocks, real timers; jsdom polyfills. Must never import app modules.
     utils.ts               → withScope(), deferred(). App-free, because setup.ts imports it
     session.ts             → signIn() / signOut(): seed or clear the connection + session singletons
+    router.ts              → createTestRouter() / renderAt(component, path, options): memory router
+                             mirroring src/router/index.ts (names, paths, login's requiresAuth meta)
     fixtures/jellyfin.ts   → data factories (makeItem, makeSession, ...)
     mocks/tauri-store.ts   → in-memory LazyStore (+ readFakeStore, resetFakeStores)
     mocks/tauri-keychain.ts → mockKeychain(): in-memory stand-in for the Rust secure_* commands
@@ -175,14 +177,25 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
 
 ### `src/views/`, `layouts/`, `components/layout/`, `router/`: integration
 
-- Mock only `@/api/*`. Use a real router: `createRouter({ history: createMemoryHistory(), routes })`
-  with just the routes the test needs, passed via `global.plugins`. Navigate with `await router.push()`
-  then `await router.isReady()`.
-- Few, scenario-shaped tests: "shows the server list when there's no session", "loads the next page
-  when scrolled", "redirects to login with `?redirect=`". Don't re-test what component specs cover.
-- `src/router/index.ts` builds the router with `createWebHistory` at import time. To test the guard,
-  extract it into an exported function first (a small, allowed testability refactor) rather than
-  importing the app router.
+- Mock only `@/api/jellyfin/*` (automock) and the Tauri boundary (store fake, `mockKeychain()`).
+  Composables, child components and Reka stay real.
+- Render with `renderAt(View, '/library/lib-1', { props })` from `src/test/router.ts`. It's a memory
+  router with every app route name pointing at a blank page, so the view under test is rendered
+  directly and its navigations show up in `router.currentRoute`. Change the route with
+  `await router.push(...)` to test route-param reactions. **When you add a route to
+  `src/router/index.ts`, add it to `createTestRouter()` too.** Use `renderAt` for _any_ component
+  containing a `router-link` (cards, cast rows, ...), never an ad-hoc router. A router missing the `/`
+  route logs "No match found for location with path ''".
+- Few, scenario-shaped tests: "first launch adds a server, signs in and opens the app", "opening another
+  library starts unfiltered with one request", "redirects to login with `?redirect=`". Don't re-test
+  what component or composable specs already cover.
+- The navigation guard lives in `src/router/guards.ts` (`restoreSession`). Test it on
+  `createTestRouter()` with `router.beforeEach(restoreSession)`, never by importing the app router
+  (it uses `createWebHistory`).
+- Async UI that settles after mount (saved servers, health checks, fetched items): wait with
+  `findBy*` / `vi.waitFor`. A list item's content may not exist yet on the first query.
+- Cards repeat their title (image fallback text plus caption). Query them as links
+  (`getByRole('link', { name: /Alien/ })`) rather than by text.
 
 ## How to write a test
 
@@ -245,3 +258,6 @@ When choosing what to cover next, go in this order. Skip pure-markup components 
 - [ ] Each new test fails when the behavior it guards is broken (temporarily break the source to check).
 - [ ] `pnpm vitest run`, `pnpm lint`, `pnpm format:check` and `pnpm vue-tsc --noEmit` all pass (specs
       under `src/` are type-checked).
+- [ ] `pnpm vitest run --reporter=verbose` prints no `stderr` blocks. A `[Vue warn]` or
+      `[Vue Router warn]` is either a test setup mistake to fix or a real component bug to report.
+      Expected `console.error`s in failure-path tests are silenced with `vi.spyOn`.

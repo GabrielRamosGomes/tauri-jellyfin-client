@@ -23,5 +23,5 @@
 	import { openExternal } from '@/utils/openExternal';
 	import { ExternalLink } from 'lucide-vue-next';
 
-	defineProps<{ links: BaseItemDto['ExternalUrls'] }>();
+	defineProps<{ links?: BaseItemDto['ExternalUrls'] }>();
 </script>

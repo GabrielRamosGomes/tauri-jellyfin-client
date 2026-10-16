@@ -54,7 +54,7 @@ src/components/    → presentational; receive data via props, emit events. No a
 - `/login` (`name: 'login'`) — `meta: { requiresAuth: false }`, standalone (not nested under the app shell).
 - Everything else is nested under `/` → `src/layouts/AppShell.vue` (`meta: { requiresAuth: true }` on the parent, inherited by all children): `home`, `settings`, `library/:id`, `item/:id`, `person/:id`, plus `dashboard` and `metadata-manager` (both placeholders rendering `ComingSoonView`). See `src/router/index.ts` for the live list.
 
-A single `router.beforeEach` guard handles session restoration for protected routes (see `src/router/index.ts` for the code). It short-circuits on `/login`, and otherwise: if `api`/`session` are already set it returns immediately; otherwise it tries `restoreActive()` from storage, redirects to `login` with a `?redirect=` query when there's nothing to restore, reconnects the saved server, and reapplies the saved access token.
+A single `router.beforeEach` guard handles session restoration for protected routes (`restoreSession` in `src/router/guards.ts`, registered in `src/router/index.ts`). It short-circuits on `/login`, and otherwise: if `api`/`session` are already set it returns immediately; otherwise it tries `restoreActive()` from storage, redirects to `login` with a `?redirect=` query when there's nothing to restore, reconnects the saved server, and reapplies the saved access token.
 
 It runs once per app launch: the guard calls straight into the `useAuthSession`/`useServerConnection` singleton composables (not `src/api/` directly), and once `api`/`session` are populated, later navigations short-circuit. Views and layout components then read the same singletons reactively — there's no separate "auth store" to keep in sync.
 

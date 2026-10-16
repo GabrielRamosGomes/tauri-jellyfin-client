@@ -2,6 +2,7 @@
 	<dropdown-menu-root v-if="session">
 		<dropdown-menu-trigger
 			class="ui-avatar app-header-avatar"
+			aria-label="Account"
 			title="Account">
 			<img
 				v-if="avatarUrl && !avatarFailed"
