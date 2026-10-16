@@ -39,8 +39,14 @@ user can review and commit before the next one starts. Don't run ahead into the 
 - `globals: false`. Import `describe`/`it`/`expect`/`vi` from `vitest` explicitly in every file.
 - Config sets `clearMocks: true` and `restoreMocks: true`. Still configure mock return values inside
   each test or `beforeEach`, never in a `vi.mock` factory, so one test's setup can't leak into the next.
-- Package manager is **pnpm**: `pnpm test:run` (watch), `pnpm vitest run` (once), `pnpm test:cov`
+- Package manager is **pnpm**: `pnpm test` (once), `pnpm vitest` (watch), `pnpm test:cov`
   (coverage report), `pnpm vitest run path/to/file.spec.ts` for one file.
+- CI runs on every PR and push to `main`, as two workflows: `.github/workflows/lint.yml`
+  (`pnpm lint --deny-warnings`, `pnpm format:check`) and `.github/workflows/test.yml`, with three
+  parallel jobs: `typecheck` (`vue-tsc --noEmit`, `tsc -p tsconfig.node.json`), `build` (`vite build`)
+  and `unit` (`pnpm test`). Every job starts with the shared `.github/actions/setup` (pnpm, Node,
+  cached install). Change tool versions there, not in each workflow. A lint _warning_ fails CI, as does any spec that only passes in your local timezone or
+  locale (runners use UTC/en-US).
 
 ## File layout
 
@@ -256,8 +262,8 @@ When choosing what to cover next, go in this order. Skip pure-markup components 
 - [ ] Every async step is awaited. No snapshot-only or `wrapper.vm` assertions.
 - [ ] Failure paths covered, not just the happy path.
 - [ ] Each new test fails when the behavior it guards is broken (temporarily break the source to check).
-- [ ] `pnpm vitest run`, `pnpm lint`, `pnpm format:check` and `pnpm vue-tsc --noEmit` all pass (specs
-      under `src/` are type-checked).
+- [ ] `pnpm test`, `pnpm lint --deny-warnings`, `pnpm format:check` and `pnpm vue-tsc --noEmit` all
+      pass (specs under `src/` are type-checked). These are what CI runs.
 - [ ] `pnpm vitest run --reporter=verbose` prints no `stderr` blocks. A `[Vue warn]` or
       `[Vue Router warn]` is either a test setup mistake to fix or a real component bug to report.
       Expected `console.error`s in failure-path tests are silenced with `vi.spyOn`.
