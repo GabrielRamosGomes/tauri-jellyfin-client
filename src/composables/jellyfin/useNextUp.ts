@@ -9,10 +9,13 @@ import { useServerConnection } from './useServerConnection';
 export function useNextUp(seriesId: Ref<string>) {
 	const loading = ref(false);
 	const nextUpItem = ref<BaseItemDto | undefined>();
+	let requestSeq = 0;
 
 	async function refresh() {
 		if (!seriesId.value) {
+			requestSeq++;
 			nextUpItem.value = undefined;
+			loading.value = false;
 			return;
 		}
 
@@ -21,15 +24,16 @@ export function useNextUp(seriesId: Ref<string>) {
 
 		if (!api.value || !session.value) return;
 
+		const seq = ++requestSeq;
 		loading.value = true;
 
 		try {
 			const items = await getNextUp(api.value, session.value.userId, seriesId.value);
-			nextUpItem.value = items[0];
+			if (seq === requestSeq) nextUpItem.value = items[0];
 		} catch (error) {
 			console.error('Error fetching next up:', error);
 		} finally {
-			loading.value = false;
+			if (seq === requestSeq) loading.value = false;
 		}
 	}
 

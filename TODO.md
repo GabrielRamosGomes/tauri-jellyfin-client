@@ -13,9 +13,9 @@
   - [x] Basic library sorting and filtering (Name, Date, Unwatched)
   - [x] Improve switch/connect server screens
 
-- [ ] 3. Ui/Unit Tests
-  - [ ] Added vitest for unit/component tests
-  - [ ] Actually add CI/CD
+- [x] 3. Ui/Unit Tests
+  - [x] Added vitest for unit/component tests
+  - [x] Actually add CI/CD
 
 - [ ] 4. Playback / DirectPlayer
   - [ ] Send custom Client Profile in /PlaybackInfo to bypass server transcoding

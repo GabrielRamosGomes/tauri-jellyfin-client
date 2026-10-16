@@ -22,10 +22,13 @@ export function useJellyfinResource<T>(options: ResourceOptions<T>) {
 	const data = ref(options.initial) as Ref<T>;
 	const loading = ref(false);
 	const errorMessage = ref('');
+	let requestSeq = 0;
 
 	async function refresh() {
 		if (options.enabled && !options.enabled()) {
+			requestSeq++;
 			data.value = options.initial;
+			loading.value = false;
 			return;
 		}
 
@@ -33,16 +36,20 @@ export function useJellyfinResource<T>(options: ResourceOptions<T>) {
 		const { session } = useAuthSession();
 		if (!api.value || !session.value) return;
 
+		const seq = ++requestSeq;
 		loading.value = true;
 		errorMessage.value = '';
 		try {
-			data.value = await options.fetcher({ api: api.value, userId: session.value.userId });
+			const result = await options.fetcher({ api: api.value, userId: session.value.userId });
+			if (seq === requestSeq) data.value = result;
 		} catch (error) {
 			const fallback = options.errorLabel ?? 'Something went wrong.';
-			errorMessage.value = error instanceof Error ? error.message : fallback;
+			if (seq === requestSeq) {
+				errorMessage.value = error instanceof Error ? error.message : fallback;
+			}
 			console.error(fallback, error);
 		} finally {
-			loading.value = false;
+			if (seq === requestSeq) loading.value = false;
 		}
 	}
 

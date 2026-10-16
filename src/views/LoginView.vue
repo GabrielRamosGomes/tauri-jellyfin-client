@@ -84,12 +84,15 @@
 	const loading = computed(() => connectLoading.value || authLoading.value);
 	const errorMessage = computed(() => authError.value || connectError.value);
 
-	// Signing out lands here with ?mode=signout and goes straight to the credentials form for
-	// the server just signed out of. Any other arrival (e.g. "Change Server") shows the picker.
 	const isSignOutMode = computed(() => route.query.mode === 'signout');
 
-	// The server being tried out lives here, apart from the live connection, so the rest of
-	// the app keeps working (and Back is instant) until a login actually succeeds.
+	const redirectPath = computed(() => {
+		const target = route.query.redirect;
+		return typeof target === 'string' && target.startsWith('/') && !target.startsWith('//')
+			? target
+			: undefined;
+	});
+
 	const pendingServer = shallowRef<ConnectedServer | null>(null);
 	const serverUrlInput = ref('');
 	const addDialogOpen = ref(false);
@@ -136,8 +139,6 @@
 		const server = await probe(serverUrlInput.value);
 		if (!server) return;
 
-		// The same server can be reached through another address (LAN IP vs domain),
-		// so compare the resolved URL and the server's own id too.
 		if (findSavedServer(server.serverUrl, server.info.Id)) {
 			connectError.value = `${server.info.ServerName ?? 'This server'} is already in your list.`;
 			return;
@@ -156,7 +157,7 @@
 
 		use(server);
 		await refreshServers();
-		router.push({ name: 'home' });
+		router.push(redirectPath.value ?? { name: 'home' });
 	}
 
 	function addServer() {

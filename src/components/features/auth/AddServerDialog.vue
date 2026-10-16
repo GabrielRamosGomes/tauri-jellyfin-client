@@ -15,9 +15,9 @@
 				<form
 					class="add-server-dialog-form"
 					@submit.prevent="emit('submit')">
+					<!-- Not type="url": native validation rejects bare "192.168.1.20:8096", which server discovery accepts. -->
 					<ui-input
 						v-model="serverUrl"
-						type="url"
 						:icon="Server"
 						placeholder="https://jellyfin.example.com"
 						required

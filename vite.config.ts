@@ -1,7 +1,7 @@
 import path from 'path';
 
 import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 const host = process.env.TAURI_DEV_HOST;
 
@@ -28,6 +28,19 @@ export default defineConfig(async () => ({
 			: undefined,
 		watch: {
 			ignored: ['**/src-tauri/**'],
+		},
+	},
+
+	test: {
+		environment: 'jsdom',
+		include: ['src/**/*.spec.ts'],
+		setupFiles: ['./src/test/setup.ts'],
+		clearMocks: true,
+		restoreMocks: true,
+		coverage: {
+			provider: 'v8' as const,
+			include: ['src/**/*.{ts,vue}'],
+			exclude: ['src/test/**', 'src/**/__tests__/**', 'src/**/*.d.ts', 'src/main.ts'],
 		},
 	},
 }));
