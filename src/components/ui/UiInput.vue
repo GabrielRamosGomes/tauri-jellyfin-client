@@ -1,9 +1,10 @@
 <template>
-	<label class="ui-input-field">
-		<span
+	<div class="ui-input-field">
+		<label
 			v-if="label"
+			:for="inputId"
 			class="ui-input-label"
-			>{{ label }}</span
+			>{{ label }}</label
 		>
 		<div class="ui-input-wrapper">
 			<component
@@ -12,6 +13,7 @@
 				:size="18"
 				class="ui-input-icon" />
 			<input
+				:id="inputId"
 				class="ui-input"
 				:class="{ 'ui-input--has-icon': icon, 'ui-input--has-toggle': type === 'password' }"
 				:type="resolvedType"
@@ -19,6 +21,8 @@
 				:value="modelValue"
 				:disabled="disabled"
 				:required="required"
+				:aria-invalid="error ? true : undefined"
+				:aria-describedby="error ? errorId : undefined"
 				@input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" />
 
 			<button
@@ -37,17 +41,18 @@
 		</div>
 		<span
 			v-if="error"
+			:id="errorId"
 			class="ui-input-error"
 			>{{ error }}</span
 		>
-	</label>
+	</div>
 </template>
 
 <script setup lang="ts">
 	import type { Component } from 'vue';
 
 	import { Eye, EyeOff } from 'lucide-vue-next';
-	import { computed, ref } from 'vue';
+	import { computed, ref, useId } from 'vue';
 
 	const props = withDefaults(
 		defineProps<{
@@ -64,6 +69,9 @@
 	);
 
 	defineEmits<{ 'update:modelValue': [value: string] }>();
+
+	const inputId = useId();
+	const errorId = `${inputId}-error`;
 
 	const revealed = ref(false);
 

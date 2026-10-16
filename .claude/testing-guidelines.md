@@ -143,13 +143,19 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
 
 ### `src/components/`: presentational, props in / events out
 
-- No module mocks are needed. If a component seems to need one, it's breaking the
-  "no `src/api/` imports" rule; flag it instead of mocking around it. (`layout/*` is the sanctioned
-  exception and is tested like a view.)
-- Render with `@testing-library/vue`'s `render`, interact with `userEvent.setup()`, assert on
-  what the user sees and on `emitted()`.
-- `v-model` components: pass `modelValue` + `'onUpdate:modelValue': (v) => rerender({ modelValue: v })`
-  or assert on `emitted()['update:modelValue']`.
+- Pure props-in/events-out components need no module mocks. Components that call a data composable
+  themselves (`ItemActions` → `useItemActions`) are set up like a composable spec: automock the
+  `@/api/jellyfin/*` module and `signIn()`. Components that fetch through several composables and use
+  the router (`EpisodeHeader`, `SeasonHeader`, `PersonHeader`, `SeriesContent`, `HeroBanner`) belong
+  to the views/integration layer. (`layout/*` is also tested like a view.)
+- Render with `@testing-library/vue`'s `render`, interact with `userEvent`, and assert on what the
+  user sees, on the bound model, and on handler props (`onSubmit: vi.fn()` passed as a prop).
+- Event handlers are passed as props or `attrs` (`render(UiButton, { attrs: { onClick } })`).
+- `v-model` components: use `withVModel(Component, initial, props)` from `src/test/utils.ts`. It gives a
+  real two-way binding (`model.value`), like a parent. For several models (`v-model:open` +
+  `v-model:url`), write a small `defineComponent` host with `h()` and one `ref` per model.
+- Behaviors that depend on a parent (a button inside a `<form>`, an action inside a clickable card)
+  are tested by rendering that parent with `h()`: "does not submit the form", "does not open the card".
 - Render children for real. No `shallowMount` and no stubbing `Ui*` children: they're part of the
   behavior being tested. Stub only things jsdom can't do (e.g. `node-vibrant`).
 - **Reka UI / teleport**: `*Portal` content is teleported to `document.body`. Testing Library's
@@ -157,6 +163,13 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
   menus/selects the way a user does (`await user.click(screen.getByRole('combobox'))`). Never import
   Reka primitives into tests or assert on their internals. The polyfills Reka needs in jsdom
   (`ResizeObserver`, `scrollIntoView`, pointer-capture methods) live in `src/test/setup.ts`.
+  Known Reka behavior in jsdom:
+  - Content of an open `Dialog`/`Popover` mounts a tick after render → `await screen.findByRole('dialog')`.
+  - A closed `Select` shows the selected label a tick after mount → `await waitFor(...)`.
+  - `ToggleGroup` items are buttons with `aria-pressed` (not radios/checkboxes). Assert
+    `toHaveAttribute('aria-pressed', 'true')`.
+  - Accessible names include child labels: a `UiButton` that is `loading` is named "Loading Save".
+    Match with a regex (`{ name: /Save/ }`).
 - `lucide-vue-next` icons render fine as real components. Don't assert on them unless the icon _is_
   the information (then give it an accessible label and query that).
 
@@ -183,8 +196,17 @@ reading `Date.now()` (e.g. `formatEndsAt`). Cover edge cases: `null`/`undefined`
 - **Async**: always `await` user-event calls. After anything that resolves a mocked api promise, `await
 flushPromises()` (from `@vue/test-utils`) or use `findBy*`/`waitFor`. Use `await nextTick()` only for
   a plain reactive change you made yourself. No arbitrary `setTimeout` waits.
-- **Timers**: `vi.useFakeTimers()` for debounce/timeouts, `vi.useRealTimers()` in `afterEach`. With
-  user-event, use `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })`.
+- **Timers**: `vi.useFakeTimers()` for debounce/timeouts (`setup.ts` restores real timers after each
+  test). With user-event, use `userEvent.setup({ advanceTimers: vi.advanceTimersByTime })`.
+  **Gotcha:** when a component test needs fake timers _and_ asserts on events reaching a parent
+  listener, fake only the timer functions: `vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] })`.
+  Vue drops a bubbled event at a parent listener unless `Date.now()` has moved on since the listener
+  was attached, and a fully faked clock never moves. "Does not bubble" tests would then pass even when
+  the code is broken.
+- **Probing**: to check whether something is a bug before deciding how to test it, write a throwaway
+  spec under `src/__probe__/`, run it, and delete it. Never commit it.
+- **Prove the test can fail**: after writing a layer, temporarily break each guarded behavior in the
+  source (one-line `sed`), confirm the matching test goes red, then `git checkout` the source.
 - **Snapshots**: never as the only assertion. Avoid them in general. A small `toMatchInlineSnapshot` of
   a generated string is fine.
 - **No styling tests.** jsdom doesn't load the SCSS. Asserting a BEM modifier class _is_ fine when the
@@ -209,7 +231,8 @@ When choosing what to cover next, go in this order. Skip pure-markup components 
 5. Interactive `ui/` primitives: `UiSelect`, `UiDropdown`, `UiInput`, `UiButton`, `UiIconButton`.
 6. Interactive feature components: `LoginForm`, `AddServerDialog`, `ServerList`, `LibraryToolbar`,
    `GenreFilter`, `AlphabetRail`, `ItemActions`.
-7. A handful of view-level scenarios (`LoginView`, `LibraryView`).
+7. Integration: views (`LoginView`, `LibraryView`, ...), `components/layout/*`, and the data-fetching
+   detail components (`EpisodeHeader`, `SeasonHeader`, `PersonHeader`, `SeriesContent`, `HeroBanner`).
 
 ## Checklist before finishing
 

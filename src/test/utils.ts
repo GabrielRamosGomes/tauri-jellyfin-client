@@ -1,4 +1,12 @@
-import { effectScope, type EffectScope } from 'vue';
+import {
+	defineComponent,
+	effectScope,
+	h,
+	ref,
+	type Component,
+	type EffectScope,
+	type Ref,
+} from 'vue';
 
 // Must stay free of app imports: setup.ts loads it before each spec registers its vi.mock calls.
 
@@ -15,6 +23,25 @@ export function withScope<T>(composable: () => T): [T, EffectScope] {
 export function stopScopes() {
 	for (const scope of scopes) scope.stop();
 	scopes.clear();
+}
+
+// Renders `component` with a real two-way `v-model`, the way a parent uses it, so updates flow
+// back in as props. Pass `Host` to Testing Library's `render`; read `model` to assert the bound value.
+export function withVModel<T>(
+	component: Component,
+	initial: T,
+	props: Record<string, unknown> = {},
+) {
+	const model = ref(initial) as Ref<T>;
+	const Host = defineComponent({
+		setup: () => () =>
+			h(component, {
+				...props,
+				modelValue: model.value,
+				'onUpdate:modelValue': (value: T) => (model.value = value),
+			}),
+	});
+	return { Host, model };
 }
 
 export function deferred<T = void>() {

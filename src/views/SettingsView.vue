@@ -10,6 +10,7 @@
 			<ui-select
 				:model-value="preference"
 				:options="themeOptions"
+				aria-label="Appearance"
 				@update:model-value="setPreference($event as ThemePreference)" />
 		</div>
 	</div>

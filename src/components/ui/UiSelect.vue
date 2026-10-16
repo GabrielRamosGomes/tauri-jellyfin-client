@@ -3,7 +3,9 @@
 		:model-value="modelValue"
 		:disabled="disabled"
 		@update:model-value="(value) => $emit('update:modelValue', value as string)">
-		<select-trigger class="ui-select-trigger">
+		<select-trigger
+			class="ui-select-trigger"
+			:aria-label="ariaLabel">
 			<select-value />
 			<select-icon class="ui-select-icon">
 				<chevron-down :size="16" />
@@ -51,6 +53,7 @@
 		defineProps<{
 			modelValue: string;
 			options: { value: string; label: string }[];
+			ariaLabel?: string;
 			disabled?: boolean;
 		}>(),
 		{ disabled: false },
