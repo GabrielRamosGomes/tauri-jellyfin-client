@@ -25,3 +25,6 @@ dist-ssr
 
 # Coverage files
 coverage
+
+# Tauri files
+src-tauri/lib/mpv
