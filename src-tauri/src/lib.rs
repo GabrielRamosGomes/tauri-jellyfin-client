@@ -38,6 +38,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_http::init())
+        .plugin(tauri_plugin_log::Builder::new().build())
         .invoke_handler(tauri::generate_handler![secure_set, secure_get, secure_delete])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
