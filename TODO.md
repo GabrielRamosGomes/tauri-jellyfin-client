@@ -22,6 +22,7 @@
   - [ ] Pass raw stream URL directly to libmpv
   - [ ] Enable GPU hardware decoding (hwdec=auto)
   - [ ] Core playback controls (Play, Pause, Seek, Volume, Fullscreen)
+  - [ ] Audio channels setting (local mpv downmix, not server-side)
   - [ ] Sync playback progress to server (/Sessions/Playing/Progress)
 
 - [ ] 5. Extra Media Features

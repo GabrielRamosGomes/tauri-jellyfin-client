@@ -5,9 +5,10 @@ pub fn create() -> libmpv2::Result<Mpv> {
   let mpv = Mpv::with_initializer(|init| {
     init.set_property("vo", "gpu-next")?;
     init.set_property("hwdec", "auto-safe")?;
-    init.set_property("input-default-bindings", true)?;
+    init.set_property("input-default-bindings", true)?; // Remove later, too many keybinds
     init.set_property("input-vo-keyboard", true)?;
     init.set_property("osc", true)?; // Temp until own controls are built
+    init.set_property("audio-channels", "stereo")?; // Later will come from user settings
     Ok(())
   })?;
 
