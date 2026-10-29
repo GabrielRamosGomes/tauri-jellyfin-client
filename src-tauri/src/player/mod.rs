@@ -16,6 +16,7 @@ pub struct PlayRequest {
 
 pub fn create() -> libmpv2::Result<Mpv> {
   let mpv = Mpv::with_initializer(|init| {
+    init.set_property("ytdl", false)?; // mpv tries to play with ytdl as fallback, just disable it
     init.set_property("vo", "gpu-next")?;
     init.set_property("hwdec", "auto-safe")?;
     init.set_property("input-default-bindings", true)?; // Remove later, too many keybinds

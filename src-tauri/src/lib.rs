@@ -1,4 +1,5 @@
 use tauri::Manager;
+use tauri_plugin_log::log;
 
 mod keychain;
 mod player;
@@ -10,7 +11,9 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_http::init())
-        .plugin(tauri_plugin_log::Builder::new().build())
+        .plugin(tauri_plugin_log::Builder::new()
+            .level(log::LevelFilter::Info)
+            .build())
         .invoke_handler(tauri::generate_handler![
             keychain::secure_set, 
             keychain::secure_get, 
