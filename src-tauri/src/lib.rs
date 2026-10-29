@@ -1,3 +1,5 @@
+use tauri::Manager;
+
 mod keychain;
 mod player;
 
@@ -15,6 +17,10 @@ pub fn run() {
             keychain::secure_delete,
             player::player_load
         ])
+        .setup(|app| {
+           app.manage(player::create()?);
+           Ok(()) 
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -142,7 +142,7 @@
 	import { computed, toRef } from 'vue';
 
 	const props = defineProps<{ item: BaseItemDto }>();
-	defineEmits<{ play: [audioIndex: number, subtitleIndex: number] }>();
+	defineEmits<{ play: [] }>();
 
 	const { landscapeImageUrl } = useMediaImages();
 	const {
